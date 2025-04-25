@@ -72,9 +72,11 @@ const Header = () => {
           to="/" 
           className="flex items-center space-x-2"
         >
-          <div className="h-10 w-10 rounded-full bg-church-600 flex items-center justify-center">
-            <span className="text-white font-bold">KW</span>
-          </div>
+          <img 
+            src="/lovable-uploads/d7c1183c-049c-45be-b6bf-64d44a0578e4.png" 
+            alt="Kahawa Wendani SDA Church Logo" 
+            className="h-10 w-10 object-contain"
+          />
           <span className={cn(
             "font-serif font-bold text-xl transition-colors",
             isScrolled ? 'text-church-600' : 'text-white'
