@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -16,6 +15,7 @@ import ChildDedication from "./pages/ChildDedication";
 import Benevolence from "./pages/Benevolence";
 import Library from "./pages/Library";
 import NotFound from "./pages/NotFound";
+import Donate from "./pages/Donate";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +38,7 @@ const App = () => {
             <Route path="/child-dedication" element={<ChildDedication />} />
             <Route path="/benevolence" element={<Benevolence />} />
             <Route path="/library" element={<Library />} />
+            <Route path="/donate" element={<Donate />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

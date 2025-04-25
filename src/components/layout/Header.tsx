@@ -9,6 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -127,6 +128,19 @@ const Header = () => {
               </DropdownMenu>
             )
           ))}
+          
+          {/* Distinct Donate Button */}
+          <Link to="/donate">
+            <Button 
+              variant="default"
+              className={cn(
+                "bg-church-600 hover:bg-church-700 text-white",
+                !isScrolled && "border-2 border-white hover:border-church-600"
+              )}
+            >
+              Donate
+            </Button>
+          </Link>
         </nav>
         
         {/* Mobile Menu Toggle */}
@@ -192,6 +206,16 @@ const Header = () => {
               </div>
             )
           ))}
+          
+          {/* Mobile Donate Button */}
+          <Link to="/donate" className="px-4">
+            <Button 
+              variant="default"
+              className="w-full bg-church-600 hover:bg-church-700 text-white"
+            >
+              Donate
+            </Button>
+          </Link>
         </nav>
       </div>
     </header>
