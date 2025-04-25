@@ -87,7 +87,7 @@ const Media = () => {
       
       <main>
         {/* Hero Section with Adjusted Positioning */}
-        <section className="relative h-[400px] flex items-center justify-center pt-16">
+        <section className="relative h-[400px] flex items-center justify-center ">
           <div className="absolute inset-0">
             <div className="absolute inset-0 bg-black bg-opacity-60 z-10"></div>
             <img 

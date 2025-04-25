@@ -76,14 +76,8 @@ const Header = () => {
           <img 
             src="/lovable-uploads/d7c1183c-049c-45be-b6bf-64d44a0578e4.png" 
             alt="Kahawa Wendani SDA Church Logo" 
-            className="h-10 w-10 object-contain"
+            className="max-h-[4rem] object-contain"
           />
-          <span className={cn(
-            "font-serif font-bold text-xl transition-colors",
-            isScrolled ? 'text-church-600' : 'text-white'
-          )}>
-            Kahawa Wendani SDA
-          </span>
         </Link>
         
         {/* Desktop Navigation */}

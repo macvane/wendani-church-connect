@@ -69,7 +69,7 @@ const Contact = () => {
     <>
       <Header />
       
-      <main className="pt-16">
+      <main className="">
         {/* Hero Section */}
         <section className="relative h-[400px] flex items-center justify-center">
           <div className="absolute inset-0">
