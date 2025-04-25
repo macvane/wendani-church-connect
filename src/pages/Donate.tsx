@@ -56,7 +56,7 @@ const Donate = () => {
                 <p className="text-sm">
                   For manual M-Pesa donations, use our Paybill:
                   <br />
-                  <span className="font-semibold">Business Number: XXXXX</span>
+                  <span className="font-semibold">Paybill Number: XXXXX</span>
                   <br />
                   <span className="font-semibold">Account Number: Your Name</span>
                 </p>

@@ -18,7 +18,7 @@ const LivestreamSection = () => {
             <Button 
               className="bg-red-600 hover:bg-red-700 text-white gap-2"
               size="lg"
-              onClick={() => window.open('https://youtube.com/@KahawaWendaniSDAChurch', '_blank')}
+              onClick={() => window.open('https://www.youtube.com/@KahawaWendaniSDAChurchOfficial', '_blank')}
             >
               <Youtube className="w-5 h-5" />
               Watch Live on YouTube

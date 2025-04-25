@@ -62,40 +62,40 @@ const ConstructionSection = () => {
                 <div>
                   <div className="flex justify-between mb-1 text-sm font-medium">
                     <span>Foundation</span>
-                    <span>80%</span>
+                    <span>0%</span>
                   </div>
                   <div className="w-full bg-gray-300 rounded-full h-2">
-                    <div className="bg-church-500 h-2 rounded-full" style={{ width: '80%' }}></div>
+                    <div className="bg-church-500 h-2 rounded-full" style={{ width: '0%' }}></div>
                   </div>
                 </div>
                 
                 <div>
                   <div className="flex justify-between mb-1 text-sm font-medium">
                     <span>Structural Work</span>
-                    <span>45%</span>
+                    <span>0%</span>
                   </div>
                   <div className="w-full bg-gray-300 rounded-full h-2">
-                    <div className="bg-church-500 h-2 rounded-full" style={{ width: '45%' }}></div>
+                    <div className="bg-church-500 h-2 rounded-full" style={{ width: '0%' }}></div>
                   </div>
                 </div>
                 
                 <div>
                   <div className="flex justify-between mb-1 text-sm font-medium">
                     <span>Interior & Finishes</span>
-                    <span>10%</span>
+                    <span>0%</span>
                   </div>
                   <div className="w-full bg-gray-300 rounded-full h-2">
-                    <div className="bg-church-500 h-2 rounded-full" style={{ width: '10%' }}></div>
+                    <div className="bg-church-500 h-2 rounded-full" style={{ width: '0%' }}></div>
                   </div>
                 </div>
                 
                 <div>
                   <div className="flex justify-between mb-1 text-sm font-medium">
                     <span>Overall Completion</span>
-                    <span>40%</span>
+                    <span>0%</span>
                   </div>
                   <div className="w-full bg-gray-300 rounded-full h-2">
-                    <div className="bg-church-500 h-2 rounded-full" style={{ width: '40%' }}></div>
+                    <div className="bg-church-500 h-2 rounded-full" style={{ width: '0%' }}></div>
                   </div>
                 </div>
               </div>
@@ -103,11 +103,11 @@ const ConstructionSection = () => {
               <div className="mt-6">
                 <div className="flex justify-between mb-2">
                   <span className="font-medium">Funds Raised:</span>
-                  <span className="font-medium">KES 12,500,000</span>
+                  <span className="font-medium">KES 8,500,000</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="font-medium">Target:</span>
-                  <span className="font-medium">KES 30,000,000</span>
+                  <span className="font-medium">KES 100,000,000</span>
                 </div>
               </div>
             </div>

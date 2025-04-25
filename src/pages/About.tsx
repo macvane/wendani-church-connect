@@ -29,10 +29,10 @@ const About = () => {
   const churchLeaders = [
     {
       id: 1,
-      name: "John Doe",
-      position: "Senior Pastor",
-      image: "https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?q=80&w=300",
-      bio: "Pastor John has been leading our church for 8 years with wisdom and compassion."
+      name: "Pst. Macjoe Masesi",
+      position: "District Pastor",
+      image: "/leaders/pastor.JPG",
+      bio: "Pst. Macjoe Masesi has been leading our church for 8 years with wisdom and compassion."
     },
     {
       id: 2,
@@ -43,9 +43,9 @@ const About = () => {
     },
     {
       id: 3,
-      name: "Michael Kimani",
-      position: "Head Deacon",
-      image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=300",
+      name: "C.L. Hellen Wandollah",
+      position: "Church Leader",
+      image: "/leaders/leader.jpeg",
       bio: "Michael leads our team of deacons with dedication and servant leadership."
     },
     {
@@ -102,7 +102,7 @@ const About = () => {
               
               <div className="prose max-w-none animate-on-scroll animate-delay-1">
                 <p className="text-lg mb-4">
-                  Kahawa Wendani SDA Church was established in 1995 with just 15 members meeting in a small rented hall. Through God's leading and the dedication of its founding members, the church has grown to become a vibrant spiritual community serving hundreds of worshippers every Sabbath.
+                The name “Wendani,” a rich Kikuyu word meaning “love,” perfectly embodies the spirit and essence of our church. Sda Church Kahawa Wendani has a deep-rooted history, originating from SDA Kahawa Garrison, where Wendani Sabbath School was born on July 23, 2005.
                 </p>
                 
                 <div className="my-8 grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -130,15 +130,15 @@ const About = () => {
                 </div>
                 
                 <p className="text-lg mb-4">
-                  In the early 2000s, the congregation had grown to over 100 members, necessitating a move to a larger facility. Through sacrificial giving and dedicated fundraising efforts, the church purchased land in Kahawa Wendani and began constructing its first permanent building.
+                Our journey began on a bright Sabbath morning when members of the church, expecting their usual worship at Kahawa Garrison, were unexpectedly denied entry. The Garrison commander had issued a directive that restricted civilian access, allowing only soldiers and their families to worship inside the barracks. Despite the abrupt change, our members displayed unwavering faith, worshiping under the sun by the roadside that day.
                 </p>
                 
                 <p className="text-lg mb-4">
-                  By 2010, the first phase of our current church building was completed, providing a sanctuary capable of seating 300 worshippers. The church has continued to grow both spiritually and numerically, launching various ministries to serve both members and the wider community.
+                In the spirit of resilience and community, the church leadership quickly found a temporary worship place in an incomplete house nearby, graciously offered by the Kerimu family. As our congregation grew, we continued our services outdoors until we relocated to Mama Mbau’s compound, and later to a space provided by Brother Denvas Nyamari Gekonde’s family. Our steadfast journey reflects our commitment to faith and fellowship.
                 </p>
                 
                 <p className="text-lg">
-                  Today, Kahawa Wendani SDA Church stands as a testament to God's faithfulness and the unwavering commitment of its members. We continue to build on the foundation laid by our pioneers as we look forward to completing our new sanctuary that will accommodate our growing congregation.
+                On June 23, 2007, Wendani Sabbath School was formally organized into a church under the guidance of Pastor Marundu and Pastor Nzioka. We celebrated our first Holy Communion on July 14, 2007, marking a significant milestone in our spiritual journey. Since then, our church has continually evolved, relocating to our current location on June 29, 2013.
                 </p>
               </div>
             </div>
@@ -154,7 +154,7 @@ const About = () => {
                   <h2 className="text-2xl md:text-3xl font-bold mb-6 font-serif">Our Mission</h2>
                   <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-church-600">
                     <p className="text-lg">
-                      To spread the everlasting gospel in the context of the three angels' messages of Revelation 14 and lead people to accept Jesus as their personal Savior, unite with His church, and nurture them in preparation for His soon return.
+                    Make disciples of Jesus Christ who live as His loving witnesses and proclaim to all people the everlasting gospel of the Three Angels’ Messages in preparation for His soon return (Matt 28:18-20, Acts 1:8, Rev 14:6-12).
                     </p>
                   </div>
                 </div>
@@ -163,7 +163,7 @@ const About = () => {
                   <h2 className="text-2xl md:text-3xl font-bold mb-6 font-serif">Our Vision</h2>
                   <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-church-600">
                     <p className="text-lg">
-                      To be a beacon of light in our community, reflecting Christ's character, and nurturing a spiritual environment where all can grow in grace and prepare for Christ's soon return.
+                    In harmony with Bible revelation, Seventh-day Adventists see as the climax of God’s plan the restoration of all His creation to full harmony with His perfect will and righteousness.
                     </p>
                   </div>
                 </div>
@@ -190,7 +190,7 @@ const About = () => {
                   <img 
                     src={leader.image} 
                     alt={leader.name} 
-                    className="w-full h-64 object-cover"
+                    className="w-full h-[25rem] object-cover"
                   />
                   <div className="p-6">
                     <h3 className="font-bold text-xl mb-1">{leader.name}</h3>

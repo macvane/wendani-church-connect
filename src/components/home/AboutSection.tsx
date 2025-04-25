@@ -43,7 +43,7 @@ const AboutSection = () => {
             </div>
             <h3 className="text-xl font-bold mb-2">Our Mission</h3>
             <p className="text-gray-600">
-              To spread the everlasting gospel in the context of the three angels' messages of Revelation 14 and lead people to accept Jesus as their personal Savior.
+            Make disciples of Jesus Christ who live as His loving witnesses and proclaim to all people the everlasting gospel of the Three Angels’ Messages in preparation for His soon return (Matt 28:18-20, Acts 1:8, Rev 14:6-12).
             </p>
           </div>
           
@@ -55,7 +55,7 @@ const AboutSection = () => {
             </div>
             <h3 className="text-xl font-bold mb-2">Our Vision</h3>
             <p className="text-gray-600">
-              To be a beacon of light in our community, reflecting Christ's character, and nurturing a spiritual environment where all can grow in grace.
+            In harmony with Bible revelation, Seventh-day Adventists see as the climax of God’s plan the restoration of all His creation to full harmony with His perfect will and righteousness.
             </p>
           </div>
           
