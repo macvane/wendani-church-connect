@@ -43,7 +43,7 @@ const BaptismSection = () => {
           <div className="order-1 md:order-2 animate-on-scroll">
             <div className="relative">
               <img 
-                src="https://images.unsplash.com/photo-1563494756541-8664a7b41326?q=80&w=800" 
+                src="https://i.pinimg.com/736x/43/47/e2/4347e2373739381fb3306c36e6a97c70.jpg" 
                 alt="Baptism" 
                 className="rounded-lg shadow-lg w-full"
               />
