@@ -85,13 +85,13 @@ const ChildDedication = () => {
         <section className="section bg-white">
           <div className="container">
             <div className="max-w-3xl mx-auto text-center">
-              <h2 className="section-title animate-on-scroll">About Child Dedication</h2>
-              <div className="prose max-w-none animate-on-scroll animate-delay-1">
+              <h2 className="section-title ">About Child Dedication</h2>
+              <div className="prose max-w-none  animate-delay-1">
                 <p className="text-lg mb-4">
                   Child dedication is a ceremony in which parents make a public commitment before God, their family, and the church congregation to raise their child according to God's Word and God's ways.
                 </p>
                 <p className="text-lg">
-                  At Kahawa Wendani SDA Church, we perform child dedications during our regular Sabbath service. To register your child for dedication, please fill out the form below.
+                  At Kahawa Wendani SDA Church, we perform child dedications during the first Sabbath of every month. To register your child for dedication, please fill out the form below.
                 </p>
               </div>
             </div>
@@ -328,9 +328,9 @@ const ChildDedication = () => {
         <section className="section bg-white">
           <div className="container">
             <div className="max-w-3xl mx-auto">
-              <h2 className="section-title animate-on-scroll">What to Expect</h2>
+              <h2 className="section-title ">What to Expect</h2>
               
-              <div className="bg-gray-50 rounded-lg p-8 animate-on-scroll animate-delay-1">
+              <div className="bg-gray-50 rounded-lg p-8  animate-delay-1">
                 <h3 className="text-xl font-bold mb-4">On the Day of Dedication</h3>
                 
                 <ul className="space-y-4">
@@ -339,7 +339,7 @@ const ChildDedication = () => {
                       <span>1</span>
                     </div>
                     <p>
-                      Please arrive at least 30 minutes before the service begins. A deacon will guide you to reserved seating at the front of the sanctuary.
+                      Please arrive early. 
                     </p>
                   </li>
                   <li className="flex items-start">
@@ -355,7 +355,7 @@ const ChildDedication = () => {
                       <span>3</span>
                     </div>
                     <p>
-                      Parents will be asked to make a commitment to raise their child in a godly home.
+                      Parents will be asked to make a commitment to raise their child in a Godly home.
                     </p>
                   </li>
                   <li className="flex items-start">
@@ -363,7 +363,7 @@ const ChildDedication = () => {
                       <span>4</span>
                     </div>
                     <p>
-                      The pastor will pray for your child and your family.
+                      The pastor and elders will pray for your child and your family.
                     </p>
                   </li>
                   <li className="flex items-start">
@@ -371,7 +371,7 @@ const ChildDedication = () => {
                       <span>5</span>
                     </div>
                     <p>
-                      You will receive a dedication certificate and a small gift from the church.
+                      You will receive a dedication certificate.
                     </p>
                   </li>
                 </ul>

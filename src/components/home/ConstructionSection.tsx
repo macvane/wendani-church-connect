@@ -1,5 +1,6 @@
 
 import React, { useRef, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 const ConstructionSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -151,11 +152,14 @@ const ConstructionSection = () => {
               </div>
               
               <div className="mt-6 flex flex-col sm:flex-row gap-4">
-                <a href="#" className="btn bg-church-600 hover:bg-church-700 text-white flex-1 text-center">
+                <Link
+                  to='/donate'
+                  className="btn bg-church-600 hover:bg-church-700 text-white flex-1 text-center btn-lg"
+                >
                   Donate Now
-                </a>
-                <a href="#" className="btn bg-white text-church-700 hover:bg-gray-100 flex-1 text-center">
-                  Learn More
+                </Link>
+                <a href="https://forms.gle/schMhtN6arvjUHmd8" className="btn bg-white text-church-700 hover:bg-gray-100 flex-1 text-center">
+                  Join a Group
                 </a>
               </div>
             </div>

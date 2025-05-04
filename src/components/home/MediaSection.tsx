@@ -27,21 +27,21 @@ const MediaSection = () => {
 
   // These would be replaced with actual video IDs from the church's YouTube channel
   const sermonVideos = [
-    { id: "dQw4w9WgXcQ", title: "Finding Peace in Troubled Times" },
-    { id: "dQw4w9WgXcQ", title: "The Power of Prayer in Daily Life" },
-    { id: "dQw4w9WgXcQ", title: "Understanding God's Plan for Your Life" }
+    { id: "_XCyryGR1sA", title: "I Know Your Works..., Buy From Me!" },
+    { id: "_XCyryGR1sA", title: "The Power of Prayer in Daily Life" },
+    { id: "_XCyryGR1sA", title: "Understanding God's Plan for Your Life" }
   ];
   
   const musicVideos = [
-    { id: "dQw4w9WgXcQ", title: "Amazing Grace - Church Choir" },
-    { id: "dQw4w9WgXcQ", title: "How Great Thou Art - Youth Choir" },
-    { id: "dQw4w9WgXcQ", title: "Blessed Assurance - Ambassadors Choir" }
+    { id: "bBk9d4FfVfk", title: "Umefedheheshwa - Church Choir" },
+    { id: "ZGbM1oTzrVM", title: "Usisongwesongwe - Youth Choir" },
+    { id: "UyXrGFvm9mc", title: "Mambo Ya Kale - Ambassadors Choir" }
   ];
-  
+
   const campMeetingVideos = [
-    { id: "dQw4w9WgXcQ", title: "Camp Meeting 2023 - Day 1 Highlights" },
-    { id: "dQw4w9WgXcQ", title: "Camp Meeting 2023 - Main Sermon" },
-    { id: "dQw4w9WgXcQ", title: "Camp Meeting 2023 - Closing Ceremony" }
+    { id: "_XCyryGR1sA", title: "Camp Meeting 2023 - Day 1 Highlights" },
+    { id: "_XCyryGR1sA", title: "Camp Meeting 2023 - Main Sermon" },
+    { id: "_XCyryGR1sA", title: "Camp Meeting 2023 - Closing Ceremony" }
   ];
   
   return (
@@ -65,7 +65,7 @@ const MediaSection = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {sermonVideos.map((video, index) => (
                 <div key={index} className="rounded-lg overflow-hidden shadow-md">
-                  <div className="aspect-w-16 aspect-h-9">
+                  <div className="aspect-w-16 aspect-h-9 h-[14rem]">
                     <iframe
                       src={`https://www.youtube.com/embed/${video.id}`}
                       title={video.title}
@@ -87,7 +87,7 @@ const MediaSection = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {musicVideos.map((video, index) => (
                 <div key={index} className="rounded-lg overflow-hidden shadow-md">
-                  <div className="aspect-w-16 aspect-h-9">
+                  <div className="aspect-w-16 aspect-h-9 h-[14rem]">
                     <iframe
                       src={`https://www.youtube.com/embed/${video.id}`}
                       title={video.title}
@@ -109,7 +109,7 @@ const MediaSection = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {campMeetingVideos.map((video, index) => (
                 <div key={index} className="rounded-lg overflow-hidden shadow-md">
-                  <div className="aspect-w-16 aspect-h-9">
+                  <div className="aspect-w-16 aspect-h-9 h-[14rem]">
                     <iframe
                       src={`https://www.youtube.com/embed/${video.id}`}
                       title={video.title}

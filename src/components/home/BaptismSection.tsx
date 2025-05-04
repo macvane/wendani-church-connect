@@ -43,9 +43,9 @@ const BaptismSection = () => {
           <div className="order-1 md:order-2 animate-on-scroll">
             <div className="relative">
               <img 
-                src="https://i.pinimg.com/736x/43/47/e2/4347e2373739381fb3306c36e6a97c70.jpg" 
+                src="/assets/image (7).jpg" 
                 alt="Baptism" 
-                className="rounded-lg shadow-lg w-full"
+                className="rounded-lg object-cover object-top shadow-lg w-full md:h-[30rem]"
               />
               <div className="absolute -bottom-4 -right-4 bg-white p-4 rounded-lg shadow-md max-w-xs hidden md:block">
                 <p className="text-sm italic text-gray-600">

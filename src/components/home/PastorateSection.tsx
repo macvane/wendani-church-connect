@@ -33,7 +33,7 @@ const PastorateSection = () => {
               <div className="absolute -top-4 -left-4 w-24 h-24 bg-church-100 rounded-tl-3xl z-0"></div>
               <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-church-100 rounded-br-3xl z-0"></div>
               <img 
-                src="https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?q=80&w=600" 
+                src="/leaders/pastor.JPG" 
                 alt="Pastor" 
                 className="rounded-lg shadow-lg relative z-10 w-full h-auto"
               />
@@ -58,14 +58,14 @@ const PastorateSection = () => {
             <div className="flex items-center">
               <div className="mr-4">
                 <img 
-                  src="https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?q=80&w=100" 
+                  src="/leaders/pastor.JPG" 
                   alt="Pastor Signature" 
                   className="w-16 h-16 rounded-full object-cover border-2 border-church-600"
                 />
               </div>
               <div>
-                <h4 className="font-bold text-xl">Pastor John Doe</h4>
-                <p className="text-gray-600">Senior Pastor, Kahawa Wendani SDA Church</p>
+                <h4 className="font-bold text-xl">Pst. Macjoe Masesi</h4>
+                <p className="text-gray-600">Pastor, Kahawa District</p>
               </div>
             </div>
           </div>

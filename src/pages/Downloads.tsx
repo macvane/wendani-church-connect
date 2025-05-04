@@ -19,13 +19,13 @@ const downloads = [
   },
   {
     id: 2,
-    title: "Church Constitution",
+    title: "Church Manual",
     description: "The official church constitution and bylaws that govern our church operations.",
     date: "January 15, 2024",
     type: "PDF",
     fileSize: "3.5 MB",
     url: "https://docs.google.com/document/d/e/2PACX-1vRzTwdc1VwUTLsUKm6Z_R73OdB5j-9-iXzJ0D-4ka16VrUJw_xLbqgYsXjGVlsGEA/pub",
-    viewUrl: "https://docs.google.com/document/d/e/2PACX-1vRzTwdc1VwUTLsUKm6Z_R73OdB5j-9-iXzJ0D-4ka16VrUJw_xLbqgYsXjGVlsGEA/pub",
+    viewUrl: "https://www.adventist.org/wp-content/uploads/2023/07/2022-Seventh-day-Adventist-Church-Manual.pdf",
   },
   {
     id: 3,

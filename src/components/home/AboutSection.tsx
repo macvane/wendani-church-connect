@@ -1,5 +1,6 @@
 
 import React, { useRef, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 const AboutSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -73,9 +74,12 @@ const AboutSection = () => {
         </div>
         
         <div className="mt-12 text-center">
-          <a href="/about" className="btn btn-primary btn-lg animate-on-scroll">
+          <Link
+            to='/about'
+            className="btn btn-primary btn-lg animate-on-scroll"
+          >
             Read More About Us
-          </a>
+          </Link>
         </div>
       </div>
     </section>
