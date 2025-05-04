@@ -162,7 +162,7 @@ const Library = () => {
         {/* Library Section */}
         <section className="section bg-white">
           <div className="container">
-            <Tabs defaultValue="physical" className="animate-on-scroll">
+            <Tabs defaultValue="physical" >
               <div className="flex justify-center mb-8">
                 <TabsList>
                   <TabsTrigger value="physical">Physical Books</TabsTrigger>

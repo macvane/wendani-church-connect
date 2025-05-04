@@ -10,7 +10,7 @@ interface BlogCardProps {
 
 const BlogCard = ({ blog }: BlogCardProps) => {
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col sm:flex-row animate-on-scroll">
+    <div className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col sm:flex-row ">
       <div className="sm:w-1/3">
         <img 
           src={blog.thumbnail} 

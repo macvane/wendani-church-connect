@@ -1,5 +1,6 @@
 
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -9,54 +10,71 @@ const choirs = [
     id: "church-choir",
     name: "Church Choir",
     description: "Our main church choir ministers through beautiful hymns and anthems during divine service and special programs.",
-    leader: "Emily Wanjiku",
-    contact: "+254 712 345678",
+    leader: "Mr. Shikuku",
+    contact: "",
     message: "Music is a divine language that transcends barriers and speaks directly to the soul. Join us as we use our voices to worship and praise our Creator.",
     videos: [
-      { id: "dQw4w9WgXcQ", title: "Amazing Grace" },
-      { id: "dQw4w9WgXcQ", title: "How Great Thou Art" },
-      { id: "dQw4w9WgXcQ", title: "It Is Well With My Soul" },
+      { id: "GKE97w5ytE8", title: "Pwani" },
+      { id: "_VLJ0wTDwj8", title: "Namwandama" },
+      { id: "r93JBmUHbuk", title: "Tunalo Jina Jema" },
+      { id: "0Gi3KUgu_Hk", title: "Bwana Ni Mwingi Wa Rehema" },
+      { id: "ayUPAYph2Vw", title: "Chagueni" },
+      { id: "sWoh5GGsdRg", title: "Jiwe La Pembeni" },
+      { id: "bBk9d4FfVfk", title: "Umefedheheshwa" },
+      { id: "YYGgXoAf7gA", title: "Tafuta Daima" },
+      { id: "yqKdm0Js3gw", title: "Pendo La Agape" },
     ]
   },
   {
     id: "youth-choir",
     name: "Youth Choir",
     description: "Our youth choir brings energy and passion through contemporary Christian music and creative arrangements.",
-    leader: "Daniel Omondi",
+    leader: "Sis. Rosemary Kiago",
     contact: "+254 723 456789",
     message: "We believe that worship through music should be vibrant and engaging. Join our youth choir to experience the joy of praising God through contemporary songs.",
     videos: [
-      { id: "dQw4w9WgXcQ", title: "Days of Elijah" },
-      { id: "dQw4w9WgXcQ", title: "Shout to the Lord" },
-      { id: "dQw4w9WgXcQ", title: "10,000 Reasons" },
+      { id: "Ko9miJeoqrg", title: "Hakuna Jambo" },
+      { id: "dcJ0NWdrz8M", title: "Kale" },
+      { id: "2scNB_daPtM", title: "Nimeona" },
+      { id: "QRTkMPj26QM", title: "Nitakutukuza" },
+      { id: "JE6nNNvEulE", title: "Saviour" },
+      { id: "yY5OuyLo588", title: "Tunahangaika" },
+      { id: "yY5OuyLo588", title: "Tumealikwa Karamuni" },
+      { id: "ZGbM1oTzrVM", title: "Usisongwesongwe" },
     ]
   },
   {
     id: "ambassadors-choir",
     name: "Ambassadors Choir",
-    description: "Our Ambassadors Choir specializes in traditional African gospel music with rich harmonies and rhythms.",
-    leader: "Paul Mwangi",
+    description: "Our Ambassadors Choir specializes in gospel music with rich harmonies and rhythms.",
+    leader: "Mrs. Jennifer Ndunge",
     contact: "+254 734 567890",
-    message: "African gospel music celebrates our cultural heritage while praising God with authentic rhythms and harmonies. Join us to experience worship with African flavor.",
+    message: "Music is a divine language that transcends barriers and speaks directly to the soul. Join us as we use our voices to worship and praise our Creator.",
     videos: [
-      { id: "dQw4w9WgXcQ", title: "Mungu Ni Mwema" },
-      { id: "dQw4w9WgXcQ", title: "Neno Lake Bwana" },
-      { id: "dQw4w9WgXcQ", title: "Bwana Asifiwe" },
+      { id: "Nn9n2Ia6-r0", title: "Wewe Umetuamuru" },
+      { id: "3UqDYcr1wTQ", title: "Nimekiti Mizizi" },
+      { id: "62ymMrRyZq0", title: "Uliniumba" },
+      { id: "0JWl_Y237Co", title: "Ole Wao" },
+      { id: "ytn4vlWEVrw", title: "Mwimbieni Bwana" },
+      { id: "IPmI2PmGU30", title: "Wanaisraeli" },
+      { id: "quzdmqQoXGk", title: "Tamka Neno" },
+      { id: "jU3uUZVredo", title: "Kinyonge Hakitaingia" },
+      { id: "UyXrGFvm9mc", title: "Mambo Ya Kale" },
     ]
   },
-  {
-    id: "childrens-choir",
-    name: "Children's Choir",
-    description: "Our children's choir nurtures young voices and helps children worship through music.",
-    leader: "Grace Njoroge",
-    contact: "+254 745 678901",
-    message: "It's never too early to start worshipping God through music. Our children's choir is a nurturing environment where young voices grow in talent and faith.",
-    videos: [
-      { id: "dQw4w9WgXcQ", title: "Jesus Loves Me" },
-      { id: "dQw4w9WgXcQ", title: "This Little Light of Mine" },
-      { id: "dQw4w9WgXcQ", title: "He's Got The Whole World" },
-    ]
-  }
+  // {
+  //   id: "childrens-choir",
+  //   name: "Children's Choir",
+  //   description: "Our children's choir nurtures young voices and helps children worship through music.",
+  //   leader: "Grace Njoroge",
+  //   contact: "+254 745 678901",
+  //   message: "It's never too early to start worshipping God through music. Our children's choir is a nurturing environment where young voices grow in talent and faith.",
+  //   videos: [
+  //     { id: "dQw4w9WgXcQ", title: "Jesus Loves Me" },
+  //     { id: "dQw4w9WgXcQ", title: "This Little Light of Mine" },
+  //     { id: "dQw4w9WgXcQ", title: "He's Got The Whole World" },
+  //   ]
+  // }
 ];
 
 const Media = () => {
@@ -131,17 +149,20 @@ const Media = () => {
                         
                         <div className="border-t border-gray-200 pt-4 mt-4">
                           <h4 className="font-bold mb-2">Choir Leader</h4>
-                          <p className="text-gray-700 mb-1">{choir.leader}</p>
-                          <p className="text-gray-600 mb-4">{choir.contact}</p>
+                          <p className="text-gray-700 mb-1 mb-4">{choir.leader}</p>
+                          {/* <p className="text-gray-600 mb-4">{choir.contact}</p> */}
                           
                           <h4 className="font-bold mb-2">Join Our Choir</h4>
                           <p className="text-gray-700 mb-4">
                             {choir.message}
                           </p>
-                          
-                          <a href="/contact" className="btn btn-primary">
-                            Contact Us to Join
-                          </a>
+                          <Link
+                            to='/contact'
+                          >
+                            <button className="btn btn-primary btn-lg">
+                              Contact Us to Join
+                            </button>
+                          </Link>
                         </div>
                       </div>
                     </div>
@@ -175,7 +196,7 @@ const Media = () => {
         </section>
         
         {/* Recent Sermons */}
-        <section className="section bg-gray-50">
+        {/* <section className="section bg-gray-50">
           <div className="container">
             <h2 className="section-title animate-on-scroll">Recent Sermons</h2>
             <p className="section-subtitle animate-on-scroll animate-delay-1">
@@ -209,7 +230,7 @@ const Media = () => {
               ))}
             </div>
           </div>
-        </section>
+        </section> */}
       </main>
       
       <Footer />

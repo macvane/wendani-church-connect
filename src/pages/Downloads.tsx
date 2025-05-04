@@ -14,8 +14,8 @@ const downloads = [
     date: "April 20, 2025",
     type: "PDF",
     fileSize: "1.2 MB",
-    url: "https://docs.google.com/document/d/e/2PACX-1vRzTwdc1VwUTLsUKm6Z_R73OdB5j-9-iXzJ0D-4ka16VrUJw_xLbqgYsXjGVlsGEA/pub",
-    viewUrl: "https://docs.google.com/document/d/e/2PACX-1vRzTwdc1VwUTLsUKm6Z_R73OdB5j-9-iXzJ0D-4ka16VrUJw_xLbqgYsXjGVlsGEA/pub",
+    url: "https://docs.google.com/document/d/1aW0T5WIaOE1Oud1fNgOSwF4Q6XoYYBU_W8lrUE8Mln4/export?format=pdf",
+    viewUrl: "https://docs.google.com/document/d/e/2PACX-1vRSxftNzokmKVsEl25z8wVM883FpppTom4qprjNTjvDcAr2ndzA3iyAMpwYvSeiB0UdOaeoz4thfhvI/pub",
   },
   {
     id: 2,
@@ -100,12 +100,14 @@ const Downloads = () => {
         
         {/* Downloads Section */}
         <section className="section bg-white">
+          
           <div className="container">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
               {downloads.map((item) => (
                 <div 
                   key={item.id}
-                  className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden flex flex-col animate-on-scroll"
+                  className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden flex flex-col"
                 >
                   <div className="p-6">
                     <div className="flex items-start mb-4">
@@ -134,14 +136,14 @@ const Downloads = () => {
                         <Eye size={18} className="mr-2" />
                         View Document
                       </button>
-                      <a 
-                        href={item.url} 
+                      <button 
+                        onClick={item.url} 
                         className="flex items-center justify-center w-1/2 py-2 bg-church-600 text-white rounded-md hover:bg-church-700 transition-colors"
-                        download
+                        
                       >
                         <Download size={18} className="mr-2" />
                         Download {item.type}
-                      </a>
+                      </button>
                     </div>
                   </div>
                 </div>
