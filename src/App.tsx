@@ -17,6 +17,7 @@ import BlogPost from "./pages/BlogPost";
 import ChildDedication from "./pages/ChildDedication";
 import Benevolence from "./pages/Benevolence";
 import Library from "./pages/Library";
+import Baptism from "./pages/Baptism";
 import NotFound from "./pages/NotFound";
 import Donate from "./pages/Donate";
 
@@ -42,6 +43,7 @@ const App = () => {
             <Route path="/child-dedication" element={<ChildDedication />} />
             <Route path="/benevolence" element={<Benevolence />} />
             <Route path="/library" element={<Library />} />
+            <Route path="/baptism" element={<Baptism />} />
             <Route path="/donate" element={<Donate />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

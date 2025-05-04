@@ -37,9 +37,7 @@ const BookViewer = ({ title, pages, onClose }: BookViewerProps) => {
       
       <div className="flex-1 overflow-y-auto p-6 bg-gray-50">
         <div className="max-w-3xl mx-auto bg-white p-8 min-h-[600px] shadow-md">
-          <div className="prose max-w-none">
-            {pages[currentPage]}
-          </div>
+          <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: pages[currentPage] || 'No content available' }} />
         </div>
       </div>
       
