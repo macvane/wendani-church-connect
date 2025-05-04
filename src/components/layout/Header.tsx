@@ -144,7 +144,7 @@ const Header = () => {
           aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
         >
           {isMobileMenuOpen ? (
-            <X size={24} className={isScrolled ? 'text-gray-700' : 'text-white'} />
+            <X size={24} className="text-gray-800" />
           ) : (
             <Menu size={24} className={isScrolled ? 'text-gray-700' : 'text-white'} />
           )}
