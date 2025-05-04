@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -141,7 +140,7 @@ const Library = () => {
     <>
       <Header />
       
-      <main className="">
+      <main>
         {/* Hero Section */}
         <section className="relative h-[300px] flex items-center justify-center">
           <div className="absolute inset-0">

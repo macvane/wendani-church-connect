@@ -79,7 +79,7 @@ const Downloads = () => {
     <>
       <Header />
       
-      <main className="">
+      <main>
         {/* Hero Section */}
         <section className="relative h-[300px] flex items-center justify-center">
           <div className="absolute inset-0">
