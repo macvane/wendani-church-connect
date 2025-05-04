@@ -13,6 +13,7 @@ import Prayer from "./pages/Prayer";
 import Contact from "./pages/Contact";
 import Downloads from "./pages/Downloads";
 import Blogs from "./pages/Blogs";
+import BlogPost from "./pages/BlogPost";
 import ChildDedication from "./pages/ChildDedication";
 import Benevolence from "./pages/Benevolence";
 import Library from "./pages/Library";
@@ -37,6 +38,7 @@ const App = () => {
             <Route path="/contact" element={<Contact />} />
             <Route path="/downloads" element={<Downloads />} />
             <Route path="/blogs" element={<Blogs />} />
+            <Route path="/blogs/:id" element={<BlogPost />} />
             <Route path="/child-dedication" element={<ChildDedication />} />
             <Route path="/benevolence" element={<Benevolence />} />
             <Route path="/library" element={<Library />} />

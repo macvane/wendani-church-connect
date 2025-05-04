@@ -2,152 +2,24 @@
 import React, { useState } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import { Search, Book, Clock, Calendar, User } from 'lucide-react';
+import { Search, Book, Clock, Calendar, User, BookOpen, Headphones, Download } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from '@/hooks/use-toast';
-
-// Sample book data
-const books = [
-  {
-    id: 1,
-    title: "Steps to Christ",
-    author: "Ellen G. White",
-    category: "Spiritual Growth",
-    coverImage: "https://images.unsplash.com/photo-1529071753888-4942fe4b19cc?q=80&w=300",
-    availability: true,
-    description: "A classic work on the path to Jesus Christ and the experience of salvation.",
-    publicationYear: 1892,
-  },
-  {
-    id: 2,
-    title: "The Great Controversy",
-    author: "Ellen G. White",
-    category: "Prophecy",
-    coverImage: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=300",
-    availability: true,
-    description: "Traces the conflict between Christ and Satan from the destruction of Jerusalem to the end of sin.",
-    publicationYear: 1911,
-  },
-  {
-    id: 3,
-    title: "The Desire of Ages",
-    author: "Ellen G. White",
-    category: "Biography",
-    coverImage: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=300",
-    availability: false,
-    description: "A powerful narrative on the life, teachings, and ministry of Jesus Christ.",
-    publicationYear: 1898,
-  },
-  {
-    id: 4,
-    title: "Patriarchs and Prophets",
-    author: "Ellen G. White",
-    category: "Bible Study",
-    coverImage: "https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=300",
-    availability: true,
-    description: "Explores the biblical history from creation to the reign of King David.",
-    publicationYear: 1890,
-  },
-  {
-    id: 5,
-    title: "Christ's Object Lessons",
-    author: "Ellen G. White",
-    category: "Bible Study",
-    coverImage: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=300",
-    availability: true,
-    description: "Illuminates the spiritual lessons in Christ's parables in practical language.",
-    publicationYear: 1900,
-  },
-  {
-    id: 6,
-    title: "The Ministry of Healing",
-    author: "Ellen G. White",
-    category: "Health",
-    coverImage: "https://images.unsplash.com/photo-1550399105-c4db5fb85c18?q=80&w=300",
-    availability: false,
-    description: "A comprehensive guide to physical, mental, and spiritual well-being.",
-    publicationYear: 1905,
-  },
-  {
-    id: 7,
-    title: "Counsels on Stewardship",
-    author: "Ellen G. White",
-    category: "Christian Living",
-    coverImage: "https://images.unsplash.com/photo-1589998059171-988d887df646?q=80&w=300",
-    availability: true,
-    description: "Biblical principles on the faithful management of time, talents, and resources.",
-    publicationYear: 1940,
-  },
-  {
-    id: 8,
-    title: "Education",
-    author: "Ellen G. White",
-    category: "Education",
-    coverImage: "https://images.unsplash.com/photo-1476234251651-f353703a034d?q=80&w=300",
-    availability: true,
-    description: "Presents principles of true education that develop body, mind, and soul.",
-    publicationYear: 1903,
-  },
-];
-
-// Sample eBooks data
-const eBooks = [
-  {
-    id: 101,
-    title: "Thoughts from the Mount of Blessing",
-    author: "Ellen G. White",
-    category: "Spiritual Growth",
-    coverImage: "https://images.unsplash.com/photo-1476234251651-f353703a034d?q=80&w=300",
-    format: "PDF",
-    fileSize: "2.3 MB",
-    description: "A devotional classic that unpacks the spiritual meaning of Christ's Sermon on the Mount.",
-    url: "#",
-  },
-  {
-    id: 102,
-    title: "The Acts of the Apostles",
-    author: "Ellen G. White",
-    category: "Bible Study",
-    coverImage: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=300",
-    format: "PDF",
-    fileSize: "4.7 MB",
-    description: "Traces the history of the early Christian church through the ministry of the apostles.",
-    url: "#",
-  },
-  {
-    id: 103,
-    title: "Prophets and Kings",
-    author: "Ellen G. White",
-    category: "Bible Study",
-    coverImage: "https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=300",
-    format: "EPUB",
-    fileSize: "3.1 MB",
-    description: "Follows the history of Israel from the time of Solomon to the coming of the Messiah.",
-    url: "#",
-  },
-  {
-    id: 104,
-    title: "The Adventist Home",
-    author: "Ellen G. White",
-    category: "Family",
-    coverImage: "https://images.unsplash.com/photo-1589998059171-988d887df646?q=80&w=300",
-    format: "PDF",
-    fileSize: "3.8 MB",
-    description: "Guidance on establishing and maintaining a truly Christian home.",
-    url: "#",
-  }
-];
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { physicalBooks, digitalBooks } from '@/data/libraryData';
+import AudioBookPlayer from '@/components/library/AudioBookPlayer';
+import BookViewer from '@/components/library/BookViewer';
 
 // Sample categories
 const categories = [
-  { name: "All", count: books.length },
-  { name: "Spiritual Growth", count: 2 },
-  { name: "Prophecy", count: 1 },
-  { name: "Biography", count: 1 },
-  { name: "Bible Study", count: 2 },
-  { name: "Health", count: 1 },
-  { name: "Christian Living", count: 1 },
-  { name: "Education", count: 1 },
+  { name: "All", count: physicalBooks.length },
+  { name: "Spiritual Growth", count: physicalBooks.filter(book => book.category === "Spiritual Growth").length },
+  { name: "Prophecy", count: physicalBooks.filter(book => book.category === "Prophecy").length },
+  { name: "Biography", count: physicalBooks.filter(book => book.category === "Biography").length },
+  { name: "Bible Study", count: physicalBooks.filter(book => book.category === "Bible Study").length },
+  { name: "Health", count: physicalBooks.filter(book => book.category === "Health").length },
+  { name: "Christian Living", count: physicalBooks.filter(book => book.category === "Christian Living").length },
+  { name: "Education", count: physicalBooks.filter(book => book.category === "Education").length },
 ];
 
 const Library = () => {
@@ -166,8 +38,22 @@ const Library = () => {
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+
+  const [audioBookOpen, setAudioBookOpen] = useState(false);
+  const [audioBookData, setAudioBookData] = useState<{ 
+    title: string; 
+    author: string; 
+    coverImage: string; 
+    audioUrl: string;
+  } | null>(null);
+
+  const [bookViewerOpen, setBookViewerOpen] = useState(false);
+  const [bookViewerData, setBookViewerData] = useState<{ 
+    title: string; 
+    pages: string[];
+  } | null>(null);
   
-  const filteredBooks = books.filter(book => {
+  const filteredBooks = physicalBooks.filter(book => {
     const matchesSearch = searchTerm === '' || 
       book.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
       book.author.toLowerCase().includes(searchTerm.toLowerCase());
@@ -205,6 +91,24 @@ const Library = () => {
       borrowDate: today,
       returnDate: returnDate.toISOString().split('T')[0],
     }));
+  };
+
+  const handleReadBook = (book: any) => {
+    setBookViewerData({
+      title: book.title,
+      pages: book.pages
+    });
+    setBookViewerOpen(true);
+  };
+
+  const handleListenToBook = (book: any) => {
+    setAudioBookData({
+      title: book.title,
+      author: book.author,
+      coverImage: book.coverImage,
+      audioUrl: book.audioUrl
+    });
+    setAudioBookOpen(true);
   };
   
   const handleSubmitBorrow = (e: React.FormEvent) => {
@@ -382,16 +286,36 @@ const Library = () => {
                                 <span>{book.category}</span>
                                 <span>{book.publicationYear}</span>
                               </div>
-                              <button
-                                onClick={() => handleBorrowBook(book)}
-                                className={`w-full py-2 rounded-md ${book.availability 
-                                  ? 'bg-church-600 hover:bg-church-700 text-white' 
-                                  : 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                                } transition-colors text-center`}
-                                disabled={!book.availability}
-                              >
-                                {book.availability ? 'Borrow Book' : 'Currently Unavailable'}
-                              </button>
+                              <div className="flex flex-col space-y-2">
+                                <button
+                                  onClick={() => handleBorrowBook(book)}
+                                  className={`w-full py-2 rounded-md ${book.availability 
+                                    ? 'bg-church-600 hover:bg-church-700 text-white' 
+                                    : 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                                  } transition-colors text-center`}
+                                  disabled={!book.availability}
+                                >
+                                  {book.availability ? 'Borrow Book' : 'Currently Unavailable'}
+                                </button>
+                                
+                                <div className="grid grid-cols-2 gap-2">
+                                  <button
+                                    onClick={() => handleReadBook(book)}
+                                    className="flex items-center justify-center py-2 bg-church-100 text-church-700 rounded-md hover:bg-church-200 transition-colors"
+                                  >
+                                    <BookOpen size={16} className="mr-2" />
+                                    Read
+                                  </button>
+                                  
+                                  <button
+                                    onClick={() => handleListenToBook(book)}
+                                    className="flex items-center justify-center py-2 bg-church-100 text-church-700 rounded-md hover:bg-church-200 transition-colors"
+                                  >
+                                    <Headphones size={16} className="mr-2" />
+                                    Listen
+                                  </button>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         ))}
@@ -577,7 +501,7 @@ const Library = () => {
                   </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {eBooks.map(book => (
+                    {digitalBooks.map(book => (
                       <div key={book.id} className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden flex">
                         <div className="w-1/3">
                           <img 
@@ -605,12 +529,11 @@ const Library = () => {
                           <a 
                             href={book.url}
                             className="inline-flex items-center text-church-600 hover:text-church-700"
-                            download
+                            target="_blank"
+                            rel="noopener noreferrer"
                           >
+                            <Download size={16} className="mr-1" />
                             Download
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                            </svg>
                           </a>
                         </div>
                       </div>
@@ -739,6 +662,34 @@ const Library = () => {
           </div>
         </section>
       </main>
+      
+      {/* Audio Book Player Dialog */}
+      <Dialog open={audioBookOpen} onOpenChange={(open) => !open && setAudioBookOpen(false)}>
+        <DialogContent className="max-w-md p-6">
+          {audioBookData && (
+            <AudioBookPlayer 
+              title={audioBookData.title}
+              author={audioBookData.author}
+              coverImage={audioBookData.coverImage}
+              audioSrc={audioBookData.audioUrl}
+              onClose={() => setAudioBookOpen(false)}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Book Viewer Dialog */}
+      <Dialog open={bookViewerOpen} onOpenChange={(open) => !open && setBookViewerOpen(false)}>
+        <DialogContent className="max-w-4xl h-[80vh] p-0 overflow-hidden">
+          {bookViewerData && (
+            <BookViewer 
+              title={bookViewerData.title}
+              pages={bookViewerData.pages}
+              onClose={() => setBookViewerOpen(false)}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
       
       <Footer />
     </>
