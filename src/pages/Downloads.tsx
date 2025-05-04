@@ -1,9 +1,11 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import { File, Download, FileText } from 'lucide-react';
+import { File, Download, FileText, Eye } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
+// Sample documents data with view URLs
 const downloads = [
   {
     id: 1,
@@ -12,7 +14,8 @@ const downloads = [
     date: "April 20, 2025",
     type: "PDF",
     fileSize: "1.2 MB",
-    url: "#",
+    url: "https://docs.google.com/document/d/e/2PACX-1vRzTwdc1VwUTLsUKm6Z_R73OdB5j-9-iXzJ0D-4ka16VrUJw_xLbqgYsXjGVlsGEA/pub",
+    viewUrl: "https://docs.google.com/document/d/e/2PACX-1vRzTwdc1VwUTLsUKm6Z_R73OdB5j-9-iXzJ0D-4ka16VrUJw_xLbqgYsXjGVlsGEA/pub",
   },
   {
     id: 2,
@@ -21,7 +24,8 @@ const downloads = [
     date: "January 15, 2024",
     type: "PDF",
     fileSize: "3.5 MB",
-    url: "#",
+    url: "https://docs.google.com/document/d/e/2PACX-1vRzTwdc1VwUTLsUKm6Z_R73OdB5j-9-iXzJ0D-4ka16VrUJw_xLbqgYsXjGVlsGEA/pub",
+    viewUrl: "https://docs.google.com/document/d/e/2PACX-1vRzTwdc1VwUTLsUKm6Z_R73OdB5j-9-iXzJ0D-4ka16VrUJw_xLbqgYsXjGVlsGEA/pub",
   },
   {
     id: 3,
@@ -30,7 +34,8 @@ const downloads = [
     date: "April 1, 2025",
     type: "PDF",
     fileSize: "4.2 MB",
-    url: "#",
+    url: "https://docs.google.com/document/d/e/2PACX-1vRzTwdc1VwUTLsUKm6Z_R73OdB5j-9-iXzJ0D-4ka16VrUJw_xLbqgYsXjGVlsGEA/pub",
+    viewUrl: "https://docs.google.com/document/d/e/2PACX-1vRzTwdc1VwUTLsUKm6Z_R73OdB5j-9-iXzJ0D-4ka16VrUJw_xLbqgYsXjGVlsGEA/pub",
   },
   {
     id: 4,
@@ -39,7 +44,8 @@ const downloads = [
     date: "December 10, 2024",
     type: "PDF",
     fileSize: "2.8 MB",
-    url: "#",
+    url: "https://docs.google.com/document/d/e/2PACX-1vRzTwdc1VwUTLsUKm6Z_R73OdB5j-9-iXzJ0D-4ka16VrUJw_xLbqgYsXjGVlsGEA/pub",
+    viewUrl: "https://docs.google.com/document/d/e/2PACX-1vRzTwdc1VwUTLsUKm6Z_R73OdB5j-9-iXzJ0D-4ka16VrUJw_xLbqgYsXjGVlsGEA/pub",
   },
   {
     id: 5,
@@ -48,7 +54,8 @@ const downloads = [
     date: "April 15, 2025",
     type: "ZIP",
     fileSize: "8.5 MB",
-    url: "#",
+    url: "https://docs.google.com/document/d/e/2PACX-1vRzTwdc1VwUTLsUKm6Z_R73OdB5j-9-iXzJ0D-4ka16VrUJw_xLbqgYsXjGVlsGEA/pub",
+    viewUrl: "https://docs.google.com/document/d/e/2PACX-1vRzTwdc1VwUTLsUKm6Z_R73OdB5j-9-iXzJ0D-4ka16VrUJw_xLbqgYsXjGVlsGEA/pub",
   },
   {
     id: 6,
@@ -57,11 +64,17 @@ const downloads = [
     date: "April 5, 2025",
     type: "PDF",
     fileSize: "5.3 MB",
-    url: "#",
+    url: "https://docs.google.com/document/d/e/2PACX-1vRzTwdc1VwUTLsUKm6Z_R73OdB5j-9-iXzJ0D-4ka16VrUJw_xLbqgYsXjGVlsGEA/pub",
+    viewUrl: "https://docs.google.com/document/d/e/2PACX-1vRzTwdc1VwUTLsUKm6Z_R73OdB5j-9-iXzJ0D-4ka16VrUJw_xLbqgYsXjGVlsGEA/pub",
   },
 ];
 
 const Downloads = () => {
+  const [selectedDocument, setSelectedDocument] = useState<null | {
+    title: string;
+    viewUrl: string;
+  }>(null);
+  
   return (
     <>
       <Header />
@@ -113,13 +126,21 @@ const Downloads = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="mt-auto pt-4 border-t border-gray-100">
+                    <div className="mt-auto pt-4 border-t border-gray-100 flex gap-2">
+                      <button
+                        onClick={() => setSelectedDocument({ title: item.title, viewUrl: item.viewUrl })}
+                        className="flex items-center justify-center w-1/2 py-2 bg-church-500 text-white rounded-md hover:bg-church-600 transition-colors"
+                      >
+                        <Eye size={18} className="mr-2" />
+                        View Document
+                      </button>
                       <a 
                         href={item.url} 
-                        className="flex items-center justify-center w-full py-2 bg-church-600 text-white rounded-md hover:bg-church-700 transition-colors"
+                        className="flex items-center justify-center w-1/2 py-2 bg-church-600 text-white rounded-md hover:bg-church-700 transition-colors"
+                        download
                       >
                         <Download size={18} className="mr-2" />
-                        Download {item.type} File
+                        Download {item.type}
                       </a>
                     </div>
                   </div>
@@ -129,6 +150,24 @@ const Downloads = () => {
           </div>
         </section>
       </main>
+      
+      {/* Document Viewer Dialog */}
+      <Dialog open={!!selectedDocument} onOpenChange={(open) => !open && setSelectedDocument(null)}>
+        <DialogContent className="max-w-5xl h-[80vh] p-0 overflow-hidden">
+          <DialogHeader className="p-4 border-b">
+            <DialogTitle>{selectedDocument?.title}</DialogTitle>
+          </DialogHeader>
+          <div className="h-full p-0 overflow-hidden">
+            {selectedDocument && (
+              <iframe 
+                src={selectedDocument.viewUrl} 
+                title={selectedDocument.title} 
+                className="w-full h-full border-0"
+              />
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
       
       <Footer />
     </>

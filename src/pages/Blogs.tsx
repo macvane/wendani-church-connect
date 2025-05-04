@@ -1,71 +1,10 @@
 
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { Search, Calendar, User, Tag } from 'lucide-react';
-
-const blogPosts = [
-  {
-    id: 1,
-    title: "Finding Peace in a Chaotic World",
-    excerpt: "In today's fast-paced world, finding inner peace can be challenging. Here are biblical principles to help you find calm amid chaos.",
-    date: "April 20, 2025",
-    author: "Pastor John Doe",
-    category: "Faith",
-    thumbnail: "https://images.unsplash.com/photo-1501854140801-50d01698950b?q=80&w=600",
-    readTime: "5 min read",
-  },
-  {
-    id: 2,
-    title: "The Importance of Daily Prayer",
-    excerpt: "Establishing a consistent prayer life is essential for spiritual growth. Learn how to develop a meaningful prayer routine.",
-    date: "April 15, 2025",
-    author: "Elder Mary Smith",
-    category: "Prayer",
-    thumbnail: "https://images.unsplash.com/photo-1473177104440-ffee2f376098?q=80&w=600",
-    readTime: "7 min read",
-  },
-  {
-    id: 3,
-    title: "Understanding the Sabbath",
-    excerpt: "The Sabbath is more than just a day of rest. Discover the profound spiritual significance of this weekly observance.",
-    date: "April 10, 2025",
-    author: "Deacon James Brown",
-    category: "Doctrine",
-    thumbnail: "https://images.unsplash.com/photo-1466442929976-97f336a657be?q=80&w=600",
-    readTime: "10 min read",
-  },
-  {
-    id: 4,
-    title: "Steps to Spiritual Growth",
-    excerpt: "Growing spiritually doesn't happen by accident. Learn practical steps to deepen your relationship with God.",
-    date: "April 5, 2025",
-    author: "Elder David Kamau",
-    category: "Spiritual Growth",
-    thumbnail: "https://images.unsplash.com/photo-1524230572899-a752b3835840?q=80&w=600",
-    readTime: "8 min read",
-  },
-  {
-    id: 5,
-    title: "What the Bible Says About Stewardship",
-    excerpt: "Explore the biblical principles of stewardship and how they apply to our finances, time, and talents.",
-    date: "March 28, 2025",
-    author: "Pastor John Doe",
-    category: "Stewardship",
-    thumbnail: "https://images.unsplash.com/photo-1493397212122-2b85dda8106b?q=80&w=600",
-    readTime: "6 min read",
-  },
-  {
-    id: 6,
-    title: "The Power of Community",
-    excerpt: "God designed us to live in community. Discover the spiritual benefits of authentic Christian fellowship.",
-    date: "March 20, 2025",
-    author: "Elder Sarah Johnson",
-    category: "Community",
-    thumbnail: "https://images.unsplash.com/photo-1511988617509-a57c8a288659?q=80&w=600",
-    readTime: "4 min read",
-  }
-];
+import { blogPosts } from '@/data/blogData';
 
 const categories = [
   { name: "Faith", count: 8 },
@@ -74,6 +13,7 @@ const categories = [
   { name: "Spiritual Growth", count: 15 },
   { name: "Stewardship", count: 6 },
   { name: "Community", count: 9 },
+  { name: "Prophecy", count: 5 },
 ];
 
 const Blogs = () => {
@@ -158,9 +98,9 @@ const Blogs = () => {
                           </div>
                           
                           <h2 className="text-xl font-bold mb-3">
-                            <a href={`/blogs/${blog.id}`} className="hover:text-church-600 transition-colors">
+                            <Link to={`/blogs/${blog.id}`} className="hover:text-church-600 transition-colors">
                               {blog.title}
-                            </a>
+                            </Link>
                           </h2>
                           
                           <p className="text-gray-600 mb-4">
@@ -172,12 +112,12 @@ const Blogs = () => {
                               <User size={14} className="mr-1" />
                               By {blog.author}
                             </span>
-                            <a 
-                              href={`/blogs/${blog.id}`} 
+                            <Link 
+                              to={`/blogs/${blog.id}`} 
                               className="text-church-600 font-medium hover:text-church-700 transition-colors"
                             >
                               Read More →
-                            </a>
+                            </Link>
                           </div>
                         </div>
                       </div>
