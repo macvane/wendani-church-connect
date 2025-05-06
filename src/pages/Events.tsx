@@ -283,12 +283,11 @@ const Events = () => {
             <p className="section-subtitle animate-on-scroll animate-delay-1">
               View our complete church calendar to plan your participation.
             </p>
-            
             <div className="mt-8 flex justify-center animate-on-scroll animate-delay-2">
               <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-4xl">
                 <div className="aspect-w-16 aspect-h-9">
                   <iframe 
-                    src="https://calendar.google.com/calendar/embed?src=wendanisda%40gmail.com" 
+                    src="https://calendar.google.com/calendar/embed?src=kahawawendanisdachurch%40gmail.com&ctz=Africa%2FNairobi" 
                     className="w-full h-[600px] border-0"
                     frameBorder="0" 
                     scrolling="no"

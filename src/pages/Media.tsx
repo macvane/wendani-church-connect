@@ -149,7 +149,7 @@ const Media = () => {
                         
                         <div className="border-t border-gray-200 pt-4 mt-4">
                           <h4 className="font-bold mb-2">Choir Leader</h4>
-                          <p className="text-gray-700 mb-1 mb-4">{choir.leader}</p>
+                          <p className="text-gray-700 mb-4">{choir.leader}</p>
                           {/* <p className="text-gray-600 mb-4">{choir.contact}</p> */}
                           
                           <h4 className="font-bold mb-2">Join Our Choir</h4>

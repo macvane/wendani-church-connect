@@ -159,7 +159,7 @@ const Downloads = () => {
           <DialogHeader className="p-4 border-b">
             <DialogTitle>{selectedDocument?.title}</DialogTitle>
           </DialogHeader>
-          <div className="h-full p-0 overflow-hidden">
+          <div className="h-full p-0 overflow-  hidden">
             {selectedDocument && (
               <iframe 
                 src={selectedDocument.viewUrl} 
