@@ -11,19 +11,19 @@ const Footer = () => {
       <div className="container mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-10">
           <div>
+            
             <h3 className="text-xl font-bold mb-4 relative">
               <span className="relative z-10">About Us</span>
               <span className="absolute bottom-0 left-0 w-12 h-1 bg-church-600"></span>
             </h3>
-            <p className="mb-4">Kahawa Wendani SDA Church is committed to spreading the gospel and serving the community with love and compassion.</p>
             <div className="flex items-center space-x-2">
               <img 
                 src="/lovable-uploads/d7c1183c-049c-45be-b6bf-64d44a0578e4.png" 
                 alt="Kahawa Wendani SDA Church Logo" 
-                className="h-10 w-10 object-contain"
+                className="h-[2rem] object-contain"
               />
-              <span className="font-serif font-bold text-xl">Kahawa Wendani SDA</span>
             </div>
+            <p className="mb-4">Kahawa Wendani SDA Church is committed to spreading the gospel and serving the community with love and compassion.</p>
           </div>
           
           <div>
@@ -61,7 +61,7 @@ const Footer = () => {
             <ul className="space-y-2">
               <li className="flex flex-col">
                 <span className="font-medium">Sabbath School</span>
-                <span className="text-gray-400">Saturday 9:00 AM - 10:45 AM</span>
+                <span className="text-gray-400">Saturday 8:00 AM - 9:00 AM</span>
               </li>
               <li className="flex flex-col">
                 <span className="font-medium">Divine Service</span>
@@ -69,7 +69,7 @@ const Footer = () => {
               </li>
               <li className="flex flex-col">
                 <span className="font-medium">Afternoon Program</span>
-                <span className="text-gray-400">Saturday 2:00 PM - 4:00 PM</span>
+                <span className="text-gray-400">Saturday 2:00 PM - 5:00 PM</span>
               </li>
               <li className="flex flex-col">
                 <span className="font-medium">Midweek Prayer</span>
@@ -94,12 +94,12 @@ const Footer = () => {
               </li>
               <li className="flex items-center space-x-3">
                 <Phone size={18} className="text-church-500 shrink-0" />
-                <span>+254 700 000000</span>
+                <span>+254 726 410608</span>
               </li>
               <li className="flex items-start space-x-3">
                 <Book size={18} className="text-church-500 mt-1 shrink-0" />
                 <div>
-                  <span className="block">Sabbath School: 9:00 AM</span>
+                  <span className="block">Sabbath School: 8:00 AM</span>
                   <span className="block">Divine Service: 11:00 AM</span>
                 </div>
               </li>
