@@ -6,23 +6,35 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 
 const MissionsSection = () => {
-  // Gallery of mission images
+  // Gallery of mission images with details
   const missionImages = [
     { 
       src: "/assets/image (12).jpg", 
-      alt: "Mission outreach" 
+      alt: "Mission outreach",
+      title: "Community Outreach",
+      location: "Downtown Food Bank",
+      date: "March 12, 2025"
     },
     { 
       src: "/assets/image (36).jpg", 
-      alt: "Community service" 
+      alt: "Community service",
+      title: "Shelter Construction",
+      location: "Riverside Community",
+      date: "January 5, 2025" 
     },
     { 
       src: "/assets/image (25).jpg", 
-      alt: "Bible study group" 
+      alt: "Bible study group",
+      title: "Rural Bible Study",
+      location: "Highland Village",
+      date: "April 23, 2025"
     },
     { 
       src: "/assets/image (31).jpg", 
-      alt: "Medical mission" 
+      alt: "Medical mission",
+      title: "Medical Mission",
+      location: "East Side Clinic",
+      date: "February 18, 2025"
     }
   ];
 
@@ -115,20 +127,27 @@ const MissionsSection = () => {
           ))}
         </div>
         
-        {/* Mission gallery */}
+        {/* Mission gallery with overlay text */}
         <div className="animate-on-scroll animate-delay-3">
           <h3 className="text-2xl font-bold mb-6 text-center">Recent Mission Activities</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
             {missionImages.map((image, index) => (
               <div 
                 key={index} 
-                className="relative overflow-hidden rounded-lg h-48 md:h-64"
+                className="relative overflow-hidden rounded-lg h-64 group"
               >
                 <img 
                   src={image.src} 
                   alt={image.alt} 
-                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-90 flex flex-col justify-end p-4 text-white">
+                  <h4 className="text-lg font-bold">{image.title}</h4>
+                  <p className="text-sm mb-1">{image.location}</p>
+                  <p className="text-xs font-semibold bg-church-600 inline-block px-2 py-1 rounded-sm self-start">
+                    {image.date}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
