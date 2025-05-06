@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -137,7 +136,7 @@ const Downloads = () => {
                         View Document
                       </button>
                       <button 
-                        onClick={item.url} 
+                        onClick={() => window.open(item.url)} 
                         className="flex items-center justify-center w-1/2 py-2 bg-church-600 text-white rounded-md hover:bg-church-700 transition-colors"
                         
                       >
