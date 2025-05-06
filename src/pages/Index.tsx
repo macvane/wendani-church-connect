@@ -9,6 +9,7 @@ import PastorateSection from '@/components/home/PastorateSection';
 import BlogPreview from '@/components/home/BlogPreview';
 import LivestreamSection from '@/components/home/LivestreamSection';
 import BaptismSection from '@/components/home/BaptismSection';
+import MissionsSection from '@/components/home/MissionsSection';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
@@ -42,6 +43,7 @@ const Index = () => {
         <AboutSection />
         <LivestreamSection />
         <BaptismSection />
+        <MissionsSection />
         <ConstructionSection />
         <MediaSection />
         <EventsSection />
