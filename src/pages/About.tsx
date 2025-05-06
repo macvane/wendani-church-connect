@@ -81,7 +81,7 @@ const About = () => {
           <div className="absolute inset-0">
             <div className="absolute inset-0 bg-black bg-opacity-60 z-10"></div>
             <img 
-              src="https://images.unsplash.com/photo-1466442929976-97f336a657be?q=80&w=2000" 
+              src="/assets/image (45).jpg" 
               alt="Church Building" 
               className="w-full h-full object-cover"
             />
@@ -102,10 +102,10 @@ const About = () => {
               
               <div className="prose max-w-none animate-on-scroll animate-delay-1">
                 <p className="text-lg mb-4">
-                The name “Wendani,” a rich Kikuyu word meaning “love,” perfectly embodies the spirit and essence of our church. Sda Church Kahawa Wendani has a deep-rooted history, originating from SDA Kahawa Garrison, where Wendani Sabbath School was born on July 23, 2005.
+                The name “Wendani,” a rich Kikuyu word meaning “love,” perfectly embodies the spirit and essence of our church. SDA Church Kahawa Wendani has a deep-rooted history, originating from SDA Kahawa Garrison, where Wendani Sabbath School was born on July 23, 2005.
                 </p>
                 
-                <div className="my-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* <div className="my-8 grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="rounded-lg overflow-hidden shadow-md">
                     <img 
                       src="https://images.unsplash.com/photo-1473177104440-ffee2f376098?q=80&w=600" 
@@ -127,7 +127,7 @@ const About = () => {
                       <p className="text-sm text-gray-600">Our current church facility (since 2010)</p>
                     </div>
                   </div>
-                </div>
+                </div> */}
                 
                 <p className="text-lg mb-4">
                 Our journey began on a bright Sabbath morning when members of the church, expecting their usual worship at Kahawa Garrison, were unexpectedly denied entry. The Garrison commander had issued a directive that restricted civilian access, allowing only soldiers and their families to worship inside the barracks. Despite the abrupt change, our members displayed unwavering faith, worshiping under the sun by the roadside that day.
