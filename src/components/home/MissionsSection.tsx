@@ -9,25 +9,25 @@ const MissionsSection = () => {
   // Gallery of mission images with details
   const missionImages = [
     { 
-      src: "/assets/image (12).jpg", 
+      src: "/assets/image (46).jpg", 
       alt: "Mission outreach",
-      title: "Community Outreach",
-      location: "Downtown Food Bank",
+      title: "Prison Outreach",
+      location: "Kamiti Prisons",
       date: "March 12, 2025"
     },
     { 
-      src: "/assets/image (36).jpg", 
+      src: "/assets/image (49).jpg", 
       alt: "Community service",
-      title: "Shelter Construction",
-      location: "Riverside Community",
+      title: "Elderly Home",
+      location: "Kariobangi, Nairobi",
       date: "January 5, 2025" 
     },
     { 
-      src: "/assets/image (25).jpg", 
+      src: "/assets/image (24).jpg", 
       alt: "Bible study group",
-      title: "Rural Bible Study",
-      location: "Highland Village",
-      date: "April 23, 2025"
+      title: "Mulufumba Mission Outreach",
+      location: "Busia, Kenya",
+      date: "April 13, 2025"
     },
     { 
       src: "/assets/image (31).jpg", 
@@ -75,7 +75,7 @@ const MissionsSection = () => {
           <div className="animate-on-scroll animate-delay-2">
             <div className="relative rounded-lg overflow-hidden shadow-xl">
               <img 
-                src="/assets/image (19).jpg" 
+                src="/assets/image .jpg" 
                 alt="Mission work" 
                 className="w-full h-[400px] object-cover object-center"
               />
@@ -97,7 +97,7 @@ const MissionsSection = () => {
             {
               icon: <Globe className="h-10 w-10 text-church-600" />,
               title: "Global Reach",
-              description: "Our mission work spans over 200 countries, bringing hope and healing worldwide."
+              description: "Our mission work bringing hope and healing worldwide."
             },
             {
               icon: <Users className="h-10 w-10 text-church-600" />,
@@ -112,7 +112,7 @@ const MissionsSection = () => {
             {
               icon: <Share className="h-10 w-10 text-church-600" />,
               title: "Media Evangelism",
-              description: "Reaching millions through radio, television, and digital platforms."
+              description: "Reaching millions through digital platforms."
             }
           ].map((item, index) => (
             <Card key={index} className="border-none shadow-lg animate-on-scroll" style={{ animationDelay: `${index * 0.1}s` }}>

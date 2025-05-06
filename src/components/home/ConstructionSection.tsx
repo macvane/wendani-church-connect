@@ -26,22 +26,15 @@ const ConstructionSection = () => {
       title: "Project Planning",
       date: "November 2023",
       description: "Architectural designs were completed and approved by the church board and local authorities.",
-      image: "https://images.unsplash.com/photo-1459767129954-1b1c1f9b9ace?q=80&w=2600",
-      completed: true
-    },
-    {
-      title: "Fundraising Launch",
-      date: "January 2024",
-      description: "We launched our capital campaign with a goal to raise KES 100M for the new sanctuary.",
-      image: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?q=80&w=2600",
+      image: "/assets/image (45).jpg",
       completed: true
     },
     {
       title: "Ground Breaking",
-      date: "May 2024",
+      date: "May 2025",
       description: "The official ground breaking ceremony was held with church members and community leaders.",
-      image: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?q=80&w=2600",
-      completed: false
+      image: "/assets/image (30).jpg",
+      completed: true
     },
     {
       title: "Foundation Work",
