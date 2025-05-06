@@ -20,7 +20,7 @@ const Donate = () => {
             />
           </div>
           <div className="relative z-20 text-center text-white px-4">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Support Our Ministry</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">Support God's Ministry</h1>
             <p className="text-xl md:text-2xl max-w-2xl mx-auto">
               Your generosity helps us spread God's love and make a difference in our community
             </p>
@@ -32,16 +32,16 @@ const Donate = () => {
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
               <PiggyBank className="mx-auto h-16 w-16 text-church-600 mb-4" />
-              <h2 className="text-3xl font-bold mb-4">Make a Donation</h2>
+              <h2 className="text-3xl font-bold mb-4">Worship Through Giving</h2>
               <p className="text-gray-600 max-w-2xl mx-auto">
-                Your support enables us to continue our mission and serve our community. 
+                Your support enables us to continue God's mission and serve our community. 
                 All donations are securely processed through M-Pesa.
               </p>
             </div>
 
             <div className="bg-white rounded-lg shadow-lg p-6 md:p-8">
               <div className="text-center mb-8">
-                <h3 className="text-xl font-semibold mb-2">Donate via M-Pesa</h3>
+                <h3 className="text-xl font-semibold mb-2">Give via M-Pesa</h3>
                 <p className="text-gray-600">Coming soon: Direct M-Pesa integration</p>
               </div>
 
@@ -56,9 +56,9 @@ const Donate = () => {
                 <p className="text-sm">
                   For manual M-Pesa donations, use our Paybill:
                   <br />
-                  <span className="font-semibold">Paybill Number: XXXXX</span>
+                  <span className="font-semibold">Paybill Number: 400222</span>
                   <br />
-                  <span className="font-semibold">Account Number: Your Name</span>
+                  <span className="font-semibold">Account Number: 441211# (TITHE or OFFERING or LCB)</span>
                 </p>
               </div>
             </div>
