@@ -75,7 +75,7 @@ const Contact = () => {
           <div className="absolute inset-0">
             <div className="absolute inset-0 bg-black bg-opacity-60 z-10"></div>
             <img 
-              src="https://images.unsplash.com/photo-1504380790108-2280fee87871?q=80&w=2000" 
+              src="https://images.unsplash.com/photo-1620891727922-654a4ec31d26?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
               alt="Contact Us" 
               className="w-full h-full object-cover"
             />
@@ -124,7 +124,9 @@ const Contact = () => {
                     </div>
                     <div>
                       <h3 className="font-bold mb-1">Phone</h3>
-                      <p className="text-gray-600">+254 700 000000</p>
+                      <a href="tel:0726 410608">
+                        <p className="text-gray-600">+254 726 410608</p>
+                      </a>
                       <p className="text-gray-600">+254 711 000000</p>
                     </div>
                   </div>
@@ -135,14 +137,14 @@ const Contact = () => {
                     </div>
                     <div>
                       <h3 className="font-bold mb-1">Service Hours</h3>
-                      <p className="text-gray-600">Sabbath School: 9:00 AM</p>
+                      <p className="text-gray-600">Sabbath School: 8:00 AM</p>
                       <p className="text-gray-600">Divine Service: 11:00 AM</p>
                       <p className="text-gray-600">Afternoon Program: 2:00 PM</p>
                     </div>
                   </div>
                 </div>
                 
-                <div className="mt-8">
+                {/* <div className="mt-8">
                   <h3 className="font-bold mb-2">Connect With Us</h3>
                   <div className="flex space-x-4">
                     <a href="#" className="bg-church-100 p-2 rounded-full hover:bg-church-200 transition-colors">
@@ -166,7 +168,7 @@ const Contact = () => {
                       </svg>
                     </a>
                   </div>
-                </div>
+                </div> */}
               </div>
               
               <div className="lg:col-span-2 animate-on-scroll animate-delay-1">
@@ -272,10 +274,9 @@ const Contact = () => {
               We're located in Kahawa Wendani, Nairobi. Join us this Sabbath!
             </p>
           </div>
-          
           <div className="h-[500px] w-full animate-on-scroll animate-delay-2">
             <iframe 
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.818394895471!2d36.9406!3d-1.1994!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTLCsDExJzU3LjgiUyAzNsKwNTYnMjYuMiJF!5e0!3m2!1sen!2sus!4v1586400909864!5m2!1sen!2sus" 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.941452822009!2d36.92801547418274!3d-1.2012572355374502!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f3fc0686896b5%3A0x39495f1958453491!2sKahawa%20Wendani%20SDA!5e0!3m2!1sen!2ske!4v1746551897290!5m2!1sen!2ske" 
               width="100%" 
               height="100%" 
               style={{ border: 0 }} 

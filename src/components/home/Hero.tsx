@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 
 const slides = [
   {
-    image: "https://images.unsplash.com/photo-1473177104440-ffee2f376098?q=80&w=2000",
+    image: "/assets/hero.JPG",
     title: "Welcome to Kahawa Wendani SDA Church",
     subtitle: "Where faith meets community"
   },
