@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { useToast } from '@/hooks/use-toast';
+import { sendToGoogleSheet } from '@/utils/googleSheets';
 
 const Prayer = () => {
   const [formData, setFormData] = useState({
@@ -47,12 +48,15 @@ const Prayer = () => {
     setFormData(prev => ({ ...prev, [name]: checked }));
   };
   
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate sending to Google Sheets
-    setTimeout(() => {
+    try {
+      await sendToGoogleSheet({
+        ...formData,
+      }, 'prayer');
+      
       toast({
         title: "Prayer Request Submitted",
         description: "Thank you for sharing your prayer request. Our prayer team will be praying for you.",
@@ -66,9 +70,16 @@ const Prayer = () => {
         prayerRequest: '',
         isConfidential: false,
       });
-      
+    } catch (error) {
+      console.error("Error submitting prayer request:", error);
+      toast({
+        title: "Submission Failed",
+        description: "There was a problem submitting your prayer request. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 1500);
+    }
   };
 
   return (

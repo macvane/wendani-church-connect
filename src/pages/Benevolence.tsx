@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { useToast } from '@/hooks/use-toast';
+import { sendToGoogleSheet } from '@/utils/googleSheets';
 
 const Benevolence = () => {
   const [formData, setFormData] = useState({
@@ -25,12 +26,15 @@ const Benevolence = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
   
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      await sendToGoogleSheet({
+        ...formData,
+      }, 'benevolence');
+      
       toast({
         title: "Benevolence Request Submitted",
         description: "Your request has been received. A church representative will contact you soon.",
@@ -47,9 +51,16 @@ const Benevolence = () => {
         memberStatus: '',
         additionalInfo: '',
       });
-      
+    } catch (error) {
+      console.error("Error submitting benevolence request:", error);
+      toast({
+        title: "Submission Failed",
+        description: "There was a problem submitting your request. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 1500);
+    }
   };
 
   return (

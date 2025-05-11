@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { useToast } from '@/hooks/use-toast';
+import { sendToGoogleSheet } from '@/utils/googleSheets';
 
 const ChildDedication = () => {
   const [formData, setFormData] = useState({
@@ -28,12 +29,15 @@ const ChildDedication = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
   
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      await sendToGoogleSheet({
+        ...formData,
+      }, 'dedication');
+      
       toast({
         title: "Dedication Request Submitted",
         description: "Thank you for your submission. We will contact you soon regarding the child dedication ceremony.",
@@ -53,9 +57,16 @@ const ChildDedication = () => {
         dedicationDate: '',
         additionalInfo: '',
       });
-      
+    } catch (error) {
+      console.error("Error submitting dedication request:", error);
+      toast({
+        title: "Submission Failed",
+        description: "There was a problem submitting your request. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 1500);
+    }
   };
 
   return (

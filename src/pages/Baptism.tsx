@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -13,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import { Calendar } from 'lucide-react';
+import { sendToGoogleSheet } from '@/utils/googleSheets';
 
 const formSchema = z.object({
   fullName: z.string().min(2, { message: "Full name must be at least 2 characters." }),
@@ -56,13 +56,10 @@ const Baptism = () => {
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
     
-    // Here we would normally submit to Google Sheets using their API
     try {
-      // Simulate API call
-      console.log("Form data to be submitted:", data);
-      
-      // Simulate network delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await sendToGoogleSheet({
+        ...data,
+      }, 'baptism');
       
       toast({
         title: "Baptism Request Submitted",
