@@ -47,6 +47,7 @@ const Header = () => {
         { name: 'Downloads', path: '/downloads' },
         { name: 'Blogs', path: '/blogs' },
         { name: 'Child Dedication', path: '/child-dedication' },
+        { name: 'Membership Transfer', path: '/membership-transfer' },
         { name: 'Benevolence', path: '/benevolence' },
         { name: 'Library', path: '/library' },
       ]
@@ -140,7 +141,7 @@ const Header = () => {
         {/* Mobile Menu Toggle */}
         <button 
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="lg:hidden p-2"
+          className="lg:hidden p-2 z-50"
           aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
         >
           {isMobileMenuOpen ? (
