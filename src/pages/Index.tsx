@@ -43,15 +43,15 @@ const Index = () => {
       <main>
         <Hero />
         <AboutSection />
-        <LivestreamSection />
+        {/* <LivestreamSection /> */}
         <BaptismSection />
-        <MissionsSection />
-        <PastorateSection />
-        <ImageSlideshow />
-        <ConstructionSection />
-        <MediaSection />
         <EventsSection />
+        <MissionsSection />
+        <MediaSection />
+        <ConstructionSection />
+        <PastorateSection />
         <BlogPreview />
+        <ImageSlideshow />
         <CtaSection />
       </main>
       <Footer />
