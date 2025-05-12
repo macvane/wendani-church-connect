@@ -37,45 +37,43 @@ const BlogPost = () => {
     <>
       <Header />
       
-      <main className="container py-12">
-        <div className="mb-6">
-          <Link to="/blogs" className="flex items-center text-church-600 hover:text-church-700">
+      {/* Hero Section */}
+      <section className="relative h-[500px] flex items-center">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-black bg-opacity-60 z-10"></div>
+          <img 
+            src={blog.featuredImage || 'https://images.unsplash.com/photo-1501951653466-8df816debe46?q=80&w=1374&auto=format&fit=crop'} 
+            alt={blog.title} 
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <div className="container relative z-20 text-white">
+          <Link to="/blogs" className="inline-flex items-center text-church-300 hover:text-church-200 mb-6">
             <ArrowLeft size={16} className="mr-2" />
             Back to All Blogs
           </Link>
-        </div>
-        
-        <article className="max-w-4xl mx-auto">
-          <header className="mb-8">
-            <div className="flex items-center mb-4 text-sm text-gray-500">
-              <span className="bg-church-100 text-church-700 px-2 py-1 rounded text-xs font-medium">
+          <div className="max-w-4xl">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">{blog.title}</h1>
+            
+            <div className="flex flex-wrap items-center gap-6 text-sm text-gray-300">
+              <div className="bg-church-600 text-white px-3 py-1 rounded-full">
                 {blog.category}
-              </span>
-              <span className="mx-2">•</span>
+              </div>
               <span className="flex items-center">
                 <Calendar size={14} className="mr-1" />
                 {blog.date}
               </span>
-              <span className="mx-2">•</span>
               <span className="flex items-center">
                 <User size={14} className="mr-1" />
                 {blog.author}
               </span>
             </div>
-            
-            <h1 className="text-4xl font-bold mb-6">{blog.title}</h1>
-          </header>
-          
-          {blog.featuredImage && (
-            <div className="mb-8">
-              <img 
-                src={blog.featuredImage} 
-                alt={blog.title} 
-                className="w-full h-[400px] object-cover rounded-lg"
-              />
-            </div>
-          )}
-          
+          </div>
+        </div>
+      </section>
+      
+      <main className="container py-12">        
+        <article className="max-w-4xl mx-auto">
           <div className="prose prose-lg max-w-none">
             {blog.content.map((section, index) => (
               <React.Fragment key={index}>

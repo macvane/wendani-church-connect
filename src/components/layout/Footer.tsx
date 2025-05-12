@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Book, Mail, MapPin, Phone } from 'lucide-react';
+import { Book, Mail, MapPin, Phone, Youtube } from 'lucide-react';
 
 const Footer = () => {
   const year = new Date().getFullYear();
@@ -104,6 +104,21 @@ const Footer = () => {
                 </div>
               </li>
             </ul>
+            
+            <div className="mt-4">
+              <h4 className="text-sm font-medium mb-2">Connect With Us</h4>
+              <div className="flex space-x-3">
+                <a 
+                  href="https://www.youtube.com/@KahawaWendaniSDAChurch" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="bg-church-600 hover:bg-church-700 text-white p-2 rounded-full transition-colors"
+                  aria-label="YouTube Channel"
+                >
+                  <Youtube size={18} />
+                </a>
+              </div>
+            </div>
           </div>
         </div>
         

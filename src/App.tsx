@@ -21,6 +21,7 @@ import Library from "./pages/Library";
 import Baptism from "./pages/Baptism";
 import NotFound from "./pages/NotFound";
 import Donate from "./pages/Donate";
+import MembershipTransfer from "./pages/MembershipTransfer";
 
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
@@ -47,6 +48,7 @@ const App = () => {
             <Route path="/library" element={<Library />} />
             <Route path="/baptism" element={<Baptism />} />
             <Route path="/donate" element={<Donate />} />
+            <Route path="/membership-transfer" element={<MembershipTransfer />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
