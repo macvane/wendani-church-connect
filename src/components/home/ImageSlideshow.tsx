@@ -53,9 +53,9 @@ const ImageSlideshow = () => {
   const handleMouseLeave = () => setAutoPlay(true);
   
   return (
-    <section className="section bg-gray-50">
+    <section className="section bg-white">
       <div className="container">
-        <h2 className="section-title mb-2">Glimpses of Our Church</h2>
+        <h2 className="section-title mb-2">From Our Gallery</h2>
         <p className="section-subtitle mb-10">
           Moments captured during our church events, services, and gatherings.
         </p>
