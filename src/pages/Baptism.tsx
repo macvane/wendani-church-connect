@@ -20,8 +20,6 @@ const formSchema = z.object({
   phone: z.string().min(10, { message: "Please enter a valid phone number." }),
   address: z.string().min(5, { message: "Address must be at least 5 characters." }),
   birthDate: z.string().min(1, { message: "Birth date is required." }),
-  baptismReason: z.string().min(10, { message: "Please share more about your decision." }),
-  previousChurch: z.string().optional(),
   preferredDate: z.string().optional(),
   hasBibleStudy: z.boolean().default(false),
   hasBeenBaptized: z.boolean().default(false),
@@ -43,8 +41,6 @@ const Baptism = () => {
       phone: '',
       address: '',
       birthDate: '',
-      baptismReason: '',
-      previousChurch: '',
       preferredDate: '',
       hasBibleStudy: false,
       hasBeenBaptized: false,
@@ -233,7 +229,7 @@ const Baptism = () => {
                     />
                   </div>
                   
-                  <FormField
+                  {/* <FormField
                     control={form.control}
                     name="previousChurch"
                     render={({ field }) => (
@@ -245,9 +241,9 @@ const Baptism = () => {
                         <FormMessage />
                       </FormItem>
                     )}
-                  />
+                  /> */}
                   
-                  <FormField
+                  {/* <FormField
                     control={form.control}
                     name="baptismReason"
                     render={({ field }) => (
@@ -263,7 +259,7 @@ const Baptism = () => {
                         <FormMessage />
                       </FormItem>
                     )}
-                  />
+                  /> */}
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField

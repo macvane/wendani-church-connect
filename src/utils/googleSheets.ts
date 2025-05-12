@@ -4,7 +4,7 @@
  */
 
 // Google Apps Script URL (this should be replaced with your actual deployed script URL)
-const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxf9ZSln0KqWWXo9AKfA0qdrt3JuP_B85DohHYh178CEjyl2LrFm5jUIEm-TZPV6Oa8/exec";
+const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxPYULQxLzI8-HIu9bFdqCf265tpCnMd7IjLjhrIx55oaA_-pygnWLGQCqUc-Olk_Ov/exec";
 
 export type FormType = 'contact' | 'baptism' | 'benevolence' | 'dedication' | 'prayer' | 'library' | 'donation';
 
