@@ -35,7 +35,7 @@ const AboutSection = () => {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="bg-white rounded-lg shadow-md p-6 text-center animate-on-scroll animate-delay-1">
             <div className="h-20 w-20 rounded-full bg-church-100 mx-auto flex items-center justify-center mb-4">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-church-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -60,7 +60,7 @@ const AboutSection = () => {
             </p>
           </div>
           
-          <div className="bg-white rounded-lg shadow-md p-6 text-center animate-on-scroll animate-delay-3">
+          {/* <div className="bg-white rounded-lg shadow-md p-6 text-center animate-on-scroll animate-delay-3">
             <div className="h-20 w-20 rounded-full bg-church-100 mx-auto flex items-center justify-center mb-4">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-church-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
@@ -70,7 +70,7 @@ const AboutSection = () => {
             <p className="text-gray-600">
               Faith, service, integrity, community, and discipleship guide everything we do as we strive to create a loving church family.
             </p>
-          </div>
+          </div> */}
         </div>
         
         <div className="mt-12 text-center">
