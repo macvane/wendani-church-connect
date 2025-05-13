@@ -1,49 +1,27 @@
 
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Calendar } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
-const events = [
-  {
-    id: 1,
-    title: "Quarterly Business Meeting",
-    date: "May 5, 2025",
-    time: "3:00 PM - 5:00 PM",
-    location: "Church Fellowship Hall",
-    department: "Church Board",
-    thumbnail: "https://images.unsplash.com/photo-1573164713988-8665fc963095?q=80&w=400",
-  },
-  {
-    id: 2,
-    title: "Youth Camp",
-    date: "June 12-15, 2025",
-    time: "All Day",
-    location: "Naivasha Campgrounds",
-    department: "Youth Ministry",
-    thumbnail: "https://images.unsplash.com/photo-1521245585218-15db1fcc89e1?q=80&w=400",
-  },
-  {
-    id: 3,
-    title: "Family Life Seminar",
-    date: "July 2, 2025",
-    time: "9:00 AM - 1:00 PM",
-    location: "Church Main Sanctuary",
-    department: "Family Life",
-    thumbnail: "https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?q=80&w=400",
-  },
-  {
-    id: 4,
-    title: "Health Expo",
-    date: "July 17, 2025",
-    time: "10:00 AM - 4:00 PM",
-    location: "Church Grounds",
-    department: "Health Ministries",
-    thumbnail: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=400",
-  }
-];
+import { allEventsData } from '@/pages/Events';
+import { isDatePassed } from '@/utils/dateUtils';
 
 const EventsSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const [upcomingEvents, setUpcomingEvents] = useState<typeof allEventsData>([]);
+  
+  useEffect(() => {
+    // Filter and sort upcoming events
+    const upcoming = allEventsData
+      .filter(event => !isDatePassed(event.date))
+      .sort((a, b) => {
+        const dateA = new Date(a.date.split('-')[0]);
+        const dateB = new Date(b.date.split('-')[0]);
+        return dateA.getTime() - dateB.getTime();
+      })
+      .slice(0, 4); // Get only the first 4 upcoming events
+      
+    setUpcomingEvents(upcoming);
+  }, []);
   
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -76,7 +54,7 @@ const EventsSection = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {events.map((event, index) => (
+          {upcomingEvents.map((event, index) => (
             <div 
               key={event.id}
               className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col sm:flex-row animate-on-scroll"
@@ -104,12 +82,12 @@ const EventsSection = () => {
                   Location: {event.location}
                 </p>
                 <div className="mt-auto">
-                  <a 
-                    href={`/events/${event.id}`} 
+                  <Link 
+                    to={`/events`} 
                     className="text-church-600 font-medium hover:text-church-700"
                   >
                     View Details →
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

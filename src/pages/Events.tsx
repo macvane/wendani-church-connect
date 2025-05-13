@@ -4,106 +4,148 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { Calendar, MapPin, Clock } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { isDatePassed } from '@/utils/dateUtils';
 
-const eventsData = {
-  upcoming: [
-    {
-      id: 1,
-      title: "Women’s Ministries Emphasis Day",
-      date: "June 14, 2025",
-      time: "All Day",
-      location: "Church Main Sanctuary",
-      department: "AWM Ministry",
-      description: "Review of the church's quarterly activities, financial reports, and planning for the next quarter.",
-      thumbnail: "https://images.unsplash.com/photo-1577394732330-38cef75bc388?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      id: 2,
-      title: "World Refugee Day ",
-      date: "June 21, 2025",
-      time: "All Day",
-      location: "Church Main Sanctuary",
-      department: "Youth Ministry",
-      description: "Annual youth camp focused on spiritual growth, leadership development, and fellowship for young people aged 16-30.",
-      thumbnail: "https://images.unsplash.com/photo-1577394732330-38cef75bc388?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      id: 3,
-      title: "Public Campus Ministries Day",
-      date: "July 28, 2025",
-      time: "8:00 AM - 5:00 PM",
-      location: "Church Main Sanctuary",
-      department: "Public Campus Ministries",
-      description: "A special seminar on building strong families, effective communication, and resolving conflicts in relationships.",
-      thumbnail: "/thumbnails/pcm.jpg",
-    },
-    {
-      id: 4,
-      title: "Mission Promotion: World Mission",
-      date: "July 12, 2025",
-      time: "8:00 AM - 5:00 PM",
-      location: "Church Main Sanctuary",
-      department: "Evangelism Department",
-      description: "Community health expo offering free health screenings, nutrition information, exercise demonstrations, and health lectures.",
-      thumbnail: "https://images.unsplash.com/photo-1577394732330-38cef75bc388?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      id: 5,
-      title: "Reach the World: Media Ministry ",
-      date: "July 19, 2025",
-      time: "8:00 AM - 5:00 PM",
-      location: "Church Main Sanctuary",
-      department: "Communication Depaartment",
-      description: "Annual women's retreat with guest speakers, workshops, prayer sessions, and fellowship activities.",
-      thumbnail: "https://images.unsplash.com/photo-1577394732330-38cef75bc388?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    },
-    {
-      id: 6,
-      title: "Children’s Sabbath ",
-      date: "July 26, 2025",
-      time: "8:00 AM - 8:00 PM",
-      location: "Church Main Sanctuary",
-      department: "Children Ministries",
-      description: "12-hour continuous Bible study event covering the book of Revelation with different speakers and interactive sessions.",
-      thumbnail: "https://images.unsplash.com/photo-1577394732330-38cef75bc388?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    }
-  ],
-  past: [
-    {
-      id: 7,
-      title: "Easter Celebration Service",
-      date: "April 1, 2025",
-      time: "11:00 AM - 1:00 PM",
-      location: "Church Main Sanctuary",
-      department: "Worship Committee",
-      description: "Special resurrection service celebrating Christ's victory over death with choir performances and special readings.",
-      thumbnail: "https://images.unsplash.com/photo-1496677302437-af0950563b7d?q=80&w=600",
-    },
-    {
-      id: 8,
-      title: "Church Cleanup Day",
-      date: "March 15, 2025",
-      time: "8:00 AM - 2:00 PM",
-      location: "Church Grounds",
-      department: "Deacons",
-      description: "Community effort to clean, repair, and beautify our church facility and surrounding grounds.",
-      thumbnail: "https://images.unsplash.com/photo-1542652735873-fb2825bba4c6?q=80&w=600",
-    },
-    {
-      id: 9,
-      title: "Youth Day Program",
-      date: "March 8, 2025",
-      time: "9:00 AM - 6:00 PM",
-      location: "Church Main Sanctuary",
-      department: "Youth Ministry",
-      description: "Full day of youth-led worship, seminars, and activities focused on empowering young people in their faith journey.",
-      thumbnail: "https://images.unsplash.com/photo-1511988617509-a57c8a288659?q=80&w=600",
-    }
-  ]
-};
+// Create a shared events data structure for the whole application
+export const allEventsData = [
+  {
+    id: 1,
+    title: "Women's Ministries Emphasis Day",
+    date: "June 14, 2025",
+    time: "All Day",
+    location: "Church Main Sanctuary",
+    department: "AWM Ministry",
+    description: "Review of the church's quarterly activities, financial reports, and planning for the next quarter.",
+    thumbnail: "https://images.unsplash.com/photo-1577394732330-38cef75bc388?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  },
+  {
+    id: 2,
+    title: "World Refugee Day ",
+    date: "June 21, 2025",
+    time: "All Day",
+    location: "Church Main Sanctuary",
+    department: "Youth Ministry",
+    description: "Annual youth camp focused on spiritual growth, leadership development, and fellowship for young people aged 16-30.",
+    thumbnail: "https://images.unsplash.com/photo-1577394732330-38cef75bc388?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  },
+  {
+    id: 3,
+    title: "Public Campus Ministries Day",
+    date: "July 28, 2025",
+    time: "8:00 AM - 5:00 PM",
+    location: "Church Main Sanctuary",
+    department: "Public Campus Ministries",
+    description: "A special seminar on building strong families, effective communication, and resolving conflicts in relationships.",
+    thumbnail: "/thumbnails/pcm.jpg",
+  },
+  {
+    id: 4,
+    title: "Mission Promotion: World Mission",
+    date: "July 12, 2025",
+    time: "8:00 AM - 5:00 PM",
+    location: "Church Main Sanctuary",
+    department: "Evangelism Department",
+    description: "Community health expo offering free health screenings, nutrition information, exercise demonstrations, and health lectures.",
+    thumbnail: "https://images.unsplash.com/photo-1577394732330-38cef75bc388?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  },
+  {
+    id: 5,
+    title: "Reach the World: Media Ministry ",
+    date: "July 19, 2025",
+    time: "8:00 AM - 5:00 PM",
+    location: "Church Main Sanctuary",
+    department: "Communication Depaartment",
+    description: "Annual women's retreat with guest speakers, workshops, prayer sessions, and fellowship activities.",
+    thumbnail: "https://images.unsplash.com/photo-1577394732330-38cef75bc388?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  },
+  {
+    id: 6,
+    title: "Children's Sabbath ",
+    date: "July 26, 2025",
+    time: "8:00 AM - 8:00 PM",
+    location: "Church Main Sanctuary",
+    department: "Children Ministries",
+    description: "12-hour continuous Bible study event covering the book of Revelation with different speakers and interactive sessions.",
+    thumbnail: "https://images.unsplash.com/photo-1577394732330-38cef75bc388?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  },
+  {
+    id: 7,
+    title: "Easter Celebration Service",
+    date: "April 1, 2025",
+    time: "11:00 AM - 1:00 PM",
+    location: "Church Main Sanctuary",
+    department: "Worship Committee",
+    description: "Special resurrection service celebrating Christ's victory over death with choir performances and special readings.",
+    thumbnail: "https://images.unsplash.com/photo-1496677302437-af0950563b7d?q=80&w=600",
+  },
+  {
+    id: 8,
+    title: "Church Cleanup Day",
+    date: "March 15, 2025",
+    time: "8:00 AM - 2:00 PM",
+    location: "Church Grounds",
+    department: "Deacons",
+    description: "Community effort to clean, repair, and beautify our church facility and surrounding grounds.",
+    thumbnail: "https://images.unsplash.com/photo-1542652735873-fb2825bba4c6?q=80&w=600",
+  },
+  {
+    id: 9,
+    title: "Youth Day Program",
+    date: "March 8, 2025",
+    time: "9:00 AM - 6:00 PM",
+    location: "Church Main Sanctuary",
+    department: "Youth Ministry",
+    description: "Full day of youth-led worship, seminars, and activities focused on empowering young people in their faith journey.",
+    thumbnail: "https://images.unsplash.com/photo-1511988617509-a57c8a288659?q=80&w=600",
+  }
+];
+
+interface Event {
+  id: number;
+  title: string;
+  date: string;
+  time: string;
+  location: string;
+  department: string;
+  description: string;
+  thumbnail: string;
+}
 
 const Events = () => {
   const [activeTab, setActiveTab] = useState("upcoming");
+  const [upcomingEvents, setUpcomingEvents] = useState<Event[]>([]);
+  const [pastEvents, setPastEvents] = useState<Event[]>([]);
+
+  // Categorize events based on their dates
+  useEffect(() => {
+    const upcoming: Event[] = [];
+    const past: Event[] = [];
+    
+    allEventsData.forEach(event => {
+      if (isDatePassed(event.date)) {
+        past.push(event);
+      } else {
+        upcoming.push(event);
+      }
+    });
+    
+    // Sort upcoming events by date (nearest first)
+    upcoming.sort((a, b) => {
+      const dateA = new Date(a.date.split('-')[0]);
+      const dateB = new Date(b.date.split('-')[0]);
+      return dateA.getTime() - dateB.getTime();
+    });
+    
+    // Sort past events by date (most recent first)
+    past.sort((a, b) => {
+      const dateA = new Date(a.date.split('-')[0]);
+      const dateB = new Date(b.date.split('-')[0]);
+      return dateB.getTime() - dateA.getTime();
+    });
+    
+    setUpcomingEvents(upcoming);
+    setPastEvents(past);
+  }, []);
 
   useEffect(() => {
     // Intersection Observer for scroll animations
@@ -167,7 +209,7 @@ const Events = () => {
               
               <TabsContent value="upcoming">
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-                  {eventsData.upcoming.map((event, index) => (
+                  {upcomingEvents.map((event, index) => (
                     <div 
                       key={event.id}
                       className="bg-white rounded-lg shadow-md overflow-hidden animate-on-scroll"
@@ -218,7 +260,7 @@ const Events = () => {
               
               <TabsContent value="past">
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-                  {eventsData.past.map((event, index) => (
+                  {pastEvents.map((event, index) => (
                     <div 
                       key={event.id}
                       className="bg-white rounded-lg shadow-md overflow-hidden animate-on-scroll"
