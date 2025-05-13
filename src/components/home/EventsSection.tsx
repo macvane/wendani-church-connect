@@ -11,7 +11,7 @@ const EventsSection = () => {
   
   useEffect(() => {
     // Filter and sort upcoming events
-    const upcoming = allEventsData
+    const upcoming = [...allEventsData]
       .filter(event => !isDatePassed(event.date))
       .sort((a, b) => {
         const dateA = new Date(a.date.split('-')[0]);
@@ -20,6 +20,7 @@ const EventsSection = () => {
       })
       .slice(0, 4); // Get only the first 4 upcoming events
       
+    console.log('Upcoming events for homepage:', upcoming);
     setUpcomingEvents(upcoming);
   }, []);
   
@@ -54,44 +55,50 @@ const EventsSection = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {upcomingEvents.map((event, index) => (
-            <div 
-              key={event.id}
-              className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col sm:flex-row animate-on-scroll"
-              style={{animationDelay: `${index * 0.1 + 0.2}s`}}
-            >
-              <div className="sm:w-1/3">
-                <img 
-                  src={event.thumbnail} 
-                  alt={event.title} 
-                  className="w-full h-48 sm:h-full object-cover"
-                />
+          {upcomingEvents.length > 0 ? (
+            upcomingEvents.map((event, index) => (
+              <div 
+                key={event.id}
+                className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col sm:flex-row animate-on-scroll"
+                style={{animationDelay: `${index * 0.1 + 0.2}s`}}
+              >
+                <div className="sm:w-1/3">
+                  <img 
+                    src={event.thumbnail} 
+                    alt={event.title} 
+                    className="w-full h-48 sm:h-full object-cover"
+                  />
+                </div>
+                <div className="p-6 sm:w-2/3 flex flex-col">
+                  <div className="flex items-start justify-between mb-2">
+                    <h3 className="font-bold text-xl">{event.title}</h3>
+                    <span className="bg-church-600 text-white text-xs px-2 py-1 rounded">
+                      {event.department}
+                    </span>
+                  </div>
+                  <div className="flex items-center text-gray-600 mb-2">
+                    <Calendar size={16} className="mr-2" />
+                    <span>{event.date} • {event.time}</span>
+                  </div>
+                  <p className="text-gray-600 mb-4">
+                    Location: {event.location}
+                  </p>
+                  <div className="mt-auto">
+                    <Link 
+                      to={`/events`} 
+                      className="text-church-600 font-medium hover:text-church-700"
+                    >
+                      View Details →
+                    </Link>
+                  </div>
+                </div>
               </div>
-              <div className="p-6 sm:w-2/3 flex flex-col">
-                <div className="flex items-start justify-between mb-2">
-                  <h3 className="font-bold text-xl">{event.title}</h3>
-                  <span className="bg-church-600 text-white text-xs px-2 py-1 rounded">
-                    {event.department}
-                  </span>
-                </div>
-                <div className="flex items-center text-gray-600 mb-2">
-                  <Calendar size={16} className="mr-2" />
-                  <span>{event.date} • {event.time}</span>
-                </div>
-                <p className="text-gray-600 mb-4">
-                  Location: {event.location}
-                </p>
-                <div className="mt-auto">
-                  <Link 
-                    to={`/events`} 
-                    className="text-church-600 font-medium hover:text-church-700"
-                  >
-                    View Details →
-                  </Link>
-                </div>
-              </div>
+            ))
+          ) : (
+            <div className="col-span-2 text-center py-12">
+              <p className="text-lg text-gray-600">No upcoming events at this time. Check back soon!</p>
             </div>
-          ))}
+          )}
         </div>
         
         <div className="mt-8 text-center animate-on-scroll">
