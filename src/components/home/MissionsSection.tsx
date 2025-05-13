@@ -60,13 +60,8 @@ const MissionsSection = () => {
               As Seventh-day Adventists, we are called to share the everlasting gospel and prepare the world for Christ's return. Through various mission initiatives, our church members are actively involved in spreading God's love both locally and internationally.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Button size="lg" className="bg-church-600 hover:bg-church-700">
+              <Link to='/contact' className="btn btn-primary btn-lg">
                 Join a Mission Trip
-              </Button>
-              <Link to="/mission">
-                <Button size="lg" variant="outline" className="border-church-600 text-church-600">
-                  Learn More
-                </Button>
               </Link>
             </div>
           </div>

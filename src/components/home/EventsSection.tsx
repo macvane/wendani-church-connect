@@ -1,6 +1,7 @@
 
 import React, { useRef, useEffect } from 'react';
 import { Calendar } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const events = [
   {
@@ -116,9 +117,9 @@ const EventsSection = () => {
         </div>
         
         <div className="mt-8 text-center animate-on-scroll">
-          <a href="/events" className="btn btn-primary btn-lg">
+          <Link to="/events" className="btn btn-primary btn-lg">
             View All Events
-          </a>
+          </Link>
         </div>
       </div>
     </section>

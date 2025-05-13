@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Link } from 'react-router-dom';
 
 const slides = [
   {
@@ -106,12 +107,12 @@ const Hero = () => {
                     currentSlide === index ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0"
                   )}
                 >
-                  <a href="#about" className="btn btn-primary btn-lg">
+                  <Link to="/about" className="btn btn-primary btn-lg">
                     Learn More
-                  </a>
-                  <a href="/contact" className="btn btn-outline btn-lg border-white text-white hover:bg-white hover:text-gray-900">
+                  </Link>
+                  <Link to="/contact" className="btn btn-outline btn-lg border-white text-white hover:bg-white hover:text-gray-900">
                     Join Us
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

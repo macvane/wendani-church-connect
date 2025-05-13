@@ -1,6 +1,7 @@
 
 import React, { useRef, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Link } from 'react-router-dom';
 
 const MediaSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -129,9 +130,9 @@ const MediaSection = () => {
         </Tabs>
         
         <div className="mt-8 text-center animate-on-scroll">
-          <a href="/media" className="btn btn-primary btn-lg">
+          <Link to="/media" className="btn btn-primary btn-lg">
             View All Media
-          </a>
+          </Link>
         </div>
       </div>
     </section>

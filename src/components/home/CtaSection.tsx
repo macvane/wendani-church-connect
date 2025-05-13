@@ -25,7 +25,7 @@ const CtaSection = () => {
               to="/events" 
               className="px-8 py-3 border border-white text-white hover:bg-white/10 rounded-md font-medium transition-colors"
             >
-              View Service Times
+              Upcoming Events
             </Link>
           </div>
         </div>
