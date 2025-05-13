@@ -41,7 +41,7 @@ const AboutSection = () => {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           <div className="col-span-1 lg:col-span-2">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card className="bg-white shadow-lg border-0 overflow-hidden transform transition-all duration-300 hover:shadow-xl animate-on-scroll animate-delay-1">
@@ -74,7 +74,7 @@ const AboutSection = () => {
                 </CardContent>
               </Card>
               
-              <Card className="bg-white shadow-lg border-0 overflow-hidden transform transition-all duration-300 hover:shadow-xl animate-on-scroll animate-delay-3 md:col-span-2">
+              {/* <Card className="bg-white shadow-lg border-0 overflow-hidden transform transition-all duration-300 hover:shadow-xl animate-on-scroll animate-delay-3 md:col-span-2">
                 <div className="h-2 bg-church-600 w-full"></div>
                 <CardContent className="p-6 text-center">
                   <div className="h-16 w-16 rounded-full bg-church-100 mx-auto flex items-center justify-center mb-4 border-4 border-white shadow-md">
@@ -102,11 +102,11 @@ const AboutSection = () => {
                     </div>
                   </div>
                 </CardContent>
-              </Card>
+              </Card> */}
             </div>
           </div>
           
-          <div className="col-span-1 animate-on-scroll animate-delay-2">
+          <div className="col-span-1 animate-on-scroll animate-delay-2 hidden">
             <Card className="bg-white shadow-lg h-full border-0 overflow-hidden relative">
               <div className="absolute top-0 right-0 w-28 h-28">
                 <div className="absolute transform rotate-45 bg-church-600 text-white text-sm font-bold py-1 right-[-35px] top-[32px] w-[170px] text-center">
