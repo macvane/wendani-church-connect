@@ -11,12 +11,12 @@ const slides = [
     subtitle: "Where faith meets community"
   },
   {
-    image: "https://images.unsplash.com/photo-1466442929976-97f336a657be?q=80&w=2000",
+    image: "https://images.unsplash.com/photo-1523803326055-9729b9e02e5a?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     title: "Join Us in Worship",
-    subtitle: "Every Sabbath at 9:00 AM"
+    subtitle: "Every Sabbath at 8:00 AM"
   },
   {
-    image: "https://images.unsplash.com/photo-1524230572899-a752b3835840?q=80&w=2000",
+    image: "https://images.unsplash.com/photo-1426604966848-d7adac402bff?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     title: "Growing in Faith Together",
     subtitle: "Building a community of believers"
   }
