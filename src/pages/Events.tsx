@@ -10,73 +10,73 @@ import { isDatePassed } from '@/utils/dateUtils';
 export const allEventsData = [
   {
     id: 1,
-    title: "Women's Ministries Emphasis Day",
-    date: "June 14, 2025",
-    time: "All Day",
+    title: "Communication Sabbath",
+    date: "May 17, 2025",
+    time: "8:00 AM - 5:00 PM",
     location: "Church Main Sanctuary",
-    department: "AWM Ministry",
+    department: "Communication Dpt.",
     description: "Review of the church's quarterly activities, financial reports, and planning for the next quarter.",
-    thumbnail: "https://images.unsplash.com/photo-1577394732330-38cef75bc388?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    thumbnail: "/thumbnails/com.jpg",
   },
   {
     id: 2,
-    title: "World Refugee Day ",
-    date: "June 21, 2025",
-    time: "All Day",
-    location: "Church Main Sanctuary",
-    department: "Youth Ministry",
+    title: "Ambs Nature Sabbath",
+    date: "May 17, 2025",
+    time: "8:00 AM - 5:00 PM",
+    location: "Michuki Park",
+    department: "Ambassadors Dpt.",
     description: "Annual youth camp focused on spiritual growth, leadership development, and fellowship for young people aged 16-30.",
-    thumbnail: "https://images.unsplash.com/photo-1577394732330-38cef75bc388?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    thumbnail: "https://images.unsplash.com/photo-1578359968130-76b59bb5af13?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8cGljbmljfGVufDB8fDB8fHww",
   },
   {
     id: 3,
-    title: "Public Campus Ministries Day",
-    date: "July 28, 2025",
+    title: "District Adventurers Sabbath",
+    date: "May 17, 2025",
     time: "8:00 AM - 5:00 PM",
     location: "Church Main Sanctuary",
-    department: "Public Campus Ministries",
+    department: "Adventurers Dpt",
     description: "A special seminar on building strong families, effective communication, and resolving conflicts in relationships.",
-    thumbnail: "/thumbnails/pcm.jpg",
+    thumbnail: "https://metrosda.org/wp-content/uploads/2022/07/adventurer-club-2.png",
   },
   {
     id: 4,
-    title: "Mission Promotion: World Mission",
-    date: "July 12, 2025",
+    title: "Music Sabbath",
+    date: "May 24, 2025",
     time: "8:00 AM - 5:00 PM",
     location: "Church Main Sanctuary",
-    department: "Evangelism Department",
+    department: "Music Dpt.",
     description: "Community health expo offering free health screenings, nutrition information, exercise demonstrations, and health lectures.",
-    thumbnail: "https://images.unsplash.com/photo-1577394732330-38cef75bc388?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    thumbnail: "https://images.unsplash.com/photo-1512733596533-7b00ccf8ebaf?q=80&w=1632&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
     id: 5,
-    title: "Reach the World: Media Ministry ",
-    date: "July 19, 2025",
+    title: "AWM (Emphasis) Sabbath",
+    date: "June 14, 2025",
     time: "8:00 AM - 5:00 PM",
     location: "Church Main Sanctuary",
-    department: "Communication Depaartment",
+    department: "AWM Dpt.",
     description: "Annual women's retreat with guest speakers, workshops, prayer sessions, and fellowship activities.",
-    thumbnail: "https://images.unsplash.com/photo-1577394732330-38cef75bc388?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    thumbnail: "https://media.istockphoto.com/id/1987917916/photo/portrait-of-young-multiracial-girls-smiling-at-camera-standing-together-outdoors.webp?a=1&b=1&s=612x612&w=0&k=20&c=54Xb396qnnUWBBKb9kJR147gpOpHgDu-RWJcZ10TFe8=",
   },
   {
     id: 6,
-    title: "Children's Sabbath ",
-    date: "July 26, 2025",
-    time: "8:00 AM - 8:00 PM",
+    title: "AWM Week Of Prayer",
+    date: "June 14, 2025",
+    time: "8:00 AM - 5:00 PM",
     location: "Church Main Sanctuary",
-    department: "Children Ministries",
+    department: "AWM Dpt.",
     description: "12-hour continuous Bible study event covering the book of Revelation with different speakers and interactive sessions.",
-    thumbnail: "https://images.unsplash.com/photo-1577394732330-38cef75bc388?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    thumbnail: "https://media.istockphoto.com/id/1987917916/photo/portrait-of-young-multiracial-girls-smiling-at-camera-standing-together-outdoors.webp?a=1&b=1&s=612x612&w=0&k=20&c=54Xb396qnnUWBBKb9kJR147gpOpHgDu-RWJcZ10TFe8=",
   },
   {
     id: 7,
-    title: "Easter Celebration Service",
-    date: "April 1, 2025",
-    time: "11:00 AM - 1:00 PM",
-    location: "Church Main Sanctuary",
+    title: "District Music Sabbath",
+    date: "June 21, 2025",
+    time: "8:00 AM - 5:00 PM",
+    location: "K.Sukari Church",
     department: "Worship Committee",
     description: "Special resurrection service celebrating Christ's victory over death with choir performances and special readings.",
-    thumbnail: "https://images.unsplash.com/photo-1496677302437-af0950563b7d?q=80&w=600",
+    thumbnail: "https://i.pinimg.com/736x/6e/02/66/6e026627a6dd1008e61dad40b3cf8289.jpg",
   },
   {
     id: 8,
@@ -198,7 +198,7 @@ const Events = () => {
               defaultValue="upcoming" 
               value={activeTab}
               onValueChange={setActiveTab}
-              className="animate-on-scroll"
+              className=""
             >
               <div className="flex justify-center mb-12">
                 <TabsList className="grid w-full max-w-md grid-cols-2">
@@ -212,13 +212,13 @@ const Events = () => {
                   {upcomingEvents.map((event, index) => (
                     <div 
                       key={event.id}
-                      className="bg-white rounded-lg shadow-md overflow-hidden animate-on-scroll"
+                      className="bg-white rounded-lg shadow-md overflow-hidden "
                       style={{animationDelay: `${index * 0.1}s`}}
                     >
                       <img 
                         src={event.thumbnail} 
                         alt={event.title} 
-                        className="w-full h-48 object-cover"
+                        className="w-full h-[15rem] object-cover"
                       />
                       <div className="p-6">
                         <div className="flex items-start justify-between mb-2">
@@ -247,11 +247,11 @@ const Events = () => {
                           {event.description}
                         </p>
                         
-                        <div className="flex justify-end">
+                        {/* <div className="flex justify-end">
                           <button className="text-church-600 font-medium hover:text-church-800 transition-colors">
                             View Details →
                           </button>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   ))}
@@ -263,14 +263,14 @@ const Events = () => {
                   {pastEvents.map((event, index) => (
                     <div 
                       key={event.id}
-                      className="bg-white rounded-lg shadow-md overflow-hidden animate-on-scroll"
+                      className="bg-white rounded-lg shadow-md overflow-hidden "
                       style={{animationDelay: `${index * 0.1}s`}}
                     >
                       <div className="relative">
                         <img 
                           src={event.thumbnail} 
                           alt={event.title} 
-                          className="w-full h-48 object-cover filter grayscale"
+                          className="w-full h-[15rem] object-cover filter grayscale"
                         />
                         <div className="absolute top-3 right-3 bg-gray-800 text-white text-xs px-3 py-1 rounded">
                           Past Event
