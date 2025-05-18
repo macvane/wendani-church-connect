@@ -31,7 +31,7 @@ const choirs = [
     description: "Our youth choir brings energy and passion through contemporary Christian music and creative arrangements.",
     leader: "Sis. Rosemary Kiago",
     contact: "+254 723 456789",
-    message: "We believe that worship through music should be vibrant and engaging. Join our youth choir to experience the joy of praising God through contemporary songs.",
+    message: "Sing to the Lord a new song, and let your heart be filled with joy! Through every note and harmony, we lift our voices in praise, declaring His goodness and love. Be part of a generation that worships boldly, honoring God with passion and purpose.",
     videos: [
       { id: "Ko9miJeoqrg", title: "Hakuna Jambo" },
       { id: "dcJ0NWdrz8M", title: "Kale" },
@@ -49,7 +49,7 @@ const choirs = [
     description: "Our Ambassadors Choir specializes in gospel music with rich harmonies and rhythms.",
     leader: "Mrs. Jennifer Ndunge",
     contact: "+254 734 567890",
-    message: "Music is a divine language that transcends barriers and speaks directly to the soul. Join us as we use our voices to worship and praise our Creator.",
+    message: "Let everything that has breath praise the Lord! With instruments, voices, and hearts united, we come together to glorify His name.",
     videos: [
       { id: "Nn9n2Ia6-r0", title: "Wewe Umetuamuru" },
       { id: "3UqDYcr1wTQ", title: "Nimekiti Mizizi" },
@@ -109,7 +109,7 @@ const Media = () => {
           <div className="absolute inset-0">
             <div className="absolute inset-0 bg-black bg-opacity-60 z-10"></div>
             <img 
-              src="https://images.unsplash.com/photo-1501854140801-50d01698950b?q=80&w=2000" 
+              src="https://images.unsplash.com/photo-1698199071311-bd5fe0e37449?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
               alt="Church Media" 
               className="w-full h-full object-cover"
             />
