@@ -139,6 +139,7 @@ const Prayer = () => {
                         type="text" 
                         id="name" 
                         name="name" 
+                        placeholder='Your name'
                         value={formData.name}
                         onChange={handleChange}
                         required
@@ -148,15 +149,15 @@ const Prayer = () => {
                     
                     <div>
                       <label htmlFor="email" className="block font-medium mb-1 text-gray-700">
-                        Email Address <span className="text-red-500">*</span>
+                        Email Address 
                       </label>
                       <input 
                         type="email" 
                         id="email" 
                         name="email"
+                        placeholder='youremail@gmail.com'
                         value={formData.email}
                         onChange={handleChange}
-                        required
                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                       />
                     </div>
@@ -170,6 +171,7 @@ const Prayer = () => {
                       type="tel" 
                       id="phone" 
                       name="phone"
+                      placeholder='Phone number'
                       value={formData.phone}
                       onChange={handleChange}
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
