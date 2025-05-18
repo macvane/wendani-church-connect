@@ -178,7 +178,7 @@ const Events = () => {
           <div className="absolute inset-0">
             <div className="absolute inset-0 bg-black bg-opacity-60 z-10"></div>
             <img 
-              src="https://images.unsplash.com/photo-1577394732330-38cef75bc388?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+              src="https://i.pinimg.com/736x/e8/86/f0/e886f04adcd89551b7bc2926422588f5.jpg" 
               alt="Church Events" 
               className="w-full h-full object-cover"
             />
@@ -339,32 +339,7 @@ const Events = () => {
             </div>
           </div>
         </section>
-        
-        {/* Event Registration */}
-        <section className="section bg-church-600 text-white">
-          <div className="container">
-            <div className="max-w-3xl mx-auto text-center">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6 animate-on-scroll">
-                Want to Receive Event Updates?
-              </h2>
-              <p className="text-xl mb-8 animate-on-scroll animate-delay-1">
-                Sign up for our newsletter to receive updates about upcoming events and activities.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 animate-on-scroll animate-delay-2">
-                <input 
-                  type="email" 
-                  placeholder="Your email address" 
-                  className="flex-1 px-4 py-3 rounded-md text-gray-800 focus:outline-none focus:ring-2 focus:ring-church-300"
-                />
-                <button className="bg-white text-church-700 hover:bg-gray-100 px-6 py-3 rounded-md font-medium transition-colors">
-                  Subscribe
-                </button>
-              </div>
-            </div>
-          </div>
-        </section>
       </main>
-      
       <Footer />
     </>
   );
