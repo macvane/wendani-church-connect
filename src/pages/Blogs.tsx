@@ -38,7 +38,7 @@ const Blogs = () => {
           <div className="absolute inset-0">
             <div className="absolute inset-0 bg-black bg-opacity-70 z-10"></div>
             <img 
-              src="https://images.unsplash.com/photo-1524230572899-a752b3835840?q=80&w=2000" 
+              src="https://i.pinimg.com/736x/8a/5f/95/8a5f9570104eaaa848777581187cced2.jpg" 
               alt="Church Blog" 
               className="w-full h-full object-cover"
             />

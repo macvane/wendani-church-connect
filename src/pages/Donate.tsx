@@ -5,6 +5,7 @@ import { PiggyBank } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { sendToGoogleSheet } from "@/utils/googleSheets";
+import Footer from "@/components/layout/Footer";
 
 const Donate = () => {
   const [donationData, setDonationData] = useState({
@@ -66,7 +67,7 @@ const Donate = () => {
           <div className="absolute inset-0">
             <div className="absolute inset-0 bg-black bg-opacity-60 z-10"></div>
             <img 
-              src="/placeholder.svg" 
+              src="https://images.unsplash.com/photo-1633158829875-e5316a358c6f?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
               alt="Donate Hero Background"
               className="w-full h-full object-cover"
             />
@@ -116,7 +117,7 @@ const Donate = () => {
             </div>
             
             {/* Donation Records Form */}
-            <div className="bg-white rounded-lg shadow-lg p-6 md:p-8 mt-8">
+            {/* <div className="bg-white rounded-lg shadow-lg p-6 md:p-8 mt-8">
               <h3 className="text-xl font-semibold mb-4 text-center">Record Your Donation</h3>
               <p className="text-gray-600 mb-6 text-center">
                 After making your donation via M-Pesa, please fill out this form to help us record your contribution correctly.
@@ -229,10 +230,11 @@ const Donate = () => {
                   {isSubmitting ? 'Submitting...' : 'Record Donation'}
                 </Button>
               </form>
-            </div>
+            </div> */}
           </div>
         </section>
       </main>
+      <Footer />
     </>
   );
 };

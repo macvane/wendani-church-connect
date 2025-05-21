@@ -100,7 +100,7 @@ const MembershipTransfer = () => {
           <div className="absolute inset-0">
             <div className="absolute inset-0 bg-black bg-opacity-60 z-10"></div>
             <img 
-              src="https://images.unsplash.com/photo-1453486030486-0faf83940b41?q=80&w=1374&auto=format&fit=crop"
+              src="https://images.unsplash.com/photo-1518495973542-4542c06a5843?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               alt="Membership Transfer" 
               className="w-full h-full object-cover"
             />
@@ -134,7 +134,7 @@ const MembershipTransfer = () => {
                               <input 
                                 type="text"
                                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
-                                placeholder="John Doe"
+                                placeholder="Your name"
                                 {...field}
                               />
                             </FormControl>
@@ -152,7 +152,7 @@ const MembershipTransfer = () => {
                               <input 
                                 type="email"
                                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
-                                placeholder="john@example.com"
+                                placeholder="youremail@example.com"
                                 {...field}
                               />
                             </FormControl>

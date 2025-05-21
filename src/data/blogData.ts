@@ -2,12 +2,12 @@
 export const blogPosts = [
   {
     id: 1,
-    title: "Finding Peace in a Chaotic World",
-    excerpt: "In today's fast-paced world, finding inner peace can be challenging. Here are biblical principles to help you find calm amid chaos.",
+    title: "How Does Prayer Work?",
+    excerpt: "Prayer works because God, through His love for us, wills it to work. He makes Himself accessible and available for us when we want to commune with Him.",
     date: "April 20, 2025",
-    author: "Pastor John Doe",
+    author: "Admin",
     category: "Faith",
-    thumbnail: "https://images.unsplash.com/photo-1501854140801-50d01698950b?q=80&w=600",
+    thumbnail: "https://images.unsplash.com/photo-1523803326055-9729b9e02e5a?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     readTime: "5 min read",
     tags: ["Peace", "Faith", "Christian Living"],
   },
@@ -16,7 +16,7 @@ export const blogPosts = [
     title: "The Importance of Daily Prayer",
     excerpt: "Establishing a consistent prayer life is essential for spiritual growth. Learn how to develop a meaningful prayer routine.",
     date: "April 15, 2025",
-    author: "Elder Mary Smith",
+    author: "Admin",
     category: "Prayer",
     thumbnail: "https://images.unsplash.com/photo-1473177104440-ffee2f376098?q=80&w=600",
     readTime: "7 min read",
@@ -27,7 +27,7 @@ export const blogPosts = [
     title: "Understanding the Sabbath",
     excerpt: "The Sabbath is more than just a day of rest. Discover the profound spiritual significance of this weekly observance.",
     date: "April 10, 2025",
-    author: "Deacon James Brown",
+    author: "Admin",
     category: "Doctrine",
     thumbnail: "https://images.unsplash.com/photo-1466442929976-97f336a657be?q=80&w=600",
     readTime: "10 min read",
@@ -38,7 +38,7 @@ export const blogPosts = [
     title: "The State of the Dead: An Adventist Perspective",
     excerpt: "What happens when we die? Explore the biblical teaching on death, resurrection, and immortality.",
     date: "April 5, 2025",
-    author: "Elder David Kamau",
+    author: "Admin",
     category: "Doctrine",
     thumbnail: "https://images.unsplash.com/photo-1524230572899-a752b3835840?q=80&w=600",
     readTime: "8 min read",
@@ -49,7 +49,7 @@ export const blogPosts = [
     title: "The Sanctuary Doctrine Explained",
     excerpt: "Understanding the Sanctuary doctrine helps us comprehend God's plan of salvation and Christ's ministry in heaven.",
     date: "March 28, 2025",
-    author: "Pastor John Doe",
+    author: "Admin",
     category: "Doctrine",
     thumbnail: "https://images.unsplash.com/photo-1493397212122-2b85dda8106b?q=80&w=600",
     readTime: "9 min read",
@@ -60,7 +60,7 @@ export const blogPosts = [
     title: "The Second Coming of Christ",
     excerpt: "The Second Coming of Christ is the blessed hope of the church. Learn what the Bible teaches about this glorious event.",
     date: "March 20, 2025",
-    author: "Elder Sarah Johnson",
+    author: "Admin",
     category: "Prophecy",
     thumbnail: "https://images.unsplash.com/photo-1511988617509-a57c8a288659?q=80&w=600",
     readTime: "6 min read",
@@ -71,7 +71,7 @@ export const blogPosts = [
     title: "The Three Angels' Messages",
     excerpt: "The Three Angels' Messages of Revelation 14 are central to Adventist eschatology. Discover their relevance for today.",
     date: "March 15, 2025",
-    author: "Pastor Daniel Muthama",
+    author: "Admin",
     category: "Prophecy",
     thumbnail: "https://images.unsplash.com/photo-1528164344705-47542687000d?q=80&w=600",
     readTime: "11 min read",
@@ -82,7 +82,7 @@ export const blogPosts = [
     title: "The Gift of Prophecy in the Adventist Church",
     excerpt: "Understand the role of the prophetic gift in the Seventh-day Adventist Church and its continued relevance.",
     date: "March 10, 2025",
-    author: "Elder Mary Smith",
+    author: "Admin",
     category: "Spiritual Gifts",
     thumbnail: "https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=600",
     readTime: "7 min read",
@@ -93,16 +93,36 @@ export const blogPosts = [
 export const blogContents = [
   {
     id: 1,
-    title: "Finding Peace in a Chaotic World",
-    author: "Pastor John Doe",
+    title: "How Does Prayer Work?",
+    author: "Admin",
     date: "April 20, 2025",
     category: "Faith",
-    featuredImage: "https://images.unsplash.com/photo-1501854140801-50d01698950b?q=80&w=1200",
+    featuredImage: "https://images.unsplash.com/photo-1523803326055-9729b9e02e5a?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     tags: ["Peace", "Faith", "Christian Living"],
     content: [
       {
         type: "paragraph",
-        text: "In a world filled with constant noise, endless notifications, and increasing demands on our time and energy, finding peace can seem impossible. Yet, as Christians, we are promised a peace that surpasses understanding. The Bible offers profound guidance for finding and maintaining inner peace amid external chaos."
+        text: "Prayer works because God, through His love for us, wills it to work. He makes Himself accessible and available for us when we want to commune with Him."
+      },
+      {
+        type: "paragraph",
+        text: "We all have that someone we want to tell our good news to, or someone we need to talk to when things aren’t going well. God can be all of that and more, through prayer."
+      },
+      {
+        type: "paragraph",
+        text: "The Bible tells us that God hears us whenever we pray (1 John 5:14; Jeremiah 29:12). And He responds to us through His Word and the Holy Spirit (1 Corinthians 2:13; 2 Timothy 3:16-17)."
+      },
+      {
+        type: "paragraph",
+        text: "But how does it all work? Why does prayer seem so mysterious sometimes?"
+      },
+      {
+        type: "paragraph",
+        text: "Let’s look closer at what the Bible can tell us about how prayer works:"
+      },
+      {
+        type: "paragraph",
+        text: "1. Reviewing what prayer is"
       },
       {
         type: "heading",
@@ -173,7 +193,7 @@ export const blogContents = [
   {
     id: 3,
     title: "Understanding the Sabbath",
-    author: "Deacon James Brown",
+    author: "Admin",
     date: "April 10, 2025",
     category: "Doctrine",
     featuredImage: "https://images.unsplash.com/photo-1466442929976-97f336a657be?q=80&w=1200",
@@ -296,7 +316,7 @@ export const blogContents = [
   {
     id: 5,
     title: "The Sanctuary Doctrine Explained",
-    author: "Pastor John Doe",
+    author: "Admin",
     date: "March 28, 2025",
     category: "Doctrine",
     featuredImage: "https://images.unsplash.com/photo-1493397212122-2b85dda8106b?q=80&w=1200",
