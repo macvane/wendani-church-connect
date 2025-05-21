@@ -79,7 +79,7 @@ const ChildDedication = () => {
           <div className="absolute inset-0">
             <div className="absolute inset-0 bg-black bg-opacity-70 z-10"></div>
             <img 
-              src="https://images.unsplash.com/photo-1533569088894-9af3fa322cda?q=80&w=2000" 
+              src="https://plus.unsplash.com/premium_photo-1725408058301-c1b959db6cc9?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
               alt="Child Dedication" 
               className="w-full h-full object-cover"
             />
@@ -128,6 +128,7 @@ const ChildDedication = () => {
                           type="text" 
                           id="childName" 
                           name="childName" 
+                          placeholder='Full name'
                           value={formData.childName}
                           onChange={handleChange}
                           required
@@ -181,6 +182,7 @@ const ChildDedication = () => {
                           type="text" 
                           id="fatherName" 
                           name="fatherName" 
+                          placeholder="Father's full name"
                           value={formData.fatherName}
                           onChange={handleChange}
                           required
@@ -190,15 +192,15 @@ const ChildDedication = () => {
                       
                       <div>
                         <label htmlFor="fatherEmail" className="block font-medium mb-1 text-gray-700">
-                          Email Address <span className="text-red-500">*</span>
+                          Email Address 
                         </label>
                         <input 
                           type="email" 
                           id="fatherEmail" 
                           name="fatherEmail"
+                          placeholder="father'semail@gmail.com"
                           value={formData.fatherEmail}
                           onChange={handleChange}
-                          required
                           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                         />
                       </div>
@@ -211,6 +213,7 @@ const ChildDedication = () => {
                           type="tel" 
                           id="fatherPhone" 
                           name="fatherPhone"
+                          placeholder="Father's number"
                           value={formData.fatherPhone}
                           onChange={handleChange}
                           required
@@ -231,6 +234,7 @@ const ChildDedication = () => {
                           type="text" 
                           id="motherName" 
                           name="motherName" 
+                          placeholder="Mother's full name"
                           value={formData.motherName}
                           onChange={handleChange}
                           required
@@ -240,15 +244,15 @@ const ChildDedication = () => {
                       
                       <div>
                         <label htmlFor="motherEmail" className="block font-medium mb-1 text-gray-700">
-                          Email Address <span className="text-red-500">*</span>
+                          Email Address 
                         </label>
                         <input 
                           type="email" 
                           id="motherEmail" 
                           name="motherEmail"
+                          placeholder="mother'semail@gmail.com"
                           value={formData.motherEmail}
                           onChange={handleChange}
-                          required
                           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                         />
                       </div>
@@ -261,6 +265,7 @@ const ChildDedication = () => {
                           type="tel" 
                           id="motherPhone" 
                           name="motherPhone"
+                          placeholder="Mother's number"
                           value={formData.motherPhone}
                           onChange={handleChange}
                           required
@@ -281,6 +286,7 @@ const ChildDedication = () => {
                           type="text" 
                           id="address" 
                           name="address" 
+                          placeholder="Current residence"
                           value={formData.address}
                           onChange={handleChange}
                           required

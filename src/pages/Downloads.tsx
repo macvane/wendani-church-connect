@@ -43,8 +43,8 @@ const downloads = [
     date: "December 10, 2024",
     type: "PDF",
     fileSize: "2.8 MB",
-    url: "https://docs.google.com/document/d/e/2PACX-1vRzTwdc1VwUTLsUKm6Z_R73OdB5j-9-iXzJ0D-4ka16VrUJw_xLbqgYsXjGVlsGEA/pub",
-    viewUrl: "https://docs.google.com/document/d/e/2PACX-1vRzTwdc1VwUTLsUKm6Z_R73OdB5j-9-iXzJ0D-4ka16VrUJw_xLbqgYsXjGVlsGEA/pub",
+    url: "https://docs.google.com/document/d/e/1D7wugC1TzaqldU_kD1vDE8aZpgq0FO8EsAMTejMyyTM/pub", 
+    viewUrl: "https://docs.google.com/document/d/1D7wugC1TzaqldU_kD1vDE8aZpgq0FO8EsAMTejMyyTM/export?format=pdf",
   },
   {
     id: 5,
@@ -84,7 +84,7 @@ const Downloads = () => {
           <div className="absolute inset-0">
             <div className="absolute inset-0 bg-black bg-opacity-70 z-10"></div>
             <img 
-              src="https://images.unsplash.com/photo-1524230572899-a752b3835840?q=80&w=2000" 
+              src="https://images.unsplash.com/photo-1694015824784-28d0c8d6fdca?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
               alt="Downloads" 
               className="w-full h-full object-cover"
             />
