@@ -22,6 +22,7 @@ import Baptism from "./pages/Baptism";
 import NotFound from "./pages/NotFound";
 import Donate from "./pages/Donate";
 import MembershipTransfer from "./pages/MembershipTransfer";
+import ThankYou from "./pages/ThankYou";
 
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
@@ -49,6 +50,7 @@ const App = () => {
             <Route path="/baptism" element={<Baptism />} />
             <Route path="/donate" element={<Donate />} />
             <Route path="/membership-transfer" element={<MembershipTransfer />} />
+            <Route path="/thank-you" element={<ThankYou />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
