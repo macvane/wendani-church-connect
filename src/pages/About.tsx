@@ -32,42 +32,21 @@ const About = () => {
       name: "Pst. Macjoe Masesi",
       position: "District Pastor",
       image: "/leaders/pastor.JPG",
-      bio: "Pst. Macjoe Masesi has been leading our church for 8 years with wisdom and compassion."
+      bio: "Pst. Macjoe Masesi has been leading our church for 3 years with wisdom and compassion."
     },
     {
       id: 2,
-      name: "Sarah Johnson",
+      name: "Eld. Calvince Ouma",
       position: "First Elder",
-      image: "https://images.unsplash.com/photo-1587614382346-4ec70e388b28?q=80&w=300",
-      bio: "Sarah has served as First Elder for 3 years, bringing energy and vision to our church."
+      image: "/placeholder.svg",
+      bio: "Eld. Calvince Ouma has served as First Elder for 1 year, bringing energy and vision to our church."
     },
     {
       id: 3,
       name: "C.L. Hellen Wandollah",
       position: "Church Leader",
       image: "/leaders/leader.jpeg",
-      bio: "Michael leads our team of deacons with dedication and servant leadership."
-    },
-    {
-      id: 4,
-      name: "Grace Mwangi",
-      position: "Head Deaconess",
-      image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=300",
-      bio: "Grace has been instrumental in organizing church activities and caring for members."
-    },
-    {
-      id: 5,
-      name: "David Ochieng",
-      position: "Youth Leader",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300",
-      bio: "David leads our vibrant youth ministry with passion and creativity."
-    },
-    {
-      id: 6,
-      name: "Ruth Njeri",
-      position: "Sabbath School Superintendent",
-      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=300",
-      bio: "Ruth brings enthusiasm and innovation to our Sabbath School programs."
+      bio: "C.L. Hellen Wandollah leads our church with dedication and servant leadership."
     }
   ];
 
