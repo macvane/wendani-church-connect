@@ -7,15 +7,7 @@ import { useToast } from '@/hooks/use-toast';
 import { sendToGoogleSheet } from '@/utils/googleSheets';
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    subject: '',
-    message: '',
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const { toast } = useToast();
+  const apiKey = import.meta.env.VITE_API_URL;
   
   useEffect(() => {
     // Intersection Observer for scroll animations
@@ -37,44 +29,6 @@ const Contact = () => {
       elements.forEach((el) => observer.unobserve(el));
     };
   }, []);
-  
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-  
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
-    try {
-      await sendToGoogleSheet({
-        ...formData,
-      }, 'contact');
-      
-      toast({
-        title: "Message Sent",
-        description: "Thank you for reaching out. We'll get back to you soon.",
-      });
-      
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        subject: '',
-        message: '',
-      });
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      toast({
-        title: "Submission Failed",
-        description: "There was a problem sending your message. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   return (
     <>
@@ -186,7 +140,7 @@ const Contact = () => {
                 <h2 className="text-2xl font-bold mb-6">Send Us a Message</h2>
                 
                 <form action="https://api.web3forms.com/submit" method="POST" className="space-y-6">
-                  <input type="hidden" name="access_key" value="203298c2-7be9-4de5-b1c6-1b91f760bea0"></input>
+                  <input type="hidden" name="access_key" value={apiKey}></input>
                    <input type="hidden" name="redirect" value="https://wendani-v2.vercel.app/thank-you" />
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
@@ -262,10 +216,9 @@ const Contact = () => {
                   <div>
                     <button 
                       type="submit"
-                      disabled={isSubmitting}
-                      className={`w-full px-8 py-3 bg-church-600 text-white rounded-md font-medium hover:bg-church-700 transition-colors ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
+                      className={`w-full px-8 py-3 bg-church-600 text-white rounded-md font-medium hover:bg-church-700 transition-colors `}
                     >
-                      {isSubmitting ? 'Sending...' : 'Send Message'}
+                      Send Message
                     </button>
                   </div>
                 </form>
