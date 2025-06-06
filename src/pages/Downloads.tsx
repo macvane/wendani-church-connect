@@ -13,8 +13,8 @@ const downloads = [
     date: "April 20, 2025",
     type: "PDF",
     fileSize: "1.2 MB",
-    url: "https://docs.google.com/document/d/1aW0T5WIaOE1Oud1fNgOSwF4Q6XoYYBU_W8lrUE8Mln4/export?format=pdf",
-    viewUrl: "https://docs.google.com/document/d/e/2PACX-1vRSxftNzokmKVsEl25z8wVM883FpppTom4qprjNTjvDcAr2ndzA3iyAMpwYvSeiB0UdOaeoz4thfhvI/pub",
+    url: "https://docs.google.com/presentation/d/13nnbHdfIszqeC9xHcA5I_uibJH6DW8gi/embed?start=false&loop=false&delayms=3000",
+    viewUrl: "https://docs.google.com/presentation/d/13nnbHdfIszqeC9xHcA5I_uibJH6DW8gi/embed?start=false&loop=false&delayms=3000",
   },
   {
     id: 2,
@@ -23,7 +23,7 @@ const downloads = [
     date: "January 15, 2024",
     type: "PDF",
     fileSize: "3.5 MB",
-    url: "https://docs.google.com/document/d/e/2PACX-1vRzTwdc1VwUTLsUKm6Z_R73OdB5j-9-iXzJ0D-4ka16VrUJw_xLbqgYsXjGVlsGEA/pub",
+    url: "https://www.adventist.org/wp-content/uploads/2023/07/2022-Seventh-day-Adventist-Church-Manual.pdf",
     viewUrl: "https://www.adventist.org/wp-content/uploads/2023/07/2022-Seventh-day-Adventist-Church-Manual.pdf",
   },
   {
@@ -33,8 +33,8 @@ const downloads = [
     date: "April 1, 2025",
     type: "PDF",
     fileSize: "4.2 MB",
-    url: "https://docs.google.com/document/d/e/2PACX-1vRzTwdc1VwUTLsUKm6Z_R73OdB5j-9-iXzJ0D-4ka16VrUJw_xLbqgYsXjGVlsGEA/pub",
-    viewUrl: "https://docs.google.com/document/d/e/2PACX-1vRzTwdc1VwUTLsUKm6Z_R73OdB5j-9-iXzJ0D-4ka16VrUJw_xLbqgYsXjGVlsGEA/pub",
+    url: "https://docs.google.com/presentation/d/13nnbHdfIszqeC9xHcA5I_uibJH6DW8gi/edit?usp=sharing&ouid=104174869585023377770&rtpof=true&sd=true",
+    viewUrl: "https://docs.google.com/presentation/d/13nnbHdfIszqeC9xHcA5I_uibJH6DW8gi/edit?usp=sharing&ouid=104174869585023377770&rtpof=true&sd=true",
   },
   {
     id: 4,
@@ -44,7 +44,7 @@ const downloads = [
     type: "PDF",
     fileSize: "2.8 MB",
     url: "https://docs.google.com/document/d/e/1D7wugC1TzaqldU_kD1vDE8aZpgq0FO8EsAMTejMyyTM/pub", 
-    viewUrl: "https://docs.google.com/document/d/1D7wugC1TzaqldU_kD1vDE8aZpgq0FO8EsAMTejMyyTM/export?format=pdf",
+    viewUrl: "https://docs.google.com/document/d/e/1D7wugC1TzaqldU_kD1vDE8aZpgq0FO8EsAMTejMyyTM/pub",
   },
   {
     id: 5,
@@ -53,8 +53,8 @@ const downloads = [
     date: "April 15, 2025",
     type: "ZIP",
     fileSize: "8.5 MB",
-    url: "https://docs.google.com/document/d/e/2PACX-1vRzTwdc1VwUTLsUKm6Z_R73OdB5j-9-iXzJ0D-4ka16VrUJw_xLbqgYsXjGVlsGEA/pub",
-    viewUrl: "https://docs.google.com/document/d/e/2PACX-1vRzTwdc1VwUTLsUKm6Z_R73OdB5j-9-iXzJ0D-4ka16VrUJw_xLbqgYsXjGVlsGEA/pub",
+    url: "https://docs.google.com/presentation/d/13nnbHdfIszqeC9xHcA5I_uibJH6DW8gi/edit?usp=sharing&ouid=104174869585023377770&rtpof=true&sd=true",
+    viewUrl: "https://docs.google.com/presentation/d/13nnbHdfIszqeC9xHcA5I_uibJH6DW8gi/edit?usp=sharing&ouid=104174869585023377770&rtpof=true&sd=true",
   },
   {
     id: 6,
@@ -63,8 +63,8 @@ const downloads = [
     date: "April 5, 2025",
     type: "PDF",
     fileSize: "5.3 MB",
-    url: "https://docs.google.com/document/d/e/2PACX-1vRzTwdc1VwUTLsUKm6Z_R73OdB5j-9-iXzJ0D-4ka16VrUJw_xLbqgYsXjGVlsGEA/pub",
-    viewUrl: "https://docs.google.com/document/d/e/2PACX-1vRzTwdc1VwUTLsUKm6Z_R73OdB5j-9-iXzJ0D-4ka16VrUJw_xLbqgYsXjGVlsGEA/pub",
+    url: "https://docs.google.com/presentation/d/13nnbHdfIszqeC9xHcA5I_uibJH6DW8gi/edit?usp=sharing&ouid=104174869585023377770&rtpof=true&sd=true",
+    viewUrl: "https://docs.google.com/presentation/d/13nnbHdfIszqeC9xHcA5I_uibJH6DW8gi/edit?usp=sharing&ouid=104174869585023377770&rtpof=true&sd=true",
   },
 ];
 
@@ -129,7 +129,7 @@ const Downloads = () => {
                     </div>
                     <div className="mt-auto pt-4 border-t border-gray-100 flex gap-2">
                       <button
-                        onClick={() => setSelectedDocument({ title: item.title, viewUrl: item.viewUrl })}
+                        onClick={() => window.open(item.url)}
                         className="flex items-center justify-center w-1/2 py-2 bg-church-500 text-white rounded-md hover:bg-church-600 transition-colors"
                       >
                         <Eye size={18} className="mr-2" />
@@ -137,7 +137,7 @@ const Downloads = () => {
                       </button>
                       <button 
                         onClick={() => window.open(item.url)} 
-                        className="flex items-center justify-center w-1/2 py-2 bg-church-600 text-white rounded-md hover:bg-church-700 transition-colors"
+                        className="flex  items-center justify-center w-1/2 py-2 bg-church-600 text-white rounded-md hover:bg-church-700 transition-colors"
                         
                       >
                         <Download size={18} className="mr-2" />
