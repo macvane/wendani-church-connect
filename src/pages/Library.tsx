@@ -298,21 +298,25 @@ const Library = () => {
                                 </button>
                                 
                                 <div className="grid grid-cols-2 gap-2">
-                                  <button
-                                    onClick={() => handleReadBook(book)}
+                                  <a
+                                    href={book.readUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     className="flex items-center justify-center py-2 bg-church-100 text-church-700 rounded-md hover:bg-church-200 transition-colors"
                                   >
                                     <BookOpen size={16} className="mr-2" />
                                     Read
-                                  </button>
+                                  </a>
                                   
-                                  <button
-                                    onClick={() => handleListenToBook(book)}
+                                  <a
+                                    href={book.listenUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     className="flex items-center justify-center py-2 bg-church-100 text-church-700 rounded-md hover:bg-church-200 transition-colors"
                                   >
                                     <Headphones size={16} className="mr-2" />
                                     Listen
-                                  </button>
+                                  </a>
                                 </div>
                               </div>
                             </div>

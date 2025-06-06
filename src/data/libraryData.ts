@@ -1,4 +1,3 @@
-
 export const physicalBooks = [
   {
     id: 1,
@@ -14,7 +13,9 @@ export const physicalBooks = [
       "Christ has pledged Himself to be our substitute and surety, and He neglects no one. He who could not see human beings exposed to eternal ruin without pouring out His soul unto death in their behalf, will look with pity and compassion upon every soul who realizes that he cannot save himself.",
       "He will look upon no trembling suppliant without raising him up. He who through His own atonement provided for man an infinite fund of moral power, will not fail to employ this power in our behalf."
     ],
-    audioUrl: "https://archive.org/download/steps-to-christ_202003/steps-to-christ.mp3"
+    audioUrl: "https://archive.org/download/steps-to-christ_202003/steps-to-christ.mp3",
+    readUrl: "https://m.egwwritings.org/en/book/108.1",
+    listenUrl: "https://archive.org/details/steps-to-christ_202003"
   },
   {
     id: 2,
@@ -30,7 +31,9 @@ export const physicalBooks = [
       "By the plan of redemption, however, a way has been opened whereby the inhabitants of the earth may still have connection with heaven.",
       "God has communicated with men by His Spirit, and divine light has been imparted to the world by revelations to His chosen servants."
     ],
-    audioUrl: "https://archive.org/download/great_controversy_librivox/greatcontroversy_01_white.mp3"
+    audioUrl: "https://archive.org/download/great_controversy_librivox/greatcontroversy_01_white.mp3",
+    readUrl: "https://m.egwwritings.org/en/book/132.1",
+    listenUrl: "https://archive.org/details/great_controversy_librivox"
   },
   {
     id: 3,
@@ -46,7 +49,9 @@ export const physicalBooks = [
       "He was in the world, and the world was made by Him, and the world knew Him not. He came unto His own, and His own received Him not.",
       "But as many as received Him, to them gave He power to become the sons of God, even to them that believe on His name."
     ],
-    audioUrl: "https://archive.org/download/desire_of_ages_librivox/desireofages_01_white.mp3"
+    audioUrl: "https://archive.org/download/desire_of_ages_librivox/desireofages_01_white.mp3",
+    readUrl: "https://m.egwwritings.org/en/book/130.1",
+    listenUrl: "https://archive.org/details/desire_of_ages_librivox"
   },
   {
     id: 4,
@@ -62,7 +67,9 @@ export const physicalBooks = [
       "Every manifestation of creative power is an expression of infinite love. The sovereignty of God involves fullness of blessing to all created beings.",
       "The history of the great conflict between good and evil, from the time it first began in heaven to the final overthrow of rebellion and the total eradication of sin, is also a demonstration of God's unchanging love."
     ],
-    audioUrl: "https://archive.org/download/patriarchs_prophets_1007_librivox/patriarchsandprophets_01_white_64kb.mp3"
+    audioUrl: "https://archive.org/download/patriarchs_prophets_1007_librivox/patriarchsandprophets_01_white_64kb.mp3",
+    readUrl: "https://m.egwwritings.org/en/book/84.1",
+    listenUrl: "https://archive.org/details/patriarchs_prophets_1007_librivox"
   },
   {
     id: 5,
@@ -78,7 +85,9 @@ export const physicalBooks = [
       "Divinity was revealed in humanity; the invisible glory in the visible human form. Men could learn of the unknown through the known; heavenly things were revealed through the earthly.",
       "God's word, the truth, is the medium by which He manifests His Spirit and power."
     ],
-    audioUrl: "https://archive.org/download/christs_object_lessons_1007_librivox/christsobjectlessons_01_white_64kb.mp3"
+    audioUrl: "https://archive.org/download/christs_object_lessons_1007_librivox/christsobjectlessons_01_white_64kb.mp3",
+    readUrl: "https://m.egwwritings.org/en/book/15.1",
+    listenUrl: "https://archive.org/details/christs_object_lessons_1007_librivox"
   },
   {
     id: 6,
@@ -94,7 +103,9 @@ export const physicalBooks = [
       "The burden of disease and wretchedness and sin He came to remove. It was His mission to bring to men complete restoration; He came to give them health and peace and perfection of character.",
       "Varied were the circumstances and needs of those who besought His aid, and none who came to Him went away unhelped."
     ],
-    audioUrl: "https://archive.org/download/ministry_of_healing_1007_librivox/ministryofhealing_01_white_64kb.mp3"
+    audioUrl: "https://archive.org/download/ministry_of_healing_1007_librivox/ministryofhealing_01_white_64kb.mp3",
+    readUrl: "https://m.egwwritings.org/en/book/142.1",
+    listenUrl: "https://archive.org/details/ministry_of_healing_1007_librivox"
   },
   {
     id: 7,
@@ -110,7 +121,9 @@ export const physicalBooks = [
       "The Lord has entrusted means to His stewards, that they may use it wisely, not selfishly or carelessly, or through neglect.",
       "God calls upon those to whom He has lent His goods to acquit themselves as faithful stewards."
     ],
-    audioUrl: "https://ia800908.us.archive.org/27/items/counsels-on-stewardship/Counsels%20on%20Stewardship.mp3"
+    audioUrl: "https://ia800908.us.archive.org/27/items/counsels-on-stewardship/Counsels%20on%20Stewardship.mp3",
+    readUrl: "https://m.egwwritings.org/en/book/21.1",
+    listenUrl: "https://archive.org/details/counsels-on-stewardship"
   },
   {
     id: 8,
@@ -126,7 +139,9 @@ export const physicalBooks = [
       "True education means more than the pursual of a certain course of study. It means more than a preparation for the life that now is.",
       "It has to do with the whole being, and with the whole period of existence possible to man. It is the harmonious development of the physical, the mental, and the spiritual powers."
     ],
-    audioUrl: "https://archive.org/download/education_eg_white_librivox/education_01_white_64kb.mp3"
+    audioUrl: "https://archive.org/download/education_eg_white_librivox/education_01_white_64kb.mp3",
+    readUrl: "https://m.egwwritings.org/en/book/29.1",
+    listenUrl: "https://archive.org/details/education_eg_white_librivox"
   }
 ];
 
