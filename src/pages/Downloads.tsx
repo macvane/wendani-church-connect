@@ -9,9 +9,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 const downloads = [
   {
     id: 1,
-    title: "Weekly Church Bulletin",
+    title: "Weekly Church Announcements",
     description: "The most recent bulletin with announcements, upcoming events, and church activities.",
-    date: "April 20, 2025",
+    date: "June 06, 2025",
     type: "PDF",
     fileSize: "1.2 MB",
     url: "https://docs.google.com/presentation/d/13nnbHdfIszqeC9xHcA5I_uibJH6DW8gi/embed?start=false&loop=false&delayms=3000",
@@ -26,47 +26,7 @@ const downloads = [
     fileSize: "3.5 MB",
     url: "https://www.adventist.org/wp-content/uploads/2023/07/2022-Seventh-day-Adventist-Church-Manual.pdf",
     viewUrl: "https://www.adventist.org/wp-content/uploads/2023/07/2022-Seventh-day-Adventist-Church-Manual.pdf",
-  },
-  {
-    id: 3,
-    title: "Quarterly Newsletter",
-    description: "Our latest newsletter featuring church news, member spotlights, and event recaps.",
-    date: "April 1, 2025",
-    type: "PDF",
-    fileSize: "4.2 MB",
-    url: "https://docs.google.com/presentation/d/13nnbHdfIszqeC9xHcA5I_uibJH6DW8gi/edit?usp=sharing&ouid=104174869585023377770&rtpof=true&sd=true",
-    viewUrl: "https://docs.google.com/presentation/d/13nnbHdfIszqeC9xHcA5I_uibJH6DW8gi/edit?usp=sharing&ouid=104174869585023377770&rtpof=true&sd=true",
-  },
-  {
-    id: 4,
-    title: "Church Calendar 2025",
-    description: "Calendar of all planned church activities and events for the year 2025.",
-    date: "December 10, 2024",
-    type: "PDF",
-    fileSize: "2.8 MB",
-    url: "https://docs.google.com/document/d/e/1D7wugC1TzaqldU_kD1vDE8aZpgq0FO8EsAMTejMyyTM/pub", 
-    viewUrl: "https://docs.google.com/document/d/e/1D7wugC1TzaqldU_kD1vDE8aZpgq0FO8EsAMTejMyyTM/pub",
-  },
-  {
-    id: 5,
-    title: "Choir Song Sheets",
-    description: "Song sheets for the upcoming special program on May 15th.",
-    date: "April 15, 2025",
-    type: "ZIP",
-    fileSize: "8.5 MB",
-    url: "https://docs.google.com/presentation/d/13nnbHdfIszqeC9xHcA5I_uibJH6DW8gi/edit?usp=sharing&ouid=104174869585023377770&rtpof=true&sd=true",
-    viewUrl: "https://docs.google.com/presentation/d/13nnbHdfIszqeC9xHcA5I_uibJH6DW8gi/edit?usp=sharing&ouid=104174869585023377770&rtpof=true&sd=true",
-  },
-  {
-    id: 6,
-    title: "Children's Sabbath School Materials",
-    description: "Resources for children's Sabbath School teachers and parents.",
-    date: "April 5, 2025",
-    type: "PDF",
-    fileSize: "5.3 MB",
-    url: "https://docs.google.com/presentation/d/13nnbHdfIszqeC9xHcA5I_uibJH6DW8gi/edit?usp=sharing&ouid=104174869585023377770&rtpof=true&sd=true",
-    viewUrl: "https://docs.google.com/presentation/d/13nnbHdfIszqeC9xHcA5I_uibJH6DW8gi/edit?usp=sharing&ouid=104174869585023377770&rtpof=true&sd=true",
-  },
+  }
 ];
 
 // Sabbath School materials data
@@ -80,8 +40,8 @@ const sabbathSchoolMaterials = [
     fileSize: "2.1 MB",
     icon: Users,
     color: "text-blue-500",
-    url: "https://www.cornerstoneconnections.net/article/112/quarterly-lessons",
-    viewUrl: "https://www.cornerstoneconnections.net/article/112/quarterly-lessons",
+    url: "https://www.cornerstoneconnections.net/lessons",
+    viewUrl: "https://www.cornerstoneconnections.net/lessons",
   },
   {
     id: 2,
@@ -92,8 +52,8 @@ const sabbathSchoolMaterials = [
     fileSize: "3.2 MB",
     icon: BookOpen,
     color: "text-green-500",
-    url: "https://www.absg.adventist.org/",
-    viewUrl: "https://www.absg.adventist.org/",
+    url: "https://www.adultbiblestudyguide.org/pdf.php?file=2025:2Q:SE:PDFs:EAQ225_11.pdf",
+    viewUrl: "https://www.adultbiblestudyguide.org/pdf.php?file=2025:2Q:SE:PDFs:EAQ225_11.pdf",
   },
   {
     id: 3,
@@ -106,19 +66,7 @@ const sabbathSchoolMaterials = [
     color: "text-purple-500",
     url: "https://www.absg.adventist.org/",
     viewUrl: "https://www.absg.adventist.org/",
-  },
-  {
-    id: 4,
-    title: "Children's Sabbath School Guide",
-    description: "Age-appropriate lessons and activities for children's Sabbath School classes.",
-    quarter: "Q2 2025 - Bible Heroes",
-    type: "PDF",
-    fileSize: "2.8 MB",
-    icon: Heart,
-    color: "text-pink-500",
-    url: "https://www.gracelink.net/",
-    viewUrl: "https://www.gracelink.net/",
-  },
+  }
 ];
 
 const Downloads = () => {
@@ -160,7 +108,7 @@ const Downloads = () => {
               </p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
               {sabbathSchoolMaterials.map((material) => {
                 const IconComponent = material.icon;
                 return (
@@ -169,12 +117,12 @@ const Downloads = () => {
                     className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow"
                   >
                     <div className="p-6">
-                      <div className="flex items-center mb-4">
-                        <div className={`mr-3 ${material.color}`}>
-                          <IconComponent size={32} />
+                      <div className=" items-center mb-4">
+                        <div className={`flex justify-center items-center mb-4 ${material.color}`}>
+                          <IconComponent size={52} />
                         </div>
                         <div>
-                          <h3 className="font-bold text-lg">{material.title}</h3>
+                          <h3 className="font-bold text-center text-lg">{material.title}</h3>
                           <p className="text-sm text-gray-500">{material.quarter}</p>
                         </div>
                       </div>

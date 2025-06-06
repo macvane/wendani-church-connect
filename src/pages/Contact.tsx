@@ -86,7 +86,7 @@ const Contact = () => {
           <div className="absolute inset-0">
             <div className="absolute inset-0 bg-black bg-opacity-60 z-10"></div>
             <img 
-              src="https://images.unsplash.com/photo-1620891727922-654a4ec31d26?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+              src="https://images.unsplash.com/photo-1505455184862-554165e5f6ba?q=80&w=1469&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
               alt="Contact Us" 
               className="w-full h-full object-cover"
             />
@@ -185,7 +185,9 @@ const Contact = () => {
               <div className="lg:col-span-2 animate-on-scroll animate-delay-1">
                 <h2 className="text-2xl font-bold mb-6">Send Us a Message</h2>
                 
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form action="https://api.web3forms.com/submit" method="POST" className="space-y-6">
+                  <input type="hidden" name="access_key" value="203298c2-7be9-4de5-b1c6-1b91f760bea0"></input>
+                   <input type="hidden" name="redirect" value="https://wendani-v2.vercel.app/thank-you" />
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label htmlFor="name" className="block font-medium mb-1 text-gray-700">
@@ -194,10 +196,8 @@ const Contact = () => {
                       <input 
                         type="text" 
                         id="name" 
-                        name="name" 
+                        name="full name" 
                         placeholder='Full name'
-                        value={formData.name}
-                        onChange={handleChange}
                         required
                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                       />
@@ -212,8 +212,6 @@ const Contact = () => {
                         id="email" 
                         name="email"
                         placeholder='youremail@gmail.com'
-                        value={formData.email}
-                        onChange={handleChange}
                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                       />
                     </div>
@@ -228,8 +226,6 @@ const Contact = () => {
                       id="phone" 
                       name="phone"
                       placeholder='Your number'
-                      value={formData.phone}
-                      onChange={handleChange}
                       required
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                     />
@@ -244,8 +240,6 @@ const Contact = () => {
                       id="subject" 
                       name="subject"
                       placeholder='Your subject'
-                      value={formData.subject}
-                      onChange={handleChange}
                       required
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                     />
@@ -259,8 +253,6 @@ const Contact = () => {
                       id="message" 
                       name="message"
                       placeholder='Your message'
-                      value={formData.message}
-                      onChange={handleChange}
                       required
                       rows={5}
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
