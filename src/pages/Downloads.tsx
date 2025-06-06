@@ -1,7 +1,8 @@
+
 import React, { useState } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import { File, Download, FileText, Eye } from 'lucide-react';
+import { File, Download, FileText, Eye, BookOpen, Users, GraduationCap, Heart } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 // Sample documents data with view URLs
@@ -68,6 +69,58 @@ const downloads = [
   },
 ];
 
+// Sabbath School materials data
+const sabbathSchoolMaterials = [
+  {
+    id: 1,
+    title: "Cornerstone Connections",
+    description: "Weekly Sabbath School lessons designed specifically for youth and young adults.",
+    quarter: "Q2 2025",
+    type: "PDF",
+    fileSize: "2.1 MB",
+    icon: Users,
+    color: "text-blue-500",
+    url: "https://www.cornerstoneconnections.net/article/112/quarterly-lessons",
+    viewUrl: "https://www.cornerstoneconnections.net/article/112/quarterly-lessons",
+  },
+  {
+    id: 2,
+    title: "Adult Sabbath School Lesson",
+    description: "Standard adult quarterly with weekly lessons and daily study guides.",
+    quarter: "Q2 2025 - The Gospel of John",
+    type: "PDF",
+    fileSize: "3.2 MB",
+    icon: BookOpen,
+    color: "text-green-500",
+    url: "https://www.absg.adventist.org/",
+    viewUrl: "https://www.absg.adventist.org/",
+  },
+  {
+    id: 3,
+    title: "Sabbath School Teacher's Guide",
+    description: "Comprehensive teaching materials and discussion guides for Sabbath School teachers.",
+    quarter: "Q2 2025",
+    type: "PDF",
+    fileSize: "4.5 MB",
+    icon: GraduationCap,
+    color: "text-purple-500",
+    url: "https://www.absg.adventist.org/",
+    viewUrl: "https://www.absg.adventist.org/",
+  },
+  {
+    id: 4,
+    title: "Children's Sabbath School Guide",
+    description: "Age-appropriate lessons and activities for children's Sabbath School classes.",
+    quarter: "Q2 2025 - Bible Heroes",
+    type: "PDF",
+    fileSize: "2.8 MB",
+    icon: Heart,
+    color: "text-pink-500",
+    url: "https://www.gracelink.net/",
+    viewUrl: "https://www.gracelink.net/",
+  },
+];
+
 const Downloads = () => {
   const [selectedDocument, setSelectedDocument] = useState<null | {
     title: string;
@@ -96,13 +149,76 @@ const Downloads = () => {
             </p>
           </div>
         </section>
-        
-        {/* Downloads Section */}
-        <section className="section bg-white">
-          
-          <div className="container">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
+        {/* Sabbath School Materials Section */}
+        <section className="section bg-gray-50">
+          <div className="container">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold mb-4">Sabbath School Materials</h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Download the latest Sabbath School lesson materials for all age groups and teaching resources.
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+              {sabbathSchoolMaterials.map((material) => {
+                const IconComponent = material.icon;
+                return (
+                  <div 
+                    key={material.id}
+                    className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+                  >
+                    <div className="p-6">
+                      <div className="flex items-center mb-4">
+                        <div className={`mr-3 ${material.color}`}>
+                          <IconComponent size={32} />
+                        </div>
+                        <div>
+                          <h3 className="font-bold text-lg">{material.title}</h3>
+                          <p className="text-sm text-gray-500">{material.quarter}</p>
+                        </div>
+                      </div>
+                      <p className="text-gray-600 mb-4 text-sm">{material.description}</p>
+                      <div className="flex items-center text-xs text-gray-500 mb-4">
+                        <span>Type: {material.type}</span>
+                        <span className="mx-2">•</span>
+                        <span>Size: {material.fileSize}</span>
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => window.open(material.url)}
+                          className="flex items-center justify-center flex-1 py-2 px-3 bg-church-500 text-white rounded-md hover:bg-church-600 transition-colors text-sm"
+                        >
+                          <Eye size={16} className="mr-1" />
+                          View
+                        </button>
+                        <button 
+                          onClick={() => window.open(material.url)} 
+                          className="flex items-center justify-center flex-1 py-2 px-3 bg-church-600 text-white rounded-md hover:bg-church-700 transition-colors text-sm"
+                        >
+                          <Download size={16} className="mr-1" />
+                          Download
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+        
+        {/* General Downloads Section */}
+        <section className="section bg-white">
+          <div className="container">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold mb-4">General Church Resources</h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Access bulletins, newsletters, calendars, and other church documents.
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {downloads.map((item) => (
                 <div 
                   key={item.id}
