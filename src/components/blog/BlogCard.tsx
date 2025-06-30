@@ -49,6 +49,7 @@ const BlogCard = ({ blog }: BlogCardProps) => {
           </span>
           <Link 
             to={`/blogs/${blog.id}`} 
+            aria-disabled
             className="text-church-600 font-medium hover:text-church-700 transition-colors"
           >
             Read More →

@@ -66,7 +66,7 @@ const EventsSection = () => {
                   <img 
                     src={event.thumbnail} 
                     alt={event.title} 
-                    className="w-full h-48 sm:h-full object-cover"
+                    className="w-full h-48  object-cover"
                   />
                 </div>
                 <div className="p-6 sm:w-2/3 flex flex-col">

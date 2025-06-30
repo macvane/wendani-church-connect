@@ -40,9 +40,9 @@ const MediaSection = () => {
   ];
 
   const campMeetingVideos = [
-    { id: "_XCyryGR1sA", title: "Camp Meeting 2023 - Day 1 Highlights" },
-    { id: "_XCyryGR1sA", title: "Camp Meeting 2023 - Main Sermon" },
-    { id: "_XCyryGR1sA", title: "Camp Meeting 2023 - Closing Ceremony" }
+    { id: "AtARIfHwNAw?si=X_E6N2jc7p8cZTB0", title: "Camp Meeting 2024 - Closing Day" }, 
+    { id: "hwbcAwd9xg4?si=9yDWcXTZvSY956c-", title: "Camp Meeting 2024 - Sanctuary Message" },
+    { id: "yyGJgIiAED4?si=DMG5t5nLaABgDiKU", title: "Camp Meeting 2024 - The Hidden God" }
   ];
   
   return (
