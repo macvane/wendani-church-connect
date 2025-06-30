@@ -8,27 +8,27 @@ const blogs = [
     title: "Finding Peace in a Chaotic World",
     excerpt: "In today's fast-paced world, finding inner peace can be challenging. Here are biblical principles to help you find calm amid chaos.",
     date: "April 20, 2025",
-    author: "Pastor John Doe",
+    author: "Admin",
     category: "Faith",
-    thumbnail: "https://images.unsplash.com/photo-1501854140801-50d01698950b?q=80&w=400",
+    thumbnail: "https://images.unsplash.com/photo-1523803326055-9729b9e02e5a?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
     id: 2,
     title: "The Importance of Daily Prayer",
     excerpt: "Establishing a consistent prayer life is essential for spiritual growth. Learn how to develop a meaningful prayer routine.",
     date: "April 15, 2025",
-    author: "Elder Mary Smith",
+    author: "Admin",
     category: "Prayer",
-    thumbnail: "https://images.unsplash.com/photo-1473177104440-ffee2f376098?q=80&w=400",
+    thumbnail: "https://images.unsplash.com/photo-1543525238-54e3d131f7ca?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
     id: 3,
     title: "Understanding the Sabbath",
     excerpt: "The Sabbath is more than just a day of rest. Discover the profound spiritual significance of this weekly observance.",
     date: "April 10, 2025",
-    author: "Deacon James Brown",
+    author: "Admin",
     category: "Doctrine",
-    thumbnail: "https://images.unsplash.com/photo-1466442929976-97f336a657be?q=80&w=400",
+    thumbnail: "https://images.unsplash.com/photo-1749847850294-19c4f59bf3f9?q=80&w=393&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   }
 ];
 

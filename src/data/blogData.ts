@@ -18,7 +18,7 @@ export const blogPosts = [
     date: "April 15, 2025",
     author: "Admin",
     category: "Prayer",
-    thumbnail: "https://images.unsplash.com/photo-1473177104440-ffee2f376098?q=80&w=600",
+    thumbnail: "https://images.unsplash.com/photo-1543525238-54e3d131f7ca?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     readTime: "7 min read",
     tags: ["Prayer", "Spiritual Disciplines"],
   },
@@ -29,7 +29,7 @@ export const blogPosts = [
     date: "April 10, 2025",
     author: "Admin",
     category: "Doctrine",
-    thumbnail: "https://images.unsplash.com/photo-1466442929976-97f336a657be?q=80&w=600",
+    thumbnail: "https://images.unsplash.com/photo-1749847850294-19c4f59bf3f9?q=80&w=393&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     readTime: "10 min read",
     tags: ["Sabbath", "Doctrine", "Worship"],
   },
@@ -40,7 +40,7 @@ export const blogPosts = [
     date: "April 5, 2025",
     author: "Admin",
     category: "Doctrine",
-    thumbnail: "https://images.unsplash.com/photo-1524230572899-a752b3835840?q=80&w=600",
+    thumbnail: "https://images.unsplash.com/photo-1521075486433-bf4052bb37bc?q=80&w=744&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     readTime: "8 min read",
     tags: ["State of the Dead", "Doctrine", "Hope"],
   },
@@ -51,7 +51,7 @@ export const blogPosts = [
     date: "March 28, 2025",
     author: "Admin",
     category: "Doctrine",
-    thumbnail: "https://images.unsplash.com/photo-1493397212122-2b85dda8106b?q=80&w=600",
+    thumbnail: "https://imgs.search.brave.com/RhA6pjMKW8iClOHnVT2SJ9IEF1qbNXy7T9JfCW4o2a4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90c2Ux/Lm1tLmJpbmcubmV0/L3RoP2lkPU9JUC5y/TzhDT01fSWxMTS1k/R0NHZ1pxRFRnSGFF/SyZwaWQ9MTUuMQ",
     readTime: "9 min read",
     tags: ["Sanctuary", "Doctrine", "Salvation"],
   },
@@ -62,7 +62,7 @@ export const blogPosts = [
     date: "March 20, 2025",
     author: "Admin",
     category: "Prophecy",
-    thumbnail: "https://images.unsplash.com/photo-1511988617509-a57c8a288659?q=80&w=600",
+    thumbnail: "https://i.pinimg.com/736x/1e/4b/23/1e4b23e15d9f2b5e90e2fe66a7641664.jpg",
     readTime: "6 min read",
     tags: ["Second Coming", "Prophecy", "Hope"],
   },
@@ -73,7 +73,7 @@ export const blogPosts = [
     date: "March 15, 2025",
     author: "Admin",
     category: "Prophecy",
-    thumbnail: "https://images.unsplash.com/photo-1528164344705-47542687000d?q=80&w=600",
+    thumbnail: "https://i.pinimg.com/736x/3a/fb/59/3afb594b8c23275332f9d88082f0c0f1.jpg",
     readTime: "11 min read",
     tags: ["Three Angels", "Prophecy", "Revelation"],
   },
@@ -84,7 +84,7 @@ export const blogPosts = [
     date: "March 10, 2025",
     author: "Admin",
     category: "Spiritual Gifts",
-    thumbnail: "https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=600",
+    thumbnail: "https://i.pinimg.com/736x/c8/71/b7/c871b715671a20e3e74725a8dcd62652.jpg",
     readTime: "7 min read",
     tags: ["Prophecy", "Ellen White", "Spiritual Gifts"],
   }
@@ -160,7 +160,7 @@ export const blogContents = [
     author: "Admin",
     date: "April 15, 2025",
     category: "Prayer",
-    featuredImage: "https://images.unsplash.com/photo-1473177104440-ffee2f376098?q=80&w=1200",
+    featuredImage: "https://images.unsplash.com/photo-1543525238-54e3d131f7ca?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     tags: ["Prayer", "Spiritual Disciplines"],
     content: [
       {
@@ -271,7 +271,7 @@ export const blogContents = [
     author: "Admin",
     date: "April 10, 2025",
     category: "Doctrine",
-    featuredImage: "https://images.unsplash.com/photo-1466442929976-97f336a657be?q=80&w=1200",
+    featuredImage: "https://images.unsplash.com/photo-1749847850294-19c4f59bf3f9?q=80&w=393&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     tags: ["Sabbath", "Doctrine", "Worship"],
     content: [
       {
@@ -394,7 +394,7 @@ export const blogContents = [
     author: "Admin",
     date: "April 5, 2025",
     category: "Doctrine",
-    featuredImage: "https://images.unsplash.com/photo-1524230572899-a752b3835840?q=80&w=1200",
+    featuredImage: "https://images.unsplash.com/photo-1521075486433-bf4052bb37bc?q=80&w=744&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     tags: ["State of the Dead", "Doctrine", "Hope"],
     content: [
       {
@@ -525,7 +525,7 @@ export const blogContents = [
     author: "Admin",
     date: "March 28, 2025",
     category: "Doctrine",
-    featuredImage: "https://images.unsplash.com/photo-1493397212122-2b85dda8106b?q=80&w=1200",
+    featuredImage: "https://imgs.search.brave.com/RhA6pjMKW8iClOHnVT2SJ9IEF1qbNXy7T9JfCW4o2a4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90c2Ux/Lm1tLmJpbmcubmV0/L3RoP2lkPU9JUC5y/TzhDT01fSWxMTS1k/R0NHZ1pxRFRnSGFF/SyZwaWQ9MTUuMQ",
     tags: ["Sanctuary", "Doctrine", "Salvation"],
     content: [
       {
@@ -640,7 +640,7 @@ export const blogContents = [
     author: "Admin",
     date: "March 20, 2025",
     category: "Prophecy",
-    featuredImage: "https://images.unsplash.com/photo-1511988617509-a57c8a288659?q=80&w=1200",
+    featuredImage: "https://i.pinimg.com/736x/1e/4b/23/1e4b23e15d9f2b5e90e2fe66a7641664.jpg",
     tags: ["Second Coming", "Prophecy", "Hope"],
     content: [
       {
@@ -839,7 +839,7 @@ export const blogContents = [
     author: "Admin",
     date: "March 15, 2025",
     category: "Prophecy",
-    featuredImage: "https://images.unsplash.com/photo-1528164344705-47542687000d?q=80&w=1200",
+    featuredImage: "https://i.pinimg.com/736x/3a/fb/59/3afb594b8c23275332f9d88082f0c0f1.jpg",
     tags: ["Three Angels", "Prophecy", "Revelation"],
     content: [
       {
@@ -1022,7 +1022,7 @@ export const blogContents = [
     author: "Admin",
     date: "March 10, 2025",
     category: "Spiritual Gifts",
-    featuredImage: "https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1200",
+    featuredImage: "https://i.pinimg.com/736x/c8/71/b7/c871b715671a20e3e74725a8dcd62652.jpg",
     tags: ["Prophecy", "Ellen White", "Spiritual Gifts"],
     content: [
       {
