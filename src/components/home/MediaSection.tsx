@@ -28,9 +28,9 @@ const MediaSection = () => {
 
   // These would be replaced with actual video IDs from the church's YouTube channel
   const sermonVideos = [
-    { id: "_XCyryGR1sA", title: "I Know Your Works..., Buy From Me!" },
-    { id: "_XCyryGR1sA", title: "The Power of Prayer in Daily Life" },
-    { id: "_XCyryGR1sA", title: "Understanding God's Plan for Your Life" }
+    { id: "N24zpN3AUzc?si=wqZijH6TflzZtTOd&amp;start=11521", title: " Make No Delay" }, 
+    { id: "A90ftLtiGOU?si=KFGBFNfUaAVWfn2i&amp;start=16225", title: " The 'HEARTBEAT' Of Mission " },
+    { id: "LmPDCRZ98rs?si=DawX54qOdBTbRrkG&amp;start=10418", title: "Getting Ready to Meet God" } 
   ];
   
   const musicVideos = [
