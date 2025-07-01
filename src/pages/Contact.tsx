@@ -76,8 +76,7 @@ const Contact = () => {
                     </div>
                     <div>
                       <h3 className="font-bold mb-1">Email</h3>
-                      <p className="text-gray-600">info@kahawawendanisda.org</p>
-                      <p className="text-gray-600">pastor@kahawawendanisda.org</p>
+                      <p className="text-church-600 hover:underline transition-all duration-500 ease-linear "><a href="mailto:info@kahawawendanisda.org">info@kahawawendanisda.org</a></p>
                     </div>
                   </div>
                   
@@ -87,10 +86,10 @@ const Contact = () => {
                     </div>
                     <div>
                       <h3 className="font-bold mb-1">Phone</h3>
-                      <a href="tel:0726 410608">
-                        <p className="text-gray-600">+254 726 410608</p>
+                      <a href="tel:0726561839">
+                        <p className="text-church-600 hover:underline transition-all duration-500 ease-linear ">+254 726 561 839</p>
                       </a>
-                      <p className="text-gray-600">+254 711 000000</p>
+                      <p className="text-church-600 hover:underline transition-all duration-500 ease-linear "><a href="tel:0726410608">+254 726 410 608</a></p>
                     </div>
                   </div>
                   
