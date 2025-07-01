@@ -3,6 +3,33 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <!-- <script>
+      window.MOBConfig = {
+        render: true,
+        styles: true,
+        popover: true,
+        language: "en-US",
+        app: "https://web.myownbible.app",
+        api: "https://api.myownbible.app"
+      };
+      var o = document.createElement('script');
+      o.src = "https://www.myownbible.app/embed.js";
+      o.defer = true;
+      document.head.appendChild(o);
+    </script>
+    <style>
+      .mob-link {
+        color: #ff0000 !important;
+      }
+      .mob-card h1,
+      .mob-card p {
+        color: #000 !important;
+      }
+      .mob-btns button {
+        background-color: #007780 !important;
+      }
+    </style> -->
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Kahawa Wendani SDA Church</title>
     <meta name="description" content="Welcome to Kahawa Wendani SDA Church - Building a community of faith, hope, and love in Kahawa Wendani and beyond." />
@@ -22,11 +49,43 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <!-- Styling For Bible Gateway -->
+    <style>
+      /* Target all links that point to biblegateway.com */
+      a[href*="biblegateway.com"] {
+        color: #007780; /* Your desired color (e.g., matching your theme) */
+        text-decoration: underline; /* Add underline */
+        font-weight: semibold; /* Make it bold */
+        /* You can add more styles here: */
+        /* font-style: italic; */
+        /* border-bottom: 1px dashed #007780; */
+        /* text-decoration: none; /* remove default underline if you use border-bottom */
+      }
+
+      /* Style on hover (optional) */
+      a[href*="biblegateway.com"]:hover {
+        color: #004455; /* A slightly darker shade on hover */
+         /* Remove underline on hover */
+      }
+    </style>
   </head>
 
   <body>
     <div id="root"></div>
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
+
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://www.biblegateway.com/public/link-to-us/tooltips/bglinks.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      // It's good practice to wrap jQuery-dependent code in a document.ready block
+      // to ensure the DOM is fully loaded.
+      jQuery(document).ready(function($) {
+          BGLinks.version = "NKJV";
+          BGLinks.linkVerses();
+      });
+    </script>
+
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
