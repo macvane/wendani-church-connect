@@ -5,7 +5,7 @@ import Footer from '@/components/layout/Footer';
 import { MapPin, Mail, Phone, Clock } from 'lucide-react';
 
 const Contact = () => {
-  const apiKey = import.meta.env.VITE_API_URL;
+  const apiKey = import.meta.env.VITE_WEB3FORMS_API_KEY;
   
   useEffect(() => {
     // Intersection Observer for scroll animations
@@ -139,6 +139,7 @@ const Contact = () => {
                 <form action="https://api.web3forms.com/submit" method="POST" className="space-y-6">
                   <input type="hidden" name="access_key" value={apiKey}></input>
                   <input type="hidden" name="redirect" value="https://wendani-v2.vercel.app/thank-you" />
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label htmlFor="name" className="block font-medium mb-1 text-gray-700">
