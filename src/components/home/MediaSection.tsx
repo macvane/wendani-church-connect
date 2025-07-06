@@ -28,9 +28,9 @@ const MediaSection = () => {
 
   // These would be replaced with actual video IDs from the church's YouTube channel
   const sermonVideos = [
-    { id: "N24zpN3AUzc?si=wqZijH6TflzZtTOd&amp;start=11521", title: " Make No Delay" }, 
-    { id: "A90ftLtiGOU?si=KFGBFNfUaAVWfn2i&amp;start=16225", title: " The 'HEARTBEAT' Of Mission " },
-    { id: "LmPDCRZ98rs?si=DawX54qOdBTbRrkG&amp;start=10418", title: "Getting Ready to Meet God" } 
+    { id: "GbRx-TpWQiY?si=pmVMvM7jwcFuJkVA&amp;start=13398", title: " Make No Delay" }, 
+    { id: "BETGwiQHQ18?si=CnNJ8JYntApfRCGt&amp;start=12571", title: "Holy Communion" }, 
+    { id: "6Soe7lt0eyk?si=SiL6-4Kqs5CdDPH1&amp;start=14618", title: "Praise & Pains" } 
   ];
   
   const musicVideos = [
