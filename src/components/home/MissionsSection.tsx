@@ -28,13 +28,6 @@ const MissionsSection = () => {
       title: "Mulufumba Mission Outreach",
       location: "Busia, Kenya",
       date: "April 13, 2025"
-    },
-    { 
-      src: "/assets/image (31).jpg", 
-      alt: "Medical mission",
-      title: "Medical Mission",
-      location: "East Side Clinic",
-      date: "February 18, 2025"
     }
   ];
 
@@ -125,7 +118,7 @@ const MissionsSection = () => {
         {/* Mission gallery with overlay text */}
         <div className="animate-on-scroll animate-delay-3">
           <h3 className="text-2xl font-bold mb-6 text-center">Recent Mission Activities</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {missionImages.map((image, index) => (
               <div 
                 key={index} 
