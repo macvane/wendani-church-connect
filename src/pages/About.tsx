@@ -38,7 +38,7 @@ const About = () => {
       id: 2,
       name: "Eld. Calvince Ouma",
       position: "First Elder",
-      image: "/placeholder.svg",
+      image: "/leaders/elder.jpg",
       bio: "Eld. Calvince Ouma has served as First Elder for 1 year, bringing energy and vision to our church."
     },
     {
