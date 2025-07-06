@@ -51,7 +51,7 @@ const Index = () => {
         <ConstructionSection />
         <PastorateSection />
         <BlogPreview />
-        <ImageSlideshow />
+        {/* <ImageSlideshow /> */}
         <CtaSection />
       </main>
       <Footer />

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Book, Mail, MapPin, Phone, Youtube } from 'lucide-react';
+import { Book, Mail, MailCheck, MapPin, Phone, Youtube } from 'lucide-react';
 
 const Footer = () => {
   const year = new Date().getFullYear();
@@ -18,9 +18,9 @@ const Footer = () => {
             </h3>
             <div className="flex items-center space-x-2">
               <img 
-                src="/lovable-uploads/d7c1183c-049c-45be-b6bf-64d44a0578e4.png" 
+                src="/logo.png" 
                 alt="Kahawa Wendani SDA Church Logo" 
-                className="h-[2rem] object-contain"
+                className="h-[2rem] md:h-[4rem] object-contain"
               />
             </div>
             <p className="mb-4">Kahawa Wendani SDA Church is committed to spreading the gospel and serving the community with love and compassion.</p>
@@ -98,13 +98,6 @@ const Footer = () => {
                   <p className="hover:text-church-600 hover:underline transition-all duration-500 ease-linear ">+254 726 561 839</p>
                 </a>
               </li>
-              <li className="flex items-start space-x-3">
-                <Book size={18} className="text-church-500 mt-1 shrink-0" />
-                <div>
-                  <span className="block">Sabbath School: 8:00 AM</span>
-                  <span className="block">Divine Service: 11:00 AM</span>
-                </div>
-              </li>
             </ul>
             
             <div className="mt-4">
@@ -118,6 +111,15 @@ const Footer = () => {
                   aria-label="YouTube Channel"
                 >
                   <Youtube size={18} />
+                </a>
+                <a 
+                  href="mailto:info@kahawawendanisda.org" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="bg-church-600 hover:bg-church-700 text-white p-2 rounded-full transition-colors"
+                  aria-label="YouTube Channel"
+                >
+                  <MailCheck size={18} />
                 </a>
               </div>
             </div>
