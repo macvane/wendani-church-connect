@@ -79,7 +79,7 @@ const MissionsSection = () => {
                   <p className="font-serif italic mb-2">
                     "The church exists by mission, just as fire exists by burning."
                   </p>
-                  <p className="text-sm">- Emil Brunner</p>
+                  {/* <p className="text-sm">- Emil Brunner</p> */}
                 </div>
               </div>
             </div>
