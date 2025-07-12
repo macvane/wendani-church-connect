@@ -42,6 +42,7 @@ const Index = () => {
       <Header />
       <main>
         <Hero />
+        <LivestreamSection />
         <AboutSection />
         {/* <LivestreamSection /> */}
         <BaptismSection />
