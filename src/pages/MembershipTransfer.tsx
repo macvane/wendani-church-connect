@@ -31,9 +31,11 @@ const formSchema = z.object({
   fromChurch: z.string().min(2, "Church name is required"),
   fromDistrict: z.string().min(2, "District name is required"),
   fromConference: z.string().min(2, "Conference name is required"),
+  fromPoBox: z.string().optional(),
   toChurch: z.string().min(2, "Church name is required"),
   toDistrict: z.string().min(2, "District name is required"),
   toConference: z.string().min(2, "Conference name is required"),
+  toPoBox: z.string().optional(),
   additionalNotes: z.string().optional(),
 });
 
@@ -55,9 +57,11 @@ const MembershipTransfer = () => {
       fromChurch: "",
       fromDistrict: "",
       fromConference: "",
+      fromPoBox: "",
       toChurch: "",
       toDistrict: "",
       toConference: "",
+      toPoBox: "",
       additionalNotes: "",
     },
   });
@@ -324,6 +328,25 @@ const MembershipTransfer = () => {
                           )}
                         />
                       </div>
+                      
+                      <FormField
+                        control={form.control}
+                        name="fromPoBox"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>P.O. Box</FormLabel>
+                            <FormControl>
+                              <input 
+                                type="text"
+                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
+                                placeholder="P.O. Box (if applicable)"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
                     </div>
                     
                     {/* "To" Church Details */}
@@ -396,6 +419,25 @@ const MembershipTransfer = () => {
                           )}
                         />
                       </div>
+                      
+                      <FormField
+                        control={form.control}
+                        name="toPoBox"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>P.O. Box</FormLabel>
+                            <FormControl>
+                              <input 
+                                type="text"
+                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
+                                placeholder="P.O. Box (if applicable)"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
                     </div>
                     
                     <FormField
