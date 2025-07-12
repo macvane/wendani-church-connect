@@ -37,7 +37,7 @@ const About = () => {
     {
       id: 2,
       name: "Eld. Calvince Ouma",
-      position: "First Elder",
+      position: "First Church Elder",
       image: "/leaders/elder.jpg",
       bio: "Eld. Calvince Ouma has served as First Elder for 1 year, bringing energy and vision to our church."
     },
@@ -82,38 +82,6 @@ const About = () => {
               <div className="prose max-w-none animate-on-scroll animate-delay-1">
                 <p className="text-lg mb-4">
                 The name “Wendani,” a rich Kikuyu word meaning “love,” perfectly embodies the spirit and essence of our church. SDA Church Kahawa Wendani has a deep-rooted history, originating from SDA Kahawa Garrison, where Wendani Sabbath School was born on July 23, 2005.
-                </p>
-                
-                {/* <div className="my-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="rounded-lg overflow-hidden shadow-md">
-                    <img 
-                      src="https://images.unsplash.com/photo-1473177104440-ffee2f376098?q=80&w=600" 
-                      alt="Early Church Meeting" 
-                      className="w-full h-64 object-cover"
-                    />
-                    <div className="p-4 bg-gray-50">
-                      <p className="text-sm text-gray-600">Early church meetings in the late 1990s</p>
-                    </div>
-                  </div>
-                  
-                  <div className="rounded-lg overflow-hidden shadow-md">
-                    <img 
-                      src="https://images.unsplash.com/photo-1524230572899-a752b3835840?q=80&w=600" 
-                      alt="Current Church Building" 
-                      className="w-full h-64 object-cover"
-                    />
-                    <div className="p-4 bg-gray-50">
-                      <p className="text-sm text-gray-600">Our current church facility (since 2010)</p>
-                    </div>
-                  </div>
-                </div> */}
-                
-                <p className="text-lg mb-4">
-                Our journey began on a bright Sabbath morning when members of the church, expecting their usual worship at Kahawa Garrison, were unexpectedly denied entry. The Garrison commander had issued a directive that restricted civilian access, allowing only soldiers and their families to worship inside the barracks. Despite the abrupt change, our members displayed unwavering faith, worshiping under the sun by the roadside that day.
-                </p>
-                
-                <p className="text-lg mb-4">
-                In the spirit of resilience and community, the church leadership quickly found a temporary worship place in an incomplete house nearby, graciously offered by the Kerimu family. As our congregation grew, we continued our services outdoors until we relocated to Mama Mbau’s compound, and later to a space provided by Brother Denvas Nyamari Gekonde’s family. Our steadfast journey reflects our commitment to faith and fellowship.
                 </p>
                 
                 <p className="text-lg">
