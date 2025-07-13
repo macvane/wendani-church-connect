@@ -30,6 +30,7 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 const Baptism = () => {
+  const apiKey = import.meta.env.VITE_WEB3FORMS_API_KEY; 
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   
@@ -110,16 +111,20 @@ const Baptism = () => {
               </div>
               
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                <form action="https://api.web3forms.com/submit" method="POST" className="space-y-6">
+                  <input type="hidden" name="access_key" value={apiKey}></input>
+                  <input type="hidden" name="redirect" value="https://wendani-v2.vercel.app/thank-you" />
+                  <input type="hidden" name="subject" value="Baptism Registration Form" />
+                 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField
                       control={form.control}
                       name="fullName"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Full Name</FormLabel>
+                          <FormLabel>Full Name <span className="text-red-500">*</span></FormLabel>
                           <FormControl>
-                            <Input placeholder="Your full name" {...field} />
+                            <Input required placeholder="Your full name" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -131,7 +136,7 @@ const Baptism = () => {
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Email</FormLabel>
+                          <FormLabel>Email </FormLabel>
                           <FormControl>
                             <Input type="email" placeholder="Your email address" {...field} />
                           </FormControl>
@@ -147,9 +152,9 @@ const Baptism = () => {
                       name="phone"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Phone Number</FormLabel>
+                          <FormLabel>Phone Number <span className="text-red-500">*</span></FormLabel>
                           <FormControl>
-                            <Input placeholder="Your phone number" {...field} />
+                            <Input required placeholder="Your phone number" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -161,9 +166,9 @@ const Baptism = () => {
                       name="birthDate"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Date of Birth</FormLabel>
+                          <FormLabel>Date of Birth <span className="text-red-500">*</span></FormLabel>
                           <FormControl>
-                            <Input type="date" {...field} />
+                            <Input required type="date" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -171,7 +176,7 @@ const Baptism = () => {
                     />
                   </div>
                   
-                  <FormField
+                  {/* <FormField
                     control={form.control}
                     name="address"
                     render={({ field }) => (
@@ -183,7 +188,7 @@ const Baptism = () => {
                         <FormMessage />
                       </FormItem>
                     )}
-                  />
+                  /> */}
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField
@@ -262,7 +267,7 @@ const Baptism = () => {
                   /> */}
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <FormField
+                    {/* <FormField
                       control={form.control}
                       name="preferredDate"
                       render={({ field }) => (
@@ -274,9 +279,9 @@ const Baptism = () => {
                           <FormMessage />
                         </FormItem>
                       )}
-                    />
+                    /> */}
                     
-                    <FormField
+                    {/* <FormField
                       control={form.control}
                       name="howDidYouHear"
                       render={({ field }) => (
@@ -299,7 +304,7 @@ const Baptism = () => {
                           <FormMessage />
                         </FormItem>
                       )}
-                    />
+                    /> */}
                   </div>
                   
                   <FormField
@@ -373,12 +378,12 @@ const Baptism = () => {
                 <p className="text-gray-700">
                   Baptism represents a public declaration of your acceptance of Jesus Christ as your Lord and Savior and your decision to join the Seventh-day Adventist Church community.
                 </p>
-                <div className="mt-4">
+                {/* <div className="mt-4">
                   <Button variant="outline" className="flex items-center">
                     <Calendar className="mr-2" size={16} />
                     View Upcoming Baptism Dates
                   </Button>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

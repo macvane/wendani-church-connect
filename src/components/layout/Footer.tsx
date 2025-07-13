@@ -92,19 +92,19 @@ const Footer = () => {
                 <Mail size={18} className="text-church-500 shrink-0" />
                 <span>info@kahawawendanisda.org</span>
               </li>
-              <li className="flex items-center space-x-3">
+              {/* <li className="flex items-center space-x-3">
                 <Phone size={18} className="text-church-500 shrink-0" />
                 <a href="tel:0726561839">
                   <p className="hover:text-church-600 hover:underline transition-all duration-500 ease-linear ">+254 726 561 839</p>
                 </a>
-              </li>
+              </li> */}
             </ul>
             
             <div className="mt-4">
               <h4 className="text-sm font-medium mb-2">Connect With Us</h4>
               <div className="flex space-x-3">
                 <a 
-                  href="https://www.youtube.com/@KahawaWendaniSDAChurch" 
+                  href="https://www.youtube.com/@KahawaWendaniSDAChurchOfficial" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="bg-church-600 hover:bg-church-700 text-white p-2 rounded-full transition-colors"

@@ -50,13 +50,13 @@ export const allEventsData = [
   },
   {
     id: 5,
-    title: "Ambassadors Cookery",
-    date: "July 20, 2025",
+    title: "VOP/ SOP Sabbath",
+    date: "July 19, 2025",
     time: "8:00 AM - 5:00 PM",
     location: "Church Main Sanctuary",
-    department: "Ambassadors Dpt.",
-    description: "Get ready for a delicious experience! The Ambassadors department invites you to a special cookery event where you'll learn to create a variety of amazing dishes. ",
-    thumbnail: "https://images.unsplash.com/photo-1532499016263-f2c3e89de9cd?q=80&w=580&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    department: "VOP/SOP Dpt.",
+    description: "Get ready for a delicious experience! The VOP/SOP department invites you to a special VOP/SOP Sabbath",
+    thumbnail: "https://i.pinimg.com/1200x/01/48/02/0148029595c277d3cd0b083952869dc9.jpg",
   },
   {
     id: 6,
@@ -74,9 +74,19 @@ export const allEventsData = [
     date: "June 21, 2025",
     time: "8:00 AM - 5:00 PM",
     location: "K.Sukari Church",
-    department: "Worship Committee",
+    department: "Music Dept.",
     description: "Special resurrection service celebrating Christ's victory over death with choir performances and special readings.",
     thumbnail: "https://i.pinimg.com/736x/6e/02/66/6e026627a6dd1008e61dad40b3cf8289.jpg",
+  },
+  {
+    id: 8,
+    title: "AMR Sabbath",
+    date: "Aug 02, 2025",
+    time: "8:00 AM - 5:00 PM",
+    location: "Church Main Sactuary",
+    department: "AMR Sabbath",
+    description: "Join us for a special Sabbath led by the Adventist Muslim Relations (AMR) department, where we'll explore paths to understanding and connection.",
+    thumbnail: "/assets/amr2.png",
   }
 ];
 

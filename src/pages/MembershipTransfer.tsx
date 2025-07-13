@@ -1,16 +1,14 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { useToast } from '@/hooks/use-toast';
-import { sendToGoogleSheet } from '@/utils/googleSheets';
-import { 
+import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from '@/components/ui/form';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Textarea } from '@/components/ui/textarea';
@@ -20,21 +18,21 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 // Form schema
 const formSchema = z.object({
-  fullName: z.string().min(2, "Full name is required"),
-  email: z.string().email("Invalid email address"),
-  phone: z.string().min(8, "Valid phone number is required"),
-  dateOfBirth: z.string().min(1, "Date of birth is required"),
-  address: z.string().min(2, "Address is required"),
-  transferType: z.enum(["transferIn", "transferOut"], {
-    required_error: "Please select a transfer type",
+  fullName: z.string().min(2, 'Full name is required'),
+  email: z.string().email('Invalid email address'),
+  phone: z.string().min(8, 'Valid phone number is required'),
+  dateOfBirth: z.string().min(1, 'Date of birth is required'),
+  address: z.string().min(2, 'Address is required'),
+  transferType: z.enum(['transferIn', 'transferOut'], {
+    required_error: 'Please select a transfer type',
   }),
-  fromChurch: z.string().min(2, "Church name is required"),
-  fromDistrict: z.string().min(2, "District name is required"),
-  fromConference: z.string().min(2, "Conference name is required"),
+  fromChurch: z.string().min(2, 'Church name is required'),
+  fromDistrict: z.string().min(2, 'District name is required'),
+  fromConference: z.string().min(2, 'Conference name is required'),
   fromPoBox: z.string().optional(),
-  toChurch: z.string().min(2, "Church name is required"),
-  toDistrict: z.string().min(2, "District name is required"),
-  toConference: z.string().min(2, "Conference name is required"),
+  toChurch: z.string().min(2, 'Church name is required'),
+  toDistrict: z.string().min(2, 'District name is required'),
+  toConference: z.string().min(2, 'Conference name is required'),
   toPoBox: z.string().optional(),
   additionalNotes: z.string().optional(),
 });
@@ -42,46 +40,91 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 const MembershipTransfer = () => {
+  const apiKey = import.meta.env.VITE_WEB3FORMS_API_KEY;
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      fullName: "",
-      email: "",
-      phone: "",
-      dateOfBirth: "",
-      address: "",
-      transferType: "transferIn",
-      fromChurch: "",
-      fromDistrict: "",
-      fromConference: "",
-      fromPoBox: "",
-      toChurch: "",
-      toDistrict: "",
-      toConference: "",
-      toPoBox: "",
-      additionalNotes: "",
+      fullName: '',
+      email: '',
+      phone: '',
+      dateOfBirth: '',
+      address: '',
+      transferType: 'transferIn',
+      fromChurch: '',
+      fromDistrict: '',
+      fromConference: '',
+      fromPoBox: '',
+      toChurch: 'Kahawa Wendani SDA Church',
+      toDistrict: 'Kahawa Wendani District',
+      toConference: 'Central Kenya Conference',
+      toPoBox: '25685 - 00100', // Predefined P.O. Box default
+      additionalNotes: '',
     },
   });
 
-  const transferType = form.watch("transferType");
-  
+  const { setValue } = form;
+  const transferType = form.watch('transferType');
+
+  useEffect(() => {
+    if (transferType === 'transferIn') {
+      // Set the "To" fields for Kahawa Wendani
+      setValue('toChurch', 'Kahawa Wendani SDA Church', { shouldValidate: true });
+      setValue('toDistrict', 'Kahawa Wendani District', { shouldValidate: true });
+      setValue('toConference', 'Central Kenya Conference', { shouldValidate: true });
+      setValue('toPoBox', ' 25685 - 00100', { shouldValidate: true });
+      
+      // Clear the "From" fields
+      setValue('fromChurch', '', { shouldValidate: true });
+      setValue('fromDistrict', '', { shouldValidate: true });
+      setValue('fromConference', '', { shouldValidate: true });
+      setValue('fromPoBox', '', { shouldValidate: true });
+
+    } else if (transferType === 'transferOut') {
+      // Set the "From" fields for Kahawa Wendani
+      setValue('fromChurch', 'Kahawa Wendani SDA Church', { shouldValidate: true });
+      setValue('fromDistrict', 'Kahawa Wendani District', { shouldValidate: true });
+      setValue('fromConference', 'Central Kenya Conference', { shouldValidate: true });
+      setValue('fromPoBox', '25685 - 00100', { shouldValidate: true });
+      
+      // Clear the "To" fields
+      setValue('toChurch', '', { shouldValidate: true });
+      setValue('toDistrict', '', { shouldValidate: true });
+      setValue('toConference', '', { shouldValidate: true });
+      setValue('toPoBox', '', { shouldValidate: true });
+    }
+  }, [transferType, setValue]);
+
+
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
-    
+
     try {
-      await sendToGoogleSheet({
-        ...data,
-      }, 'membership');
-      
-      toast({
-        title: "Form Submitted",
-        description: "Your membership transfer request has been submitted successfully.",
+      const formData = new FormData();
+      formData.append("access_key", apiKey);
+
+      Object.entries(data).forEach(([key, value]) => {
+        formData.append(key, value);
       });
-      
-      form.reset();
+
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
+      });
+
+      const json = await res.json();
+
+      if (json.success) {
+        toast({
+          title: "Form Submitted",
+          description: "Your membership transfer request has been submitted successfully.",
+        });
+        form.reset();
+      } else {
+        throw new Error(json.message || "An unknown error occurred.");
+      }
     } catch (error) {
       console.error("Error submitting form:", error);
       toast({
@@ -97,15 +140,14 @@ const MembershipTransfer = () => {
   return (
     <>
       <Header />
-      
       <main className="pb-16">
         {/* Hero Section */}
         <section className="relative h-[400px] flex items-center justify-center">
           <div className="absolute inset-0">
             <div className="absolute inset-0 bg-black bg-opacity-60 z-10"></div>
-            <img 
+            <img
               src="https://images.unsplash.com/photo-1518495973542-4542c06a5843?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-              alt="Membership Transfer" 
+              alt="Membership Transfer"
               className="w-full h-full object-cover"
             />
           </div>
@@ -116,17 +158,16 @@ const MembershipTransfer = () => {
             </p>
           </div>
         </section>
-        
         <section className="container py-16">
           <div className="max-w-3xl mx-auto">
             <h2 className="section-title text-center mb-10">Membership Transfer Form</h2>
-            
             <div className="bg-white rounded-lg shadow-lg p-8">
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                  <input type='hidden' name='subject' value='Membership Transfer Form' />
+                  {/* Personal Information fields */}
                   <div className="space-y-4">
                     <h3 className="text-xl font-semibold">Personal Information</h3>
-                    
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <FormField
                         control={form.control}
@@ -135,7 +176,7 @@ const MembershipTransfer = () => {
                           <FormItem>
                             <FormLabel>Full Name <span className="text-red-500">*</span></FormLabel>
                             <FormControl>
-                              <input 
+                              <input
                                 type="text"
                                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                                 placeholder="Your name"
@@ -153,7 +194,7 @@ const MembershipTransfer = () => {
                           <FormItem>
                             <FormLabel>Email <span className="text-red-500">*</span></FormLabel>
                             <FormControl>
-                              <input 
+                              <input
                                 type="email"
                                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                                 placeholder="youremail@example.com"
@@ -165,7 +206,6 @@ const MembershipTransfer = () => {
                         )}
                       />
                     </div>
-                    
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <FormField
                         control={form.control}
@@ -174,7 +214,7 @@ const MembershipTransfer = () => {
                           <FormItem>
                             <FormLabel>Phone Number <span className="text-red-500">*</span></FormLabel>
                             <FormControl>
-                              <input 
+                              <input
                                 type="tel"
                                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                                 placeholder="+254 700 000000"
@@ -192,7 +232,7 @@ const MembershipTransfer = () => {
                           <FormItem>
                             <FormLabel>Date of Birth <span className="text-red-500">*</span></FormLabel>
                             <FormControl>
-                              <input 
+                              <input
                                 type="date"
                                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                                 {...field}
@@ -203,7 +243,6 @@ const MembershipTransfer = () => {
                         )}
                       />
                     </div>
-                    
                     <FormField
                       control={form.control}
                       name="address"
@@ -211,7 +250,7 @@ const MembershipTransfer = () => {
                         <FormItem>
                           <FormLabel>Physical Address <span className="text-red-500">*</span></FormLabel>
                           <FormControl>
-                            <input 
+                            <input
                               type="text"
                               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                               placeholder="Your current address"
@@ -223,10 +262,10 @@ const MembershipTransfer = () => {
                       )}
                     />
                   </div>
-                  
+
+                  {/* Transfer Details */}
                   <div className="space-y-6 pt-4 border-t">
                     <h3 className="text-xl font-semibold mt-2">Transfer Details</h3>
-                    
                     <FormField
                       control={form.control}
                       name="transferType"
@@ -236,19 +275,19 @@ const MembershipTransfer = () => {
                           <FormControl>
                             <RadioGroup
                               onValueChange={field.onChange}
-                              defaultValue={field.value}
+                              value={field.value}
                               className="space-y-3 pt-2"
                             >
                               <div className="flex items-center space-x-2">
                                 <RadioGroupItem value="transferIn" id="transferIn" />
                                 <label htmlFor="transferIn" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                                  Transfer my membership from another church to Kahawa Wendani SDA Church
+                                  Transfer my membership to Kahawa Wendani SDA Church
                                 </label>
                               </div>
                               <div className="flex items-center space-x-2">
                                 <RadioGroupItem value="transferOut" id="transferOut" />
                                 <label htmlFor="transferOut" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                                  Transfer my membership from Kahawa Wendani SDA Church to another church
+                                  Transfer my membership from Kahawa Wendani SDA Church
                                 </label>
                               </div>
                             </RadioGroup>
@@ -257,13 +296,12 @@ const MembershipTransfer = () => {
                         </FormItem>
                       )}
                     />
-                    
+
                     {/* "From" Church Details */}
                     <div className="space-y-4 pt-4 border-t">
                       <h4 className="font-medium text-lg mt-2">
-                        {transferType === "transferIn" ? "Transferring From (Current Church)" : "Transferring From (Kahawa Wendani SDA Church)"}
+                        Transferring From
                       </h4>
-                      
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <FormField
                           control={form.control}
@@ -272,20 +310,18 @@ const MembershipTransfer = () => {
                             <FormItem>
                               <FormLabel>Church Name <span className="text-red-500">*</span></FormLabel>
                               <FormControl>
-                                <input 
+                                <input
                                   type="text"
+                                  placeholder="Previous church name"
                                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
-                                  placeholder="Church name"
-                                  value={transferType === "transferOut" ? "Kahawa Wendani SDA Church" : field.value}
-                                  onChange={field.onChange}
-                                  readOnly={transferType === "transferOut"}
+                                  {...field}
+                                  readOnly={transferType === 'transferOut'}
                                 />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
                           )}
                         />
-                        
                         <FormField
                           control={form.control}
                           name="fromDistrict"
@@ -293,20 +329,18 @@ const MembershipTransfer = () => {
                             <FormItem>
                               <FormLabel>District <span className="text-red-500">*</span></FormLabel>
                               <FormControl>
-                                <input 
+                                <input
                                   type="text"
-                                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                                   placeholder="District name"
-                                  value={transferType === "transferOut" ? "Kahawa Wendani District" : field.value}
-                                  onChange={field.onChange}
-                                  readOnly={transferType === "transferOut"}
+                                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
+                                  {...field}
+                                  readOnly={transferType === 'transferOut'}
                                 />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
                           )}
                         />
-                        
                         <FormField
                           control={form.control}
                           name="fromConference"
@@ -314,13 +348,12 @@ const MembershipTransfer = () => {
                             <FormItem>
                               <FormLabel>Conference <span className="text-red-500">*</span></FormLabel>
                               <FormControl>
-                                <input 
+                                <input
                                   type="text"
-                                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                                   placeholder="Conference name"
-                                  value={transferType === "transferOut" ? "Central Kenya Conference" : field.value}
-                                  onChange={field.onChange}
-                                  readOnly={transferType === "transferOut"}
+                                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
+                                  {...field}
+                                  readOnly={transferType === 'transferOut'}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -328,19 +361,20 @@ const MembershipTransfer = () => {
                           )}
                         />
                       </div>
-                      
                       <FormField
                         control={form.control}
                         name="fromPoBox"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>P.O. Box</FormLabel>
+                            <FormLabel>P.O. Box <span className="text-red-500">*</span></FormLabel>
                             <FormControl>
-                              <input 
+                              <input
                                 type="text"
+                                required
                                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
-                                placeholder="P.O. Box (if applicable)"
+                                placeholder="P.O. Box"
                                 {...field}
+                                readOnly={transferType === 'transferOut'}
                               />
                             </FormControl>
                             <FormMessage />
@@ -348,13 +382,12 @@ const MembershipTransfer = () => {
                         )}
                       />
                     </div>
-                    
+
                     {/* "To" Church Details */}
                     <div className="space-y-4 pt-4 border-t">
                       <h4 className="font-medium text-lg mt-2">
-                        {transferType === "transferIn" ? "Transferring To (Kahawa Wendani SDA Church)" : "Transferring To (New Church)"}
+                        Transferring To
                       </h4>
-                      
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <FormField
                           control={form.control}
@@ -363,20 +396,18 @@ const MembershipTransfer = () => {
                             <FormItem>
                               <FormLabel>Church Name <span className="text-red-500">*</span></FormLabel>
                               <FormControl>
-                                <input 
+                                <input
                                   type="text"
+                                  placeholder="New church name"
                                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
-                                  placeholder="Church name"
-                                  value={transferType === "transferIn" ? "Kahawa Wendani SDA Church" : field.value}
-                                  onChange={field.onChange}
-                                  readOnly={transferType === "transferIn"}
+                                  {...field}
+                                  readOnly={transferType === 'transferIn'}
                                 />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
                           )}
                         />
-                        
                         <FormField
                           control={form.control}
                           name="toDistrict"
@@ -384,20 +415,18 @@ const MembershipTransfer = () => {
                             <FormItem>
                               <FormLabel>District <span className="text-red-500">*</span></FormLabel>
                               <FormControl>
-                                <input 
+                                <input
                                   type="text"
-                                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                                   placeholder="District name"
-                                  value={transferType === "transferIn" ? "Kahawa Wendani District" : field.value}
-                                  onChange={field.onChange}
-                                  readOnly={transferType === "transferIn"}
+                                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
+                                  {...field}
+                                  readOnly={transferType === 'transferIn'}
                                 />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
                           )}
                         />
-                        
                         <FormField
                           control={form.control}
                           name="toConference"
@@ -405,13 +434,12 @@ const MembershipTransfer = () => {
                             <FormItem>
                               <FormLabel>Conference <span className="text-red-500">*</span></FormLabel>
                               <FormControl>
-                                <input 
+                                <input
                                   type="text"
-                                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                                   placeholder="Conference name"
-                                  value={transferType === "transferIn" ? "Central Kenya Conference" : field.value}
-                                  onChange={field.onChange}
-                                  readOnly={transferType === "transferIn"}
+                                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
+                                  {...field}
+                                  readOnly={transferType === 'transferIn'}
                                 />
                               </FormControl>
                               <FormMessage />
@@ -419,19 +447,20 @@ const MembershipTransfer = () => {
                           )}
                         />
                       </div>
-                      
                       <FormField
                         control={form.control}
                         name="toPoBox"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>P.O. Box</FormLabel>
+                            <FormLabel>P.O. Box <span className="text-red-500">*</span></FormLabel>
                             <FormControl>
-                              <input 
+                              <input
                                 type="text"
+                                required
                                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
-                                placeholder="P.O. Box (if applicable)"
+                                placeholder="P.O. Box"
                                 {...field}
+                                readOnly={transferType === 'transferIn'}
                               />
                             </FormControl>
                             <FormMessage />
@@ -439,7 +468,7 @@ const MembershipTransfer = () => {
                         )}
                       />
                     </div>
-                    
+
                     <FormField
                       control={form.control}
                       name="additionalNotes"
@@ -447,7 +476,7 @@ const MembershipTransfer = () => {
                         <FormItem>
                           <FormLabel>Additional Notes (Optional)</FormLabel>
                           <FormControl>
-                            <Textarea 
+                            <Textarea
                               className="w-full min-h-32"
                               placeholder="Any additional information you'd like to provide..."
                               {...field}
@@ -458,8 +487,7 @@ const MembershipTransfer = () => {
                       )}
                     />
                   </div>
-                  
-                  <button 
+                  <button
                     type="submit"
                     disabled={isSubmitting}
                     className={`w-full px-8 py-3 bg-church-600 text-white rounded-md font-medium hover:bg-church-700 transition-colors ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
@@ -472,7 +500,6 @@ const MembershipTransfer = () => {
           </div>
         </section>
       </main>
-      
       <Footer />
     </>
   );

@@ -42,9 +42,7 @@ const Index = () => {
       <Header />
       <main>
         <Hero />
-        <LivestreamSection />
         <AboutSection />
-        {/* <LivestreamSection /> */}
         <BaptismSection />
         <EventsSection />
         <MissionsSection />
@@ -52,7 +50,6 @@ const Index = () => {
         <ConstructionSection />
         <PastorateSection />
         <BlogPreview />
-        {/* <ImageSlideshow /> */}
         <CtaSection />
       </main>
       <Footer />

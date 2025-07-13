@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import { useToast } from '@/hooks/use-toast';
-import { sendToGoogleSheet } from '@/utils/googleSheets';
+// If you still want toasts for general app messages, you can keep useToast
+// import { useToast } from '@/hooks/use-toast'; 
 
 interface Dependent {
   name: string;
@@ -11,30 +11,16 @@ interface Dependent {
 }
 
 const Benevolence = () => {
-  const [formData, setFormData] = useState({
-    headOfFamilyName: '',
-    headOfFamilyPhone: '',
-    headOfFamilyEmail: '',
-    membershipStatus: '',
-    spouseName: '',
-    spouseChurch: '',
-    reason: '',
-    amount: '',
-    urgency: 'medium',
-    additionalInfo: '',
-  });
+  // Make sure this API key is correctly set in your .env file
+  const apiKey = import.meta.env.VITE_WEB3FORMS_API_KEY; 
+  
+  // No longer strictly needed for Web3Forms direct submission, 
+  // but good for showing immediate button state
+  const [isSubmitting, setIsSubmitting] = useState(false); 
 
   const [dependents, setDependents] = useState<Dependent[]>([
     { name: '', phone: '', relationship: '' }
   ]);
-  
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const { toast } = useToast();
-  
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
 
   const handleDependentChange = (index: number, field: keyof Dependent, value: string) => {
     const newDependents = [...dependents];
@@ -47,49 +33,18 @@ const Benevolence = () => {
   };
 
   const removeDependent = (index: number) => {
+    // Ensure at least one dependent field remains
     if (dependents.length > 1) {
       setDependents(dependents.filter((_, i) => i !== index));
     }
   };
-  
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+
+  // Optional: A local submit handler to manage isSubmitting state
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     setIsSubmitting(true);
-    
-    try {
-      await sendToGoogleSheet({
-        ...formData,
-        dependents: dependents.filter(dep => dep.name.trim() !== ''),
-      }, 'benevolence');
-      
-      toast({
-        title: "Benevolence Request Submitted",
-        description: "Your request has been received. A church representative will contact you soon.",
-      });
-      
-      setFormData({
-        headOfFamilyName: '',
-        headOfFamilyPhone: '',
-        headOfFamilyEmail: '',
-        membershipStatus: '',
-        spouseName: '',
-        spouseChurch: '',
-        reason: '',
-        amount: '',
-        urgency: 'medium',
-        additionalInfo: '',
-      });
-      setDependents([{ name: '', phone: '', relationship: '' }]);
-    } catch (error) {
-      console.error("Error submitting benevolence request:", error);
-      toast({
-        title: "Submission Failed",
-        description: "There was a problem submitting your request. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
+    // action="https://api.web3forms.com/submit"
+    // No need for a custom fetch here.
+    // Web3Forms will handle redirection after submission.
   };
 
   return (
@@ -139,7 +94,13 @@ const Benevolence = () => {
               <div className="bg-white rounded-lg shadow-md p-8">
                 <h2 className="text-2xl font-bold mb-6 text-center">Benevolence Request Form</h2>
                 
-                <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Add onSubmit handler to the form if you want to manage isSubmitting state */}
+                <form action="https://api.web3forms.com/submit" method="POST" className="space-y-6">
+                  <input type="hidden" name="access_key" value={apiKey}></input>
+                  {/* Web3Forms redirect URL */}
+                  <input type="hidden" name="redirect" value="https://wendani-v2.vercel.app/thank-you" />
+                  <input type="hidden" name="subject" value="Benevolence Registration Form" />
+                  
                   {/* Head of Family Information */}
                   <div>
                     <h3 className="text-lg font-bold mb-4 border-b border-gray-200 pb-2">Head of Family Information</h3>
@@ -151,10 +112,8 @@ const Benevolence = () => {
                         <input 
                           type="text" 
                           id="headOfFamilyName" 
-                          name="headOfFamilyName" 
+                          name="headOfFamilyName" // Keep name for Web3Forms
                           placeholder="Full name"
-                          value={formData.headOfFamilyName}
-                          onChange={handleChange}
                           required
                           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                         />
@@ -167,10 +126,8 @@ const Benevolence = () => {
                         <input 
                           type="tel" 
                           id="headOfFamilyPhone" 
-                          name="headOfFamilyPhone"
+                          name="headOfFamilyPhone" // Keep name for Web3Forms
                           placeholder="+254 700 000000"
-                          value={formData.headOfFamilyPhone}
-                          onChange={handleChange}
                           required
                           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                         />
@@ -183,10 +140,8 @@ const Benevolence = () => {
                         <input 
                           type="email" 
                           id="headOfFamilyEmail" 
-                          name="headOfFamilyEmail"
+                          name="headOfFamilyEmail" // Keep name for Web3Forms
                           placeholder="youremail@gmail.com"
-                          value={formData.headOfFamilyEmail}
-                          onChange={handleChange}
                           required
                           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                         />
@@ -198,9 +153,7 @@ const Benevolence = () => {
                         </label>
                         <select 
                           id="membershipStatus" 
-                          name="membershipStatus"
-                          value={formData.membershipStatus}
-                          onChange={handleChange}
+                          name="membershipStatus" // Keep name for Web3Forms
                           required
                           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                         >
@@ -225,10 +178,8 @@ const Benevolence = () => {
                         <input 
                           type="text" 
                           id="spouseName" 
-                          name="spouseName" 
+                          name="spouseName" // Keep name for Web3Forms
                           placeholder="Spouse's full name"
-                          value={formData.spouseName}
-                          onChange={handleChange}
                           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                         />
                       </div>
@@ -240,17 +191,15 @@ const Benevolence = () => {
                         <input 
                           type="text" 
                           id="spouseChurch" 
-                          name="spouseChurch"
+                          name="spouseChurch" // Keep name for Web3Forms
                           placeholder="Church name"
-                          value={formData.spouseChurch}
-                          onChange={handleChange}
                           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                         />
                       </div>
                     </div>
                   </div>
 
-                  {/* Dependents */}
+                  {/* Dependents - MODIFIED SECTION */}
                   <div>
                     <h3 className="text-lg font-bold mb-4 border-b border-gray-200 pb-2">Dependents Information</h3>
                     <p className="text-sm text-gray-600 mb-4">List the dependents you are applying for (children, relatives, etc.)</p>
@@ -278,6 +227,8 @@ const Benevolence = () => {
                               placeholder="Dependent's name"
                               value={dependent.name}
                               onChange={(e) => handleDependentChange(index, 'name', e.target.value)}
+                              // *** IMPORTANT CHANGE HERE ***
+                              name={`dependents[${index}][name]`} 
                               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                             />
                           </div>
@@ -289,6 +240,8 @@ const Benevolence = () => {
                               placeholder="Phone number"
                               value={dependent.phone}
                               onChange={(e) => handleDependentChange(index, 'phone', e.target.value)}
+                              // *** IMPORTANT CHANGE HERE ***
+                              name={`dependents[${index}][phone]`}
                               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                             />
                           </div>
@@ -300,6 +253,8 @@ const Benevolence = () => {
                               placeholder="e.g., Son, Daughter, Relative"
                               value={dependent.relationship}
                               onChange={(e) => handleDependentChange(index, 'relationship', e.target.value)}
+                              // *** IMPORTANT CHANGE HERE ***
+                              name={`dependents[${index}][relationship]`}
                               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                             />
                           </div>
@@ -326,48 +281,12 @@ const Benevolence = () => {
                         </label>
                         <textarea 
                           id="reason" 
-                          name="reason"
-                          value={formData.reason}
-                          onChange={handleChange}
+                          name="reason" // Keep name for Web3Forms
                           required
                           rows={4}
                           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                           placeholder="Please explain your situation and the reason for your request..."
                         ></textarea>
-                      </div>
-                      
-                      <div>
-                        <label htmlFor="amount" className="block font-medium mb-1 text-gray-700">
-                          Amount Requested (KES) <span className="text-red-500">*</span>
-                        </label>
-                        <input 
-                          type="number" 
-                          id="amount" 
-                          name="amount"
-                          value={formData.amount}
-                          onChange={handleChange}
-                          required
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
-                        />
-                      </div>
-                      
-                      <div>
-                        <label htmlFor="urgency" className="block font-medium mb-1 text-gray-700">
-                          Urgency Level <span className="text-red-500">*</span>
-                        </label>
-                        <select 
-                          id="urgency" 
-                          name="urgency"
-                          value={formData.urgency}
-                          onChange={handleChange}
-                          required
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
-                        >
-                          <option value="low">Low (Within next 2 weeks)</option>
-                          <option value="medium">Medium (Within next week)</option>
-                          <option value="high">High (Within 72 hours)</option>
-                          <option value="emergency">Emergency (Immediate)</option>
-                        </select>
                       </div>
                       
                       <div className="md:col-span-2">
@@ -376,9 +295,7 @@ const Benevolence = () => {
                         </label>
                         <textarea 
                           id="additionalInfo" 
-                          name="additionalInfo"
-                          value={formData.additionalInfo}
-                          onChange={handleChange}
+                          name="additionalInfo" // Keep name for Web3Forms
                           rows={3}
                           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                           placeholder="Any additional information that might be helpful for us to know..."
@@ -392,9 +309,8 @@ const Benevolence = () => {
                     <ul className="list-disc pl-5 text-yellow-800">
                       <li>All information provided will be kept confidential</li>
                       <li>The Benevolence Committee typically reviews requests weekly</li>
-                      <li>Emergency requests may be reviewed more quickly</li>
-                      <li>You may be contacted for additional information</li>
-                      <li>Assistance is provided based on available funds and committee approval</li>
+                      <li>You will be contacted for additional information</li>
+                      <li>Assistance is provided based on committee approval</li>
                     </ul>
                   </div>
                   
@@ -414,7 +330,7 @@ const Benevolence = () => {
         </section>
         
         {/* Ways to Help */}
-        <section className="section bg-white">
+        {/* <section className="section bg-white">
           <div className="container">
             <div className="max-w-3xl mx-auto text-center">
               <h2 className="section-title">Ways to Support Our Benevolence Fund</h2>
@@ -467,7 +383,8 @@ const Benevolence = () => {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
+        
       </main>
       
       <Footer />

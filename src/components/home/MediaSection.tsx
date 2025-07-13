@@ -28,9 +28,9 @@ const MediaSection = () => {
 
   // These would be replaced with actual video IDs from the church's YouTube channel
   const sermonVideos = [
+    { id: "nsAcW67cu2Y?si=ZZOc2u-fc-DQc4-A&amp;start=12571", title: "Ransomed & Glorified" }, 
     { id: "GbRx-TpWQiY?si=pmVMvM7jwcFuJkVA&amp;start=13398", title: " Make No Delay" }, 
-    { id: "BETGwiQHQ18?si=CnNJ8JYntApfRCGt&amp;start=12571", title: "Holy Communion" }, 
-    { id: "6Soe7lt0eyk?si=SiL6-4Kqs5CdDPH1&amp;start=14618", title: "Praise & Pains" } 
+    { id: "BETGwiQHQ18?si=CnNJ8JYntApfRCGt&amp;start=12571", title: "Holy Communion" }
   ];
   
   const musicVideos = [

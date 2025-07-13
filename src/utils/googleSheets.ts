@@ -1,37 +1,36 @@
+// utils/googleSheets.js (or .ts)
 
-/**
- * Utility for sending form data to Google Sheets
- */
+const GOOGLE_APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzIF1d_TfKL-2_fprtUz3oBlhAbHW_tDMPWYY5DNd5f-OaDSF17WzN8YMdG3NAOlSY6/exec'; // Make sure this is correct
 
-// Google Apps Script URL (this should be replaced with your actual deployed script URL)
-const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxPYULQxLzI8-HIu9bFdqCf265tpCnMd7IjLjhrIx55oaA_-pygnWLGQCqUc-Olk_Ov/exec";
-
-export type FormType = 'contact' | 'baptism' | 'benevolence' | 'dedication' | 'prayer' | 'library' | 'donation' | 'membership';
-
-/**
- * Send form data to Google Sheets
- * @param data Form data to be sent
- * @param formType Type of form to determine which sheet tab to use
- */
-export const sendToGoogleSheet = async (data: Record<string, any>, formType: FormType): Promise<void> => {
-  const formData = {
-    ...data,
-    formType,
-    timestamp: new Date().toISOString()
-  };
-
+export const sendToGoogleSheet = async (formData: any, formType: string) => {
   try {
-    await fetch(GOOGLE_SHEET_URL, {
-      method: "POST",
-      body: JSON.stringify(formData),
+    const response = await fetch(GOOGLE_APPS_SCRIPT_WEB_APP_URL, {
+      method: 'POST',
+      mode: "no-cors",
       headers: {
-        "Content-Type": "text/plain"
+        'Content-Type': 'application/json',
       },
-      mode: "no-cors"
+      body: JSON.stringify(formData),
     });
-    console.log(`Successfully submitted ${formType} form data`);
+
+    // Now, we *can* reliably check response.ok and parse JSON
+    if (!response.ok) {
+      // Try to get more specific error info if possible
+      let errorMessage = `HTTP error! Status: ${response.status}`;
+      try {
+        const errorBody = await response.json();
+        errorMessage += ` - Details: ${JSON.stringify(errorBody)}`;
+      } catch (e) {
+        errorMessage += " - Could not parse error response body.";
+      }
+      throw new Error(errorMessage);
+    }
+
+    const result = await response.json(); // Expecting a JSON response from Apps Script
+    console.log("Google Sheet submission successful:", result);
+    return result; // Return the result from the Apps Script
   } catch (error) {
-    console.error(`Error submitting ${formType} form data:`, error);
-    throw error; // Re-throw to allow handling in the component
+    console.error("Error sending data to Google Sheet:", error);
+    throw error; // Re-throw to be caught by the calling component (Benevolence.tsx)
   }
 };

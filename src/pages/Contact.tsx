@@ -80,7 +80,7 @@ const Contact = () => {
                     </div>
                   </div>
                   
-                  <div className="flex items-start">
+                  {/* <div className="flex items-start">
                     <div className="bg-church-100 p-3 rounded-full mr-4">
                       <Phone className="h-6 w-6 text-church-600" />
                     </div>
@@ -91,7 +91,7 @@ const Contact = () => {
                       </a>
                       <p className="text-church-600 hover:underline transition-all duration-500 ease-linear "><a href="tel:0726410608">+254 726 410 608</a></p>
                     </div>
-                  </div>
+                  </div> */}
                   
                   <div className="flex items-start">
                     <div className="bg-church-100 p-3 rounded-full mr-4">

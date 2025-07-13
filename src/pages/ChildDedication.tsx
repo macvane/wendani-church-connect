@@ -6,6 +6,7 @@ import { useToast } from '@/hooks/use-toast';
 import { sendToGoogleSheet } from '@/utils/googleSheets';
 
 const ChildDedication = () => {
+  const apiKey = import.meta.env.VITE_WEB3FORMS_API_KEY;
   const [formData, setFormData] = useState({
     childName: '',
     dateOfBirth: '',
@@ -116,7 +117,10 @@ const ChildDedication = () => {
               <div className="bg-white rounded-lg shadow-md p-8">
                 <h2 className="text-2xl font-bold mb-6 text-center">Child Dedication Registration Form</h2>
                 
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form action="https://api.web3forms.com/submit" method="POST" className="space-y-6">
+                  <input type="hidden" name="access_key" value={apiKey}></input>
+                  <input type="hidden" name="redirect" value="https://wendani-v2.vercel.app/thank-you" />
+                  <input type="hidden" name="subject" value="Child Dedication Registration Form" />
                   <div>
                     <h3 className="text-lg font-bold mb-4 border-b border-gray-200 pb-2">Child Information</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -198,7 +202,7 @@ const ChildDedication = () => {
                           type="email" 
                           id="fatherEmail" 
                           name="fatherEmail"
-                          placeholder="father'semail@gmail.com"
+                          placeholder="email@gmail.com"
                           value={formData.fatherEmail}
                           onChange={handleChange}
                           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
@@ -250,7 +254,7 @@ const ChildDedication = () => {
                           type="email" 
                           id="motherEmail" 
                           name="motherEmail"
-                          placeholder="mother'semail@gmail.com"
+                          placeholder="email@gmail.com"
                           value={formData.motherEmail}
                           onChange={handleChange}
                           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
@@ -278,7 +282,7 @@ const ChildDedication = () => {
                   <div>
                     <h3 className="text-lg font-bold mb-4 border-b border-gray-200 pb-2">Additional Information</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
+                      {/* <div>
                         <label htmlFor="address" className="block font-medium mb-1 text-gray-700">
                           Home Address <span className="text-red-500">*</span>
                         </label>
@@ -292,9 +296,9 @@ const ChildDedication = () => {
                           required
                           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                         />
-                      </div>
+                      </div> */}
                       
-                      <div>
+                      {/* <div>
                         <label htmlFor="dedicationDate" className="block font-medium mb-1 text-gray-700">
                           Preferred Dedication Date <span className="text-red-500">*</span>
                         </label>
@@ -307,7 +311,7 @@ const ChildDedication = () => {
                           required
                           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                         />
-                      </div>
+                      </div> */}
                       
                       <div className="md:col-span-2">
                         <label htmlFor="additionalInfo" className="block font-medium mb-1 text-gray-700">
