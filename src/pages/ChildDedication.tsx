@@ -119,7 +119,7 @@ const ChildDedication = () => {
                 
                 <form action="https://api.web3forms.com/submit" method="POST" className="space-y-6">
                   <input type="hidden" name="access_key" value={apiKey}></input>
-                  <input type="hidden" name="redirect" value="https://wendani-v2.vercel.app/thank-you" />
+                  <input type="hidden" name="redirect" value="http://kahawawendanisda.org/thank-you" />
                   <input type="hidden" name="subject" value="Child Dedication Registration Form" />
                   <div>
                     <h3 className="text-lg font-bold mb-4 border-b border-gray-200 pb-2">Child Information</h3>

@@ -138,7 +138,7 @@ const Contact = () => {
                 
                 <form action="https://api.web3forms.com/submit" method="POST" className="space-y-6">
                   <input type="hidden" name="access_key" value={apiKey}></input>
-                  <input type="hidden" name="redirect" value="https://wendani-v2.vercel.app/thank-you" />
+                  <input type="hidden" name="redirect" value="http://kahawawendanisda.org/thank-you" />
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>

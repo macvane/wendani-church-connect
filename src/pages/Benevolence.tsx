@@ -98,7 +98,7 @@ const Benevolence = () => {
                 <form action="https://api.web3forms.com/submit" method="POST" className="space-y-6">
                   <input type="hidden" name="access_key" value={apiKey}></input>
                   {/* Web3Forms redirect URL */}
-                  <input type="hidden" name="redirect" value="https://wendani-v2.vercel.app/thank-you" />
+                  <input type="hidden" name="redirect" value="http://kahawawendanisda.org/thank-you" />
                   <input type="hidden" name="subject" value="Benevolence Registration Form" />
                   
                   {/* Head of Family Information */}
