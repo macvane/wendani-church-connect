@@ -35,6 +35,10 @@ const formSchema = z.object({
   toConference: z.string().min(2, 'Conference name is required'),
   toPoBox: z.string().optional(),
   additionalNotes: z.string().optional(),
+  minute_number: z.string().min(2, "Church Board Minute Number is required"),
+  first_reading: z.string().optional(),
+  church_business_minute: z.string().optional(),
+  second_reading: z.string().optional(),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -58,10 +62,11 @@ const MembershipTransfer = () => {
       fromConference: '',
       fromPoBox: '',
       toChurch: 'Kahawa Wendani SDA Church',
-      toDistrict: 'Kahawa Wendani District',
+      toDistrict: 'Kahawa District',
       toConference: 'Central Kenya Conference',
       toPoBox: '25685 - 00100', // Predefined P.O. Box default
       additionalNotes: '',
+      minute_number: '',
     },
   });
 
@@ -72,7 +77,7 @@ const MembershipTransfer = () => {
     if (transferType === 'transferIn') {
       // Set the "To" fields for Kahawa Wendani
       setValue('toChurch', 'Kahawa Wendani SDA Church', { shouldValidate: true });
-      setValue('toDistrict', 'Kahawa Wendani District', { shouldValidate: true });
+      setValue('toDistrict', 'Kahawa District', { shouldValidate: true });
       setValue('toConference', 'Central Kenya Conference', { shouldValidate: true });
       setValue('toPoBox', ' 25685 - 00100', { shouldValidate: true });
       
@@ -85,7 +90,7 @@ const MembershipTransfer = () => {
     } else if (transferType === 'transferOut') {
       // Set the "From" fields for Kahawa Wendani
       setValue('fromChurch', 'Kahawa Wendani SDA Church', { shouldValidate: true });
-      setValue('fromDistrict', 'Kahawa Wendani District', { shouldValidate: true });
+      setValue('fromDistrict', 'Kahawa District', { shouldValidate: true });
       setValue('fromConference', 'Central Kenya Conference', { shouldValidate: true });
       setValue('fromPoBox', '25685 - 00100', { shouldValidate: true });
       
@@ -178,6 +183,7 @@ const MembershipTransfer = () => {
                             <FormControl>
                               <input
                                 type="text"
+                                required
                                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                                 placeholder="Your name"
                                 {...field}
@@ -196,6 +202,7 @@ const MembershipTransfer = () => {
                             <FormControl>
                               <input
                                 type="email"
+                                required
                                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                                 placeholder="youremail@example.com"
                                 {...field}
@@ -216,6 +223,7 @@ const MembershipTransfer = () => {
                             <FormControl>
                               <input
                                 type="tel"
+                                required
                                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                                 placeholder="+254 700 000000"
                                 {...field}
@@ -234,6 +242,7 @@ const MembershipTransfer = () => {
                             <FormControl>
                               <input
                                 type="date"
+                                required
                                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                                 {...field}
                               />
@@ -252,6 +261,7 @@ const MembershipTransfer = () => {
                           <FormControl>
                             <input
                               type="text"
+                              required
                               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                               placeholder="Your current address"
                               {...field}
@@ -461,6 +471,95 @@ const MembershipTransfer = () => {
                                 placeholder="P.O. Box"
                                 {...field}
                                 readOnly={transferType === 'transferIn'}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    
+                    <div className='pt-4 border-t'>
+                       <h4 className="font-medium text-lg mt-2">
+                        Church Board 
+                      </h4>
+                    </div>
+                    <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+                      <FormField
+                        control={form.control}
+                        name="minute_number"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Church Board Minute Number <span className="text-red-500">*</span></FormLabel>
+                            <FormControl>
+                              <input
+                                type="text"
+                                required
+                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
+                                placeholder="Board minute number"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="first_reading"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>First Reading Date <span className="text-red-500">*</span></FormLabel>
+                            <FormControl>
+                              <input
+                                type="date"
+                                required
+                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
+                                placeholder="Board minute number"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+                      <FormField
+                        control={form.control}
+                        name="second_reading"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Second Reading Date <span className="text-red-500">*</span></FormLabel>
+                            <FormControl>
+                              <input
+                                type="date"
+                                required
+                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
+                                placeholder="Board minute number"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="church_business_minute"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Church Business Minute Number <span className="text-red-500">*</span></FormLabel>
+                            <FormControl>
+                              <input
+                                type="text"
+                                required
+                                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
+                                placeholder="Business Minute Number"
+                                {...field}
                               />
                             </FormControl>
                             <FormMessage />

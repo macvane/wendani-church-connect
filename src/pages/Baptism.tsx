@@ -378,12 +378,6 @@ const Baptism = () => {
                 <p className="text-gray-700">
                   Baptism represents a public declaration of your acceptance of Jesus Christ as your Lord and Savior and your decision to join the Seventh-day Adventist Church community.
                 </p>
-                {/* <div className="mt-4">
-                  <Button variant="outline" className="flex items-center">
-                    <Calendar className="mr-2" size={16} />
-                    View Upcoming Baptism Dates
-                  </Button>
-                </div> */}
               </div>
             </div>
           </div>
