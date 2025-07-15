@@ -1,0 +1,43 @@
+name: Deploy React App to cPanel via SSH
+
+on:
+  push:
+    branches:
+      - main # Or your main branch name, e.g., 'master'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Use a recent LTS Node.js version
+
+      - name: Install dependencies
+        run: npm ci # Use npm ci for clean installs in CI environments
+
+      - name: Build React App
+        run: npm run build
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            # Remove existing files to ensure a clean deployment
+            rm -rf ${{ secrets.DEPLOY_DIR }}/*
+            # Create the directory if it doesn't exist (though it usually will)
+            mkdir -p ${{ secrets.DEPLOY_DIR }}
+            # Use rsync to copy files (more efficient than scp for many files)
+            # Note: You might need to adjust the source path (dist/) based on your Vite build output
+            rsync -avz --exclude=.git --delete ./dist/ ${{ secrets.DEPLOY_DIR }}/
+          # If you prefer scp for simplicity, you can use:
+          # scp -r ./dist/* ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:${{ secrets.DEPLOY_DIR }}/
+          # Ensure the "dist" folder contains your build output at the root, otherwise adjust the source path.
