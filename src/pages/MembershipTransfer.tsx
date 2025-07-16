@@ -44,7 +44,7 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 const MembershipTransfer = () => {
-  const apiKey = import.meta.env.VITE_WEB3FORMS_API_KEY;
+  const apiKey = import.meta.env.VITE_WEB3FORMS_CLERK_API_KEY;
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 

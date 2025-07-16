@@ -6,7 +6,7 @@ import { useToast } from '@/hooks/use-toast';
 import { sendToGoogleSheet } from '@/utils/googleSheets';
 
 const Prayer = () => {
-  const apiKey = import.meta.env.VITE_WEB3FORMS_API_KEY;
+  const apiKey = import.meta.env.VITE_WEB3FORMS_PRAYER_REQUEST_API_KEY;
   const [formData, setFormData] = useState({
     name: '',
     email: '',

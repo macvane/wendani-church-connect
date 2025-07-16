@@ -30,7 +30,7 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 const Baptism = () => {
-  const apiKey = import.meta.env.VITE_WEB3FORMS_API_KEY; 
+  const apiKey = import.meta.env.VITE_WEB3FORMS_PRAYER_REQUEST_API_KEY; 
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   
