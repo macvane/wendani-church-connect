@@ -9,6 +9,11 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
+    env:
+      VITE_WEB3FORMS_API_KEY: ${{ secrets.VITE_WEB3FORMS_API_KEY }}
+      VITE_WEB3FORMS_CLERK_API_KEY: ${{ secrets.VITE_WEB3FORMS_CLERK_API_KEY }}
+      VITE_WEB3FORMS_PRAYER_REQUEST_API_KEY: ${{ secrets.VITE_WEB3FORMS_PRAYER_REQUEST_API_KEY }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
