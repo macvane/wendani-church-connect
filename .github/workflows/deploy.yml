@@ -31,4 +31,4 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./dist/ # This is the directory that Vite builds to
-          server-dir: public_html/ # The destination directory on your cPanel
+          server-dir: ./ # The destination directory on your cPanel
