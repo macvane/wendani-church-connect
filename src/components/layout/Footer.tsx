@@ -90,7 +90,7 @@ const Footer = () => {
               </li>
               <li className="flex items-center space-x-3">
                 <Mail size={18} className="text-church-500 shrink-0" />
-                <span>info@kahawawendanisda.org</span>
+                <span className='hover:text-church-700 transition-colors duration-300 ease-in-out'><a href="mailto:info@kahawawendanisda.org">info@kahawawendanisda.org</a></span>
               </li>
               {/* <li className="flex items-center space-x-3">
                 <Phone size={18} className="text-church-500 shrink-0" />

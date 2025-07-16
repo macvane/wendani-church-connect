@@ -5,7 +5,7 @@ export const physicalBooks = [
     author: "Ellen G. White",
     category: "Spiritual Growth",
     coverImage: "https://imgs.search.brave.com/Udb_aivTZQ7qkxWNGSJLPjRQxv1LfDeU-6Vo7ZUeHGY/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/MzFxam02Zk9kckwu/anBn",
-    availability: true,
+    availability: false,
     description: "A classic work on the path to Jesus Christ and the experience of salvation.",
     publicationYear: 1892,
     pages: [
@@ -13,17 +13,17 @@ export const physicalBooks = [
       "Christ has pledged Himself to be our substitute and surety, and He neglects no one. He who could not see human beings exposed to eternal ruin without pouring out His soul unto death in their behalf, will look with pity and compassion upon every soul who realizes that he cannot save himself.",
       "He will look upon no trembling suppliant without raising him up. He who through His own atonement provided for man an infinite fund of moral power, will not fail to employ this power in our behalf."
     ],
-    audioUrl: "https://archive.org/download/steps-to-christ_202003/steps-to-christ.mp3",
+    audioUrl: "https://whiteestate.org/audio/108/steps-to-christ/",
     readUrl: "https://m.egwwritings.org/en/book/108.1",
-    listenUrl: "https://archive.org/details/steps-to-christ_202003"
+    listenUrl: "https://whiteestate.org/audio/108/steps-to-christ/"
   },
   {
     id: 2,
     title: "The Great Controversy",
     author: "Ellen G. White",
     category: "Prophecy",
-    coverImage: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=300",
-    availability: true,
+    coverImage: "https://media2.egwwritings.org/covers/132_m.jpg",
+    availability: false,
     description: "Traces the conflict between Christ and Satan from the destruction of Jerusalem to the end of sin.",
     publicationYear: 1911,
     pages: [
@@ -31,9 +31,9 @@ export const physicalBooks = [
       "By the plan of redemption, however, a way has been opened whereby the inhabitants of the earth may still have connection with heaven.",
       "God has communicated with men by His Spirit, and divine light has been imparted to the world by revelations to His chosen servants."
     ],
-    audioUrl: "https://archive.org/download/great_controversy_librivox/greatcontroversy_01_white.mp3",
+    audioUrl: "https://whiteestate.org/audio/132/the-great-controversy/",
     readUrl: "https://m.egwwritings.org/en/book/132.1",
-    listenUrl: "https://archive.org/details/great_controversy_librivox"
+    listenUrl: "https://whiteestate.org/audio/132/the-great-controversy/"
   },
   {
     id: 3,
@@ -49,9 +49,9 @@ export const physicalBooks = [
       "He was in the world, and the world was made by Him, and the world knew Him not. He came unto His own, and His own received Him not.",
       "But as many as received Him, to them gave He power to become the sons of God, even to them that believe on His name."
     ],
-    audioUrl: "https://archive.org/download/desire_of_ages_librivox/desireofages_01_white.mp3",
+    audioUrl: "https://whiteestate.org/audio/130/the-desire-of-ages/",
     readUrl: "https://m.egwwritings.org/en/book/130.1",
-    listenUrl: "https://archive.org/details/desire_of_ages_librivox"
+    listenUrl: "https://whiteestate.org/audio/130/the-desire-of-ages/"
   },
   {
     id: 4,
@@ -59,7 +59,7 @@ export const physicalBooks = [
     author: "Ellen G. White",
     category: "Bible Study",
     coverImage: "https://imgs.search.brave.com/28wX4bUOgZ3ukI91ilqxpkxv5fCDqih-y27qQkQw_Fw/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9ncmVh/dGNvbnRyb3ZlcnN5/LnB1Yi9fbmV4dC9p/bWFnZT91cmw9aHR0/cHM6Ly9hLmVnd3dy/aXRpbmdzLm9yZy9j/b3ZlcnMvODQ_dHlw/ZT1sYXJnZSZ3PTM4/NCZxPTc1",
-    availability: true,
+    availability: false,
     description: "Explores the biblical history from creation to the reign of King David.",
     publicationYear: 1890,
     pages: [
@@ -67,17 +67,17 @@ export const physicalBooks = [
       "Every manifestation of creative power is an expression of infinite love. The sovereignty of God involves fullness of blessing to all created beings.",
       "The history of the great conflict between good and evil, from the time it first began in heaven to the final overthrow of rebellion and the total eradication of sin, is also a demonstration of God's unchanging love."
     ],
-    audioUrl: "https://archive.org/download/patriarchs_prophets_1007_librivox/patriarchsandprophets_01_white_64kb.mp3",
+    audioUrl: "https://whiteestate.org/audio/84/patriarchs-and-prophets/",
     readUrl: "https://m.egwwritings.org/en/book/84.1",
-    listenUrl: "https://archive.org/details/patriarchs_prophets_1007_librivox"
+    listenUrl: "https://whiteestate.org/audio/84/patriarchs-and-prophets/"
   },
   {
     id: 5,
     title: "Christ's Object Lessons",
     author: "Ellen G. White",
     category: "Bible Study",
-    coverImage: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=300",
-    availability: true,
+    coverImage: "https://media2.egwwritings.org/covers/15_m.jpg",
+    availability: false,
     description: "Illuminates the spiritual lessons in Christ's parables in practical language.",
     publicationYear: 1900,
     pages: [
@@ -85,16 +85,16 @@ export const physicalBooks = [
       "Divinity was revealed in humanity; the invisible glory in the visible human form. Men could learn of the unknown through the known; heavenly things were revealed through the earthly.",
       "God's word, the truth, is the medium by which He manifests His Spirit and power."
     ],
-    audioUrl: "https://archive.org/download/christs_object_lessons_1007_librivox/christsobjectlessons_01_white_64kb.mp3",
+    audioUrl: "https://whiteestate.org/audio/15/christs-object-lessons/",
     readUrl: "https://m.egwwritings.org/en/book/15.1",
-    listenUrl: "https://archive.org/details/christs_object_lessons_1007_librivox"
+    listenUrl: "https://whiteestate.org/audio/15/christs-object-lessons/"
   },
   {
     id: 6,
     title: "The Ministry of Healing",
     author: "Ellen G. White",
     category: "Health",
-    coverImage: "https://images.unsplash.com/photo-1550399105-c4db5fb85c18?q=80&w=300",
+    coverImage: "https://media2.egwwritings.org/covers/135_m.jpg",
     availability: false,
     description: "A comprehensive guide to physical, mental, and spiritual well-being.",
     publicationYear: 1905,
@@ -103,17 +103,17 @@ export const physicalBooks = [
       "The burden of disease and wretchedness and sin He came to remove. It was His mission to bring to men complete restoration; He came to give them health and peace and perfection of character.",
       "Varied were the circumstances and needs of those who besought His aid, and none who came to Him went away unhelped."
     ],
-    audioUrl: "https://archive.org/download/ministry_of_healing_1007_librivox/ministryofhealing_01_white_64kb.mp3",
-    readUrl: "https://m.egwwritings.org/en/book/142.1",
-    listenUrl: "https://archive.org/details/ministry_of_healing_1007_librivox"
+    audioUrl: "https://whiteestate.org/audio/135/the-ministry-of-healing/",
+    readUrl: "https://m.egwwritings.org/en/book/135/toc",
+    listenUrl: "https://whiteestate.org/audio/135/the-ministry-of-healing/"
   },
   {
     id: 7,
     title: "Counsels on Stewardship",
     author: "Ellen G. White",
     category: "Christian Living",
-    coverImage: "https://images.unsplash.com/photo-1589998059171-988d887df646?q=80&w=300",
-    availability: true,
+    coverImage: "https://media2.egwwritings.org/covers/22_m.jpg",
+    availability: false,
     description: "Biblical principles on the faithful management of time, talents, and resources.",
     publicationYear: 1940,
     pages: [
@@ -121,17 +121,17 @@ export const physicalBooks = [
       "The Lord has entrusted means to His stewards, that they may use it wisely, not selfishly or carelessly, or through neglect.",
       "God calls upon those to whom He has lent His goods to acquit themselves as faithful stewards."
     ],
-    audioUrl: "https://ia800908.us.archive.org/27/items/counsels-on-stewardship/Counsels%20on%20Stewardship.mp3",
-    readUrl: "https://m.egwwritings.org/en/book/21.1",
-    listenUrl: "https://archive.org/details/counsels-on-stewardship"
+    audioUrl: "https://whiteestate.org/audio/22/counsels-on-stewardship/",
+    readUrl: "https://m.egwwritings.org/en/book/22/toc",
+    listenUrl: "https://whiteestate.org/audio/22/counsels-on-stewardship/"
   },
   {
     id: 8,
     title: "Education",
     author: "Ellen G. White",
     category: "Education",
-    coverImage: "https://images.unsplash.com/photo-1476234251651-f353703a034d?q=80&w=300",
-    availability: true,
+    coverImage: "https://media2.egwwritings.org/covers/29_m.jpg",
+    availability: false,
     description: "Presents principles of true education that develop body, mind, and soul.",
     publicationYear: 1903,
     pages: [
@@ -139,9 +139,27 @@ export const physicalBooks = [
       "True education means more than the pursual of a certain course of study. It means more than a preparation for the life that now is.",
       "It has to do with the whole being, and with the whole period of existence possible to man. It is the harmonious development of the physical, the mental, and the spiritual powers."
     ],
-    audioUrl: "https://archive.org/download/education_eg_white_librivox/education_01_white_64kb.mp3",
+    audioUrl: "https://whiteestate.org/audio/29/education/",
     readUrl: "https://m.egwwritings.org/en/book/29.1",
-    listenUrl: "https://archive.org/details/education_eg_white_librivox"
+    listenUrl: "https://whiteestate.org/audio/29/education/"
+  },
+  {
+    id: 9,
+    title: "Messages to Young People",
+    author: "Ellen G. White",
+    category: "Education",
+    coverImage: "https://media2.egwwritings.org/covers/76_m.jpg",
+    availability: false,
+    description: "Several generations of youth have been nourished by this uncompromising call to duty, purity, and service.",
+    publicationYear: 1930,
+    pages: [
+      "Our ideas of education take too narrow and too low a range. There is need of a broader scope, a higher aim.",
+      "True education means more than the pursual of a certain course of study. It means more than a preparation for the life that now is.",
+      "It has to do with the whole being, and with the whole period of existence possible to man. It is the harmonious development of the physical, the mental, and the spiritual powers."
+    ],
+    audioUrl: "https://whiteestate.org/audio/76/messages-to-young-people/",
+    readUrl: "https://m.egwwritings.org/en/book/76.6",
+    listenUrl: "https://whiteestate.org/audio/76/messages-to-young-people/"
   }
 ];
 

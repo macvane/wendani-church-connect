@@ -86,7 +86,7 @@ export const allEventsData = [
     location: "Church Main Sactuary",
     department: "AMR Sabbath",
     description: "Join us for a special Sabbath led by the Adventist Muslim Relations (AMR) department, where we'll explore paths to understanding and connection.",
-    thumbnail: "/assets/amr2.png",
+    thumbnail: "https://i.pinimg.com/736x/a5/c8/2d/a5c82d61d567394a178cff6d84dfc231.jpg",
   }
 ];
 
@@ -168,7 +168,7 @@ const Events = () => {
           <div className="absolute inset-0">
             <div className="absolute inset-0 bg-black bg-opacity-60 z-10"></div>
             <img 
-              src="https://i.pinimg.com/736x/e8/86/f0/e886f04adcd89551b7bc2926422588f5.jpg" 
+              src="/assets/image (47).jpg" 
               alt="Church Events" 
               className="w-full h-full object-cover"
             />

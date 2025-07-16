@@ -164,10 +164,10 @@ const Library = () => {
           <div className="container">
             <Tabs defaultValue="physical" >
               <div className="flex justify-center mb-8">
-                <TabsList>
+                {/* <TabsList>
                   <TabsTrigger value="physical">Physical Books</TabsTrigger>
                   <TabsTrigger value="digital">Digital Resources</TabsTrigger>
-                </TabsList>
+                </TabsList> */}
               </div>
               
               <TabsContent value="physical">
@@ -209,13 +209,13 @@ const Library = () => {
                         <ul className="space-y-3">
                           <li className="flex justify-between">
                             <span>Sunday:</span>
-                            <span>Closed</span>
+                            <span>Open</span>
                           </li>
                           <li className="flex justify-between">
                             <span>Monday:</span>
-                            <span>Closed</span>
+                            <span>Open</span>
                           </li>
-                          <li className="flex justify-between">
+                          {/* <li className="flex justify-between">
                             <span>Tuesday:</span>
                             <span>10:00 AM - 2:00 PM</span>
                           </li>
@@ -234,7 +234,7 @@ const Library = () => {
                           <li className="flex justify-between">
                             <span>Saturday:</span>
                             <span>2:00 PM - 4:00 PM</span>
-                          </li>
+                          </li> */}
                         </ul>
                         
                         <div className="mt-4 pt-4 border-t border-white/20">
@@ -536,7 +536,7 @@ const Library = () => {
                             rel="noopener noreferrer"
                           >
                             <Download size={16} className="mr-1" />
-                            Download
+                            Read
                           </a>
                         </div>
                       </div>
@@ -600,17 +600,17 @@ const Library = () => {
         </section>
         
         {/* Library Info */}
-        <section className="section bg-gray-50">
+        <section className="section bg-gray-50 hidden">
           <div className="container">
             <div className="max-w-3xl mx-auto text-center">
-              <h2 className="section-title animate-on-scroll">Library Information</h2>
-              <p className="section-subtitle animate-on-scroll animate-delay-1">
+              <h2 className="section-title ">Library Information</h2>
+              <p className="section-subtitle  animate-delay-1">
                 Our church library has resources to help you grow in your spiritual journey.
               </p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
-              <div className="bg-white p-6 rounded-lg shadow-sm animate-on-scroll">
+              <div className="bg-white p-6 rounded-lg shadow-sm ">
                 <div className="h-12 w-12 rounded-full bg-church-100 flex items-center justify-center mb-4">
                   <Book size={24} className="text-church-600" />
                 </div>
@@ -624,7 +624,7 @@ const Library = () => {
                 </ul>
               </div>
               
-              <div className="bg-white p-6 rounded-lg shadow-sm animate-on-scroll animate-delay-1">
+              <div className="bg-white p-6 rounded-lg shadow-sm  animate-delay-1">
                 <div className="h-12 w-12 rounded-full bg-church-100 flex items-center justify-center mb-4">
                   <Clock size={24} className="text-church-600" />
                 </div>

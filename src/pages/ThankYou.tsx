@@ -64,37 +64,22 @@ const ThankYou = () => {
           </div>
 
           {/* Additional Information */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-8 border-t border-gray-200">
-            <div className="text-center">
-              <h3 className="font-bold text-lg mb-2 text-church-700">What's Next?</h3>
-              <p className="text-gray-600 text-sm">
-                We will review your submission and respond within 1-2 business days.
-              </p>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-8 border-t border-gray-200">
             
             <div className="text-center">
               <h3 className="font-bold text-lg mb-2 text-church-700">Need Help?</h3>
               <p className="text-gray-600 text-sm">
-                If you have any questions, feel free to contact us at +254 726 410608.
+                If you have any questions, feel free to contact us at <span className='text-church-700'><a href="mailto:info@kahawawendanisda.org">info@kahawawendanisda.org</a></span>
               </p>
             </div>
             
             <div className="text-center">
               <h3 className="font-bold text-lg mb-2 text-church-700">Stay Connected</h3>
               <p className="text-gray-600 text-sm">
-                Join us for Sabbath services every Saturday at 11:00 AM.
+                Join us for Sabbath services every Saturday at 08:00 AM.
               </p>
             </div>
           </div>
-        </div>
-
-        {/* Church Logo */}
-        <div className="text-center mt-8">
-          <img 
-            src="/lovable-uploads/d7c1183c-049c-45be-b6bf-64d44a0578e4.png" 
-            alt="Kahawa Wendani SDA Church Logo" 
-            className="h-16 mx-auto opacity-70"
-          />
         </div>
       </div>
     </div>
