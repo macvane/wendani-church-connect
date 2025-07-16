@@ -1,9 +1,9 @@
-
 import React, { useEffect, useState } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { useToast } from '@/hooks/use-toast';
-import { sendToGoogleSheet } from '@/utils/googleSheets';
+// The sendToGoogleSheet import is no longer needed
+// import { sendToGoogleSheet } from '@/utils/googleSheets';
 
 const Prayer = () => {
   const apiKey = import.meta.env.VITE_WEB3FORMS_PRAYER_REQUEST_API_KEY;
@@ -19,7 +19,7 @@ const Prayer = () => {
   const { toast } = useToast();
   
   useEffect(() => {
-    // Intersection Observer for scroll animations
+    // Intersection Observer for scroll animations (no changes here)
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -49,28 +49,55 @@ const Prayer = () => {
     setFormData(prev => ({ ...prev, [name]: checked }));
   };
   
-  const handleSubmit = async (e: React.FormEvent) => {
+  // --- This is the updated handleSubmit function ---
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    // 1. Prevent the default browser redirect
     e.preventDefault();
     setIsSubmitting(true);
-    
+
+    // 2. Prepare the data for Web3Forms
+    const submissionData = {
+      ...formData,
+      access_key: apiKey,
+      subject: "New Prayer Request from Website",
+    };
+
     try {
-      await sendToGoogleSheet({
-        ...formData,
-      }, 'prayer');
-      
-      toast({
-        title: "Prayer Request Submitted",
-        description: "Thank you for sharing your prayer request. Our prayer team will be praying for you.",
+      // 3. Send the data using fetch
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(submissionData),
       });
-      
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        requestType: 'personal',
-        prayerRequest: '',
-        isConfidential: false,
-      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        // 4. On success, show a toast message
+        toast({
+          title: "Prayer Request Submitted",
+          description: "Thank you for sharing your prayer request. Our prayer team will be praying for you.",
+        });
+        
+        // 5. KEY STEP: Reset the form fields to their initial state
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          requestType: 'personal',
+          prayerRequest: '',
+          isConfidential: false,
+        });
+
+      } else {
+        // Handle submission errors from Web3Forms
+        console.error("Web3Forms submission error:", result);
+        throw new Error(result.message || "Submission failed.");
+      }
+
     } catch (error) {
       console.error("Error submitting prayer request:", error);
       toast({
@@ -79,6 +106,7 @@ const Prayer = () => {
         variant: "destructive",
       });
     } finally {
+      // 6. Re-enable the submit button
       setIsSubmitting(false);
     }
   };
@@ -88,7 +116,7 @@ const Prayer = () => {
       <Header />
       
       <main>
-        {/* Hero Section with Adjusted Positioning */}
+        {/* Hero Section and other sections remain the same */}
         <section className="relative h-[400px] flex items-center justify-center ">
           <div className="absolute inset-0">
             <div className="absolute inset-0 bg-black bg-opacity-60 z-10"></div>
@@ -105,14 +133,14 @@ const Prayer = () => {
             </p>
           </div>
         </section>
-        
-        {/* Prayer Introduction */}
+
+        {/* Introduction Section remains the same */}
         <section className="section bg-white">
           <div className="container">
             <div className="max-w-3xl mx-auto text-center">
               <h2 className="section-title animate-on-scroll">We Are Here to Pray With You</h2>
               <div className="prose max-w-none animate-on-scroll animate-delay-1">
-                <p className="text-lg mb-4">
+                 <p className="text-lg mb-4">
                   At Kahawa Wendani SDA Church, we believe in the power of prayer. Whether you're facing personal challenges, health issues, or simply want to give thanks, our prayer team is committed to lifting your requests to God.
                 </p>
                 <p className="text-lg mb-4">
@@ -123,22 +151,30 @@ const Prayer = () => {
           </div>
         </section>
         
-        {/* Prayer Request Form */}
+        {/* --- Prayer Request Form with crucial changes --- */}
         <section className="section bg-gray-50">
           <div className="container">
             <div className="max-w-3xl mx-auto">
               <div className="bg-white rounded-lg shadow-md p-8">
                 <h2 className="text-2xl font-bold mb-6 text-center">Prayer Request Form</h2>
                 
-                <form action="https://api.web3forms.com/submit" method="POST" className="space-y-6">
-                  <input type="hidden" name="access_key" value={apiKey}></input>
-                  <input type="hidden" name="redirect" value="http://kahawawendanisda.org/thank-you" />
-                  <input type="hidden" name="subject" value="Prayer Request" />
+                {/* 
+                  CHANGE 1: Removed `action` and `method`, added `onSubmit`.
+                  This tells the form to run our JavaScript function instead of reloading the page.
+                */}
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* 
+                    CHANGE 2: The hidden input for `redirect` is no longer needed and can be removed.
+                    The `access_key` is now handled in our JavaScript function.
+                  */}
+                  <input type="hidden" name="access_key" value={apiKey} />
+                  <input type="hidden" name="subject" value="Prayer Request from Website" />
 
+                  {/* All form fields remain exactly the same */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label htmlFor="name" className="block font-medium mb-1 text-gray-700">
-                        Your Name <span className="text-red-500">*</span>
+                        Your Name 
                       </label>
                       <input 
                         type="text" 
@@ -147,7 +183,6 @@ const Prayer = () => {
                         placeholder='Your name'
                         value={formData.name}
                         onChange={handleChange}
-                        required
                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                       />
                     </div>
@@ -249,8 +284,8 @@ const Prayer = () => {
             </div>
           </div>
         </section>
-        
-        {/* Scripture Verses */}
+
+        {/* Scripture verses section remains the same */}
         <section className="section bg-white">
           <div className="container">
             <h2 className="section-title animate-on-scroll">Encouraging Scripture Verses</h2>

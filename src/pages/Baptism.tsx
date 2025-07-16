@@ -176,20 +176,6 @@ const Baptism = () => {
                     />
                   </div>
                   
-                  {/* <FormField
-                    control={form.control}
-                    name="address"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Home Address</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Your home address" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  /> */}
-                  
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField
                       control={form.control}
@@ -232,79 +218,6 @@ const Baptism = () => {
                         </FormItem>
                       )}
                     />
-                  </div>
-                  
-                  {/* <FormField
-                    control={form.control}
-                    name="previousChurch"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Previous Church (if applicable)</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Name of your previous church" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  /> */}
-                  
-                  {/* <FormField
-                    control={form.control}
-                    name="baptismReason"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Why do you want to be baptized?</FormLabel>
-                        <FormControl>
-                          <Textarea 
-                            placeholder="Please share your testimony and reasons for wanting to be baptized..." 
-                            className="min-h-[120px]"
-                            {...field} 
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  /> */}
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* <FormField
-                      control={form.control}
-                      name="preferredDate"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Preferred Baptism Date (if any)</FormLabel>
-                          <FormControl>
-                            <Input type="date" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    /> */}
-                    
-                    {/* <FormField
-                      control={form.control}
-                      name="howDidYouHear"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>How did you hear about our church?</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select an option" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="Friend or Family">Friend or Family</SelectItem>
-                              <SelectItem value="Social Media">Social Media</SelectItem>
-                              <SelectItem value="Website">Website</SelectItem>
-                              <SelectItem value="Community Event">Community Event</SelectItem>
-                              <SelectItem value="Other">Other</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    /> */}
                   </div>
                   
                   <FormField

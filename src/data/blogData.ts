@@ -35,7 +35,7 @@ export const blogPosts = [
   },
   {
     id: 4,
-    title: "The State of the Dead: An Adventist Perspective",
+    title: "The State of the Dead: The Bible Perspective",
     excerpt: "What happens when we die? Explore the biblical teaching on death, resurrection, and immortality.",
     date: "April 5, 2025",
     author: "Admin",
@@ -390,7 +390,7 @@ export const blogContents = [
   },
   {
     id: 4,
-    title: "The State of the Dead: An Adventist Perspective",
+    title: "The State of the Dead: The Bible Perspective",
     author: "Admin",
     date: "April 5, 2025",
     category: "Doctrine",

@@ -177,7 +177,7 @@ const Media = () => {
                                 title={video.title}
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                 allowFullScreen
-                                className="w-full h-full"
+                                className="w-full h-[13rem]  md:h-full"
                               ></iframe>
                             </div>
                             <div className="p-4 bg-white">

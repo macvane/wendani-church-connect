@@ -63,7 +63,7 @@ export const allEventsData = [
     title: "District Children Ministry Sabbath",
     date: "July 26, 2025",
     time: "8:00 AM - 5:00 PM",
-    location: "TBC",
+    location: "Church Main Sanctuary",
     department: "Children Ministries",
     description: "Join children from all our sister churches for a special day of joyful songs, amazing stories, fun activities, and powerful worship made just for you. It's going to be a blast!",
     thumbnail: "https://i.pinimg.com/736x/8c/c5/67/8cc567e015621cd2e2ed35a384dbf61c.jpg",
