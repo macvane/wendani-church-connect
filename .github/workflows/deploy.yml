@@ -1,43 +1,34 @@
-name: KAHAWA_KEY
+name: Deploy Vite App to cPanel
 
 on:
   push:
     branches:
-      - main # Or your main branch name, e.g., 'master'
+      - main # Or your desired deployment branch
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: '20' # Use a recent LTS Node.js version
+          node-version: '18' # Specify your desired Node.js version
 
       - name: Install dependencies
-        run: npm ci # Use npm ci for clean installs in CI environments
+        run: npm install
 
-      - name: Build React App
+      - name: Build Vite project
         run: npm run build
 
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@master
+      - name: Deploy to cPanel via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            # Remove existing files to ensure a clean deployment
-            rm -rf ${{ secrets.DEPLOY_DIR }}/*
-            # Create the directory if it doesn't exist (though it usually will)
-            mkdir -p ${{ secrets.DEPLOY_DIR }}
-            # Use rsync to copy files (more efficient than scp for many files)
-            # Note: You might need to adjust the source path (dist/) based on your Vite build output
-            rsync -avz --exclude=.git --delete ./dist/ ${{ secrets.DEPLOY_DIR }}/
-          # If you prefer scp for simplicity, you can use:
-          # scp -r ./dist/* ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:${{ secrets.DEPLOY_DIR }}/
-          # Ensure the "dist" folder contains your build output at the root, otherwise adjust the source path.
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./dist/ # This is the directory that Vite builds to
+          server-dir: public_html/ # The destination directory on your cPanel
