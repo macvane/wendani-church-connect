@@ -65,6 +65,7 @@ const MissionsSection = () => {
               <img 
                 src="/assets/image .jpg" 
                 alt="Mission work" 
+                loading="lazy"
                 className="w-full h-[400px] object-cover object-center"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">

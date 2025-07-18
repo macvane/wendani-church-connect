@@ -66,6 +66,7 @@ const EventsSection = () => {
                   <img 
                     src={event.thumbnail} 
                     alt={event.title} 
+                    loading="lazy"
                     className="w-full h-48  object-cover"
                   />
                 </div>

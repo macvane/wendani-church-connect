@@ -144,6 +144,7 @@ const About = () => {
                   <img 
                     src={leader.image} 
                     alt={leader.name} 
+                    loading="lazy"
                     className="w-full h-[25rem] object-cover"
                   />
                   <div className="p-6">

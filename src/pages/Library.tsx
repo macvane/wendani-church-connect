@@ -274,6 +274,7 @@ const Library = () => {
                               <img 
                                 src={book.coverImage} 
                                 alt={book.title} 
+                                loading="lazy"
                                 className="absolute inset-0 w-full h-full object-cover"
                               />
                               {!book.availability && (
@@ -368,6 +369,7 @@ const Library = () => {
                             <img 
                               src={selectedBook.coverImage} 
                               alt={selectedBook.title} 
+                              loading="lazy"
                               className="w-full h-full object-cover rounded"
                             />
                           </div>
@@ -517,6 +519,7 @@ const Library = () => {
                           <img 
                             src={book.coverImage} 
                             alt={book.title} 
+                            loading="lazy"
                             className="w-full h-full object-cover"
                           />
                         </div>
@@ -654,6 +657,7 @@ const Library = () => {
                   <img 
                     src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=100" 
                     alt="Church Librarian"
+                    loading="lazy"
                     className="w-16 h-16 object-cover rounded-full mr-4"
                   />
                   <div className="text-left">

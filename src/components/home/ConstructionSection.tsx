@@ -53,6 +53,7 @@ const ConstructionSection = () => {
         <img 
           src="https://images.unsplash.com/photo-1501854140801-50d01698950b?q=80&w=2600"
           alt="Church Construction"
+          loading="lazy"
           className="w-full h-full object-cover"
         />
       </div>

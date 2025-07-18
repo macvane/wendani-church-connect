@@ -75,6 +75,7 @@ const BlogPreview = () => {
               <img 
                 src={blog.thumbnail} 
                 alt={blog.title} 
+                loading="lazy"
                 className="w-full h-48 object-cover"
               />
               <div className="p-6">

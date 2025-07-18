@@ -215,6 +215,7 @@ const Events = () => {
                       <img 
                         src={event.thumbnail} 
                         alt={event.title} 
+                        loading="lazy"
                         className="w-full h-[15rem] object-cover"
                       />
                       <div className="p-6">

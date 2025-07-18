@@ -45,6 +45,7 @@ const BaptismSection = () => {
               <img 
                 src="/assets/image (7).jpg" 
                 alt="Baptism" 
+                loading="lazy"
                 className="rounded-lg object-cover object-top shadow-lg w-full md:h-[30rem]"
               />
               <div className="absolute -bottom-4 -right-4 bg-white p-4 rounded-lg shadow-md max-w-xs hidden md:block">
