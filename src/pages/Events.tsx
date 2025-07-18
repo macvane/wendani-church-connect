@@ -51,13 +51,13 @@ export const allEventsData = [
   },
   {
     id: 5,
-    title: "VOP/ SOP Sabbath",
+    title: "Stewardship Sabbath",
     date: "July 19, 2025",
     time: "8:00 AM - 5:00 PM",
     location: "Church Main Sanctuary",
-    department: "VOP/SOP Dpt.",
-    description: "Get ready for a delicious experience! The VOP/SOP department invites you to a special VOP/SOP Sabbath",
-    thumbnail: "https://i.pinimg.com/1200x/01/48/02/0148029595c277d3cd0b083952869dc9.jpg",
+    department: "Stewardship Dpt.",
+    description: "Get ready for a delicious experience! The Stewardship department invites you to a special Stewardship Sabbath",
+    thumbnail: "/events/stewardship.jpg",
   },
   {
     id: 6,
