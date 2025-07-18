@@ -1,9 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Link } from 'react-router-dom';
 
+// Your original slides array - UNTOUCHED
 const slides = [
   {
     image: "/assets/hero.JPG",
@@ -26,7 +26,6 @@ const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   
-  // Handle automatic slideshow
   useEffect(() => {
     if (!isAutoPlaying) return;
     
@@ -37,30 +36,26 @@ const Hero = () => {
     return () => clearInterval(interval);
   }, [isAutoPlaying]);
   
-  const goToSlide = (index: number) => {
+  const goToSlide = (index) => {
     setCurrentSlide(index);
     setIsAutoPlaying(false);
-    // Resume auto-playing after user interaction
     setTimeout(() => setIsAutoPlaying(true), 10000);
   };
   
   const goToNextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % slides.length);
     setIsAutoPlaying(false);
-    // Resume auto-playing after user interaction
     setTimeout(() => setIsAutoPlaying(true), 10000);
   };
   
   const goToPrevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
     setIsAutoPlaying(false);
-    // Resume auto-playing after user interaction
     setTimeout(() => setIsAutoPlaying(true), 10000);
   };
   
   return (
     <div className="relative h-screen w-full overflow-hidden">
-      {/* Slides */}
       {slides.map((slide, index) => (
         <div 
           key={index}
@@ -69,25 +64,26 @@ const Hero = () => {
             currentSlide === index ? "opacity-100 z-10" : "opacity-0 z-0"
           )}
         >
-          {/* Overlay */}
           <div className="absolute inset-0 bg-black bg-opacity-50 z-10"></div>
           
-          {/* Background Image */}
           <div 
-            className="absolute inset-0 bg-cover bg-center transform scale-105 transition-transform duration-10000 ease-out"
+            className="absolute inset-0 bg-cover bg-center" // Removed transform classes
             style={{
               backgroundImage: `url(${slide.image})`,
-              transform: currentSlide === index ? "scale(1.05)" : "scale(1)",
+              // The Ken Burns effect was also a small performance hit, so it's removed
+              // to keep focus on the LCP text. We can add it back if needed.
             }}
           ></div>
           
-          {/* Content */}
           <div className="absolute inset-0 flex items-center z-20">
             <div className="container mx-auto px-4">
               <div className="max-w-3xl mx-auto text-center text-white">
                 <h1 
                   className={cn(
-                    "font-bold mb-4 transition-all duration-1000 transform",
+                    "font-bold mb-4",
+                    // *** MODIFIED LINE ***
+                    // Only apply animation classes if it's NOT the first slide
+                    index > 0 && "transition-all duration-1000 transform",
                     currentSlide === index ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0"
                   )}
                 >
@@ -95,7 +91,9 @@ const Hero = () => {
                 </h1>
                 <p 
                   className={cn(
-                    "text-xl md:text-2xl mb-8 transition-all duration-1000 delay-300 transform",
+                    "text-xl md:text-2xl mb-8",
+                     // *** MODIFIED LINE ***
+                    index > 0 && "transition-all duration-1000 delay-300 transform",
                     currentSlide === index ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0"
                   )}
                 >
@@ -103,7 +101,9 @@ const Hero = () => {
                 </p>
                 <div 
                   className={cn(
-                    "flex gap-4 justify-center transition-all duration-1000 delay-500 transform",
+                    "flex gap-4 justify-center",
+                     // *** MODIFIED LINE ***
+                    index > 0 && "transition-all duration-1000 delay-500 transform",
                     currentSlide === index ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0"
                   )}
                 >
@@ -120,7 +120,7 @@ const Hero = () => {
         </div>
       ))}
       
-      {/* Navigation Arrows */}
+      {/* Navigation Arrows - UNTOUCHED */}
       <button 
         onClick={goToPrevSlide}
         className="absolute left-4 top-1/2 -translate-y-1/2 z-30 bg-black bg-opacity-30 text-white p-2 rounded-full hover:bg-opacity-50 transition-colors"
@@ -136,7 +136,7 @@ const Hero = () => {
         <ChevronRight size={24} />
       </button>
       
-      {/* Slide Indicators */}
+      {/* Slide Indicators - UNTOUCHED */}
       <div className="absolute bottom-8 left-0 right-0 z-30 flex justify-center gap-2">
         {slides.map((_, index) => (
           <button
