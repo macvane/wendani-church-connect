@@ -68,7 +68,7 @@ const MediaSection = () => {
                 <div key={index} className="rounded-lg overflow-hidden shadow-md">
                   <div className="aspect-w-16 aspect-h-9 h-[14rem]">
                     <iframe
-                      src={`https://www.youtube.com/embed/${video.id}`}
+                      src={`https://www.youtube-nocookie.com/embed/${video.id}`}
                       title={video.title}
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
@@ -90,7 +90,7 @@ const MediaSection = () => {
                 <div key={index} className="rounded-lg overflow-hidden shadow-md">
                   <div className="aspect-w-16 aspect-h-9 h-[14rem]">
                     <iframe
-                      src={`https://www.youtube.com/embed/${video.id}`}
+                      src={`https://www.youtube-nocookie.com/embed/${video.id}`}
                       title={video.title}
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
@@ -112,7 +112,7 @@ const MediaSection = () => {
                 <div key={index} className="rounded-lg overflow-hidden shadow-md">
                   <div className="aspect-w-16 aspect-h-9 h-[14rem]">
                     <iframe
-                      src={`https://www.youtube.com/embed/${video.id}`}
+                      src={`https://www.youtube-nocookie.com/embed/${video.id}`}
                       title={video.title}
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
