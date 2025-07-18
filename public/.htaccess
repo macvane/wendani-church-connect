@@ -1,3 +1,39 @@
+# ==============================================================================
+# BROWSER CACHING FOR VITE ASSETS (IMPROVES SPEED)
+# ==============================================================================
+
+<IfModule mod_expires.c>
+  # Turn on the expires module
+  ExpiresActive On
+
+  # Set a default cache time of 1 hour for anything not specified below
+  ExpiresDefault "access plus 1 hour"
+
+  # Your fingerprinted assets can be cached for a very long time (1 year)
+  # Vite changes the filename when the content changes, so this is safe.
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType image/x-icon "access plus 1 year"
+</IfModule>
+
+<IfModule mod_headers.c>
+  # For assets with hashes in the filename, we can use the "immutable" directive
+  # This tells modern browsers they don't even need to check with the server for updates.
+  # This is a major performance boost for repeat visitors.
+  <FilesMatch "\.(js|css|jpg|jpeg|png|webp|svg|ico)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>
+
+# ==============================================================================
+# SINGLE PAGE APP ROUTING (DO NOT REMOVE)
+# This part makes sure your React Router works correctly.
+# ==============================================================================
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
