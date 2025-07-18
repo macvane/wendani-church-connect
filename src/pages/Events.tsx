@@ -5,6 +5,7 @@ import Footer from '@/components/layout/Footer';
 import { Calendar, MapPin, Clock } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { isDatePassed } from '@/utils/dateUtils';
+import { Helmet } from 'react-helmet-async';
 
 // Create a shared events data structure for the whole application
 export const allEventsData = [
@@ -160,6 +161,12 @@ const Events = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Events - Kahawa Wendani SDA Church</title>
+        <meta name="description" content="Find out what's happening at Kahawa Wendani SDA Church! Explore our calendar for upcoming events, including worship services, community outreach, youth programs, and special meetings in Nairobi. We invite you to join us." />
+        <link rel="canonical" href="https://kahawawendanisda.org/events" />
+      </Helmet>
+
       <Header />
       
       <main className="">

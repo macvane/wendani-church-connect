@@ -8,6 +8,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { physicalBooks, digitalBooks } from '@/data/libraryData';
 import AudioBookPlayer from '@/components/library/AudioBookPlayer';
 import BookViewer from '@/components/library/BookViewer';
+import { Helmet } from 'react-helmet-async';
 
 // Sample categories
 const categories = [
@@ -138,6 +139,12 @@ const Library = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Library - Kahawa Wendani SDA Church</title>
+        <meta name="description" content="Deepen your spiritual knowledge at the Kahawa Wendani SDA Church library. Browse our catalog of Christian and Adventist books." />
+        <link rel="canonical" href="https://kahawawendanisda.org/library" />
+      </Helmet>
+
       <Header />
       
       <main>

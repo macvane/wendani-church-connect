@@ -3,6 +3,7 @@ import  { useEffect } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { MapPin, Mail, Phone, Clock } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 
 const Contact = () => {
   const apiKey = import.meta.env.VITE_WEB3FORMS_API_KEY;
@@ -30,6 +31,12 @@ const Contact = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Contact - Kahawa Wendani SDA Church</title>
+        <meta name="description" content="Get in touch with Kahawa Wendani SDA Church. Find our address in Nairobi for your visit, service times, phone number, and email." />
+        <link rel="canonical" href="https://kahawawendanisda.org/contact" />
+      </Helmet>
+
       <Header />
       
       <main className="">

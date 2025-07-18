@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Helmet } from 'react-helmet-async';
 
 const choirs = [
   {
@@ -101,6 +102,12 @@ const Media = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Media - Kahawa Wendani SDA Church</title>
+        <meta name="description" content="Experience worship with Kahawa Wendani SDA Church from anywhere. Listen to our inspiring choir, watch special music presentations from our YouTube channel, and catch up on past sermons and messages." />
+        <link rel="canonical" href="https://kahawawendanisda.org/media" />
+      </Helmet>
+
       <Header />
       
       <main>

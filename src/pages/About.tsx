@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import { Helmet } from 'react-helmet-async';
 
 const About = () => {
   useEffect(() => {
@@ -52,6 +53,12 @@ const About = () => {
 
   return (
     <>
+      <Helmet>
+        <title>About - Kahawa Wendani SDA Church</title>
+        <meta name="description" content="The name “Wendani,” a rich Kikuyu word meaning “love,” perfectly embodies the spirit and essence of our church." />
+        <link rel="canonical" href="https://kahawawendanisda.org/about" />
+      </Helmet>
+
       <Header />
       
       <main className="">

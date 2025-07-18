@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import { Helmet } from 'react-helmet-async';
 // If you still want toasts for general app messages, you can keep useToast
 // import { useToast } from '@/hooks/use-toast'; 
 
@@ -49,6 +50,12 @@ const Benevolence = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Benevolence Form - Kahawa Wendani SDA Church</title>
+        <meta name="description" content="Apply for the Benevolence fund at Kahawa Wendani SDA Church Nairobi." />
+        <link rel="canonical" href="https://kahawawendanisda.org/benevolence" />
+      </Helmet>
+
       <Header />
       
       <main className="">

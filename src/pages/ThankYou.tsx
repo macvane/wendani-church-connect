@@ -3,6 +3,7 @@ import React from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { CheckCircle, Home, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Helmet } from 'react-helmet-async';
 
 const ThankYou = () => {
   const navigate = useNavigate();
@@ -34,6 +35,11 @@ const ThankYou = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-church-50 to-church-100 flex items-center justify-center p-4">
+      <Helmet>
+        <title>Thank You - Kahawa Wendani SDA Church</title>
+        <meta name="description" content="Welcome to Kahawa Wendani SDA Church, a vibrant Seventh-day Adventist community in Nairobi. Join us for worship and fellowship." />
+        <link rel="canonical" href="https://kahawawendanisda.org/thank-you" />
+      </Helmet>
       <div className="max-w-2xl w-full">
         {/* Main Content Card */}
         <div className="bg-white rounded-2xl shadow-2xl p-8 md:p-12 text-center">

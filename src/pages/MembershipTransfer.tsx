@@ -15,6 +15,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Helmet } from 'react-helmet-async';
 
 // Form schema
 const formSchema = z.object({
@@ -144,6 +145,11 @@ const MembershipTransfer = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Membership - Kahawa Wendani SDA Church</title>
+        <meta name="description" content="Officially join our church family or request a transfer of your membership." />
+        <link rel="canonical" href="https://kahawawendanisda.org/membership-transfer" />
+      </Helmet>
       <Header />
       <main className="pb-16">
         {/* Hero Section */}

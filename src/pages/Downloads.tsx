@@ -4,6 +4,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { File, Download, FileText, Eye, BookOpen, Users, GraduationCap, Heart } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Helmet } from 'react-helmet-async';
 
 // Sample documents data with view URLs
 const downloads = [
@@ -77,6 +78,12 @@ const Downloads = () => {
   
   return (
     <>
+      <Helmet>
+        <title>Dowloads - Kahawa Wendani SDA Church</title>
+        <meta name="description" content="Access important resources from Kahawa Wendani SDA Church. Download the latest weekly bulletin, announcements, study guides, and other materials to stay connected and grow in your faith." />
+        <link rel="canonical" href="https://kahawawendanisda.org/downloads" />
+      </Helmet>
+
       <Header />
       
       <main>

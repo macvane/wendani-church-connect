@@ -4,6 +4,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { useToast } from '@/hooks/use-toast';
 import { sendToGoogleSheet } from '@/utils/googleSheets';
+import { Helmet } from 'react-helmet-async';
 
 const ChildDedication = () => {
   const apiKey = import.meta.env.VITE_WEB3FORMS_PRAYER_REQUEST_API_KEY;
@@ -72,6 +73,12 @@ const ChildDedication = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Child Dedication - Kahawa Wendani SDA Church</title>
+        <meta name="description" content="Register for Child Dedication at Kahawa Wendani SDA Church Nairobi." />
+        <link rel="canonical" href="https://kahawawendanisda.org/child-dedication" />
+      </Helmet>
+
       <Header />
       
       <main className="">

@@ -8,6 +8,7 @@ import BlogSubscribe from '@/components/blog/BlogSubscribe';
 import BlogList from '@/components/blog/BlogList';
 import { blogPosts } from '@/data/blogData';
 import { Category } from '@/types/blog';
+import { Helmet } from 'react-helmet-async';
 
 const categories: Category[] = [
   { name: "Faith", count: 8 },
@@ -30,6 +31,12 @@ const Blogs = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Blogs - Kahawa Wendani SDA Church</title>
+        <meta name="description" content="Explore articles on faith, spiritual growth, and Christian living from the pastoral team and members of Kahawa Wendani SDA Church in Nairobi." />
+        <link rel="canonical" href="https://kahawawendanisda.org/blogs" />
+      </Helmet>
+
       <Header />
       
       <main>

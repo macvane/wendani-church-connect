@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { useToast } from '@/hooks/use-toast';
+import { Helmet } from 'react-helmet-async';
 // The sendToGoogleSheet import is no longer needed
 // import { sendToGoogleSheet } from '@/utils/googleSheets';
 
@@ -113,6 +114,12 @@ const Prayer = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Prayer - Kahawa Wendani SDA Church</title>
+        <meta name="description" content="Let us pray for you. Submit your confidential prayer request to the prayer ministry team at Kahawa Wendani SDA Church." />
+        <link rel="canonical" href="https://kahawawendanisda.org/prayer" />
+      </Helmet>
+
       <Header />
       
       <main>

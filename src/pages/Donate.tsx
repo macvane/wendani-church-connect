@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { sendToGoogleSheet } from "@/utils/googleSheets";
 import Footer from "@/components/layout/Footer";
+import { Helmet } from "react-helmet-async";
 
 const Donate = () => {
   const [donationData, setDonationData] = useState({
@@ -60,6 +61,11 @@ const Donate = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Tithes & Offerings - Kahawa Wendani SDA Church</title>
+        <meta name="description" content="Support the mission and ministry of Kahawa Wendani SDA Church in Nairobi. Give your tithes and offerings securely online." />
+        <link rel="canonical" href="https://kahawawendanisda.org/donate" />
+      </Helmet>
       <Header />
       <main>
         {/* Hero Section with Adjusted Positioning */}

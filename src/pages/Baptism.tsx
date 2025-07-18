@@ -13,6 +13,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import { Calendar } from 'lucide-react';
 import { sendToGoogleSheet } from '@/utils/googleSheets';
+import { Helmet } from 'react-helmet-async';
 
 const formSchema = z.object({
   fullName: z.string().min(2, { message: "Full name must be at least 2 characters." }),
@@ -78,6 +79,11 @@ const Baptism = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Baptism Form - Kahawa Wendani SDA Church</title>
+        <meta name="description" content="Ready to take the next step in your faith journey? Register for baptism at Kahawa Wendani SDA Church in Nairobi." />
+        <link rel="canonical" href="https://kahawawendanisda.org/baptism" />
+      </Helmet>
       <Header />
       
       <main>

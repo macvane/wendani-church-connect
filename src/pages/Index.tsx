@@ -14,6 +14,7 @@ import ImageSlideshow from '@/components/home/ImageSlideshow';
 import CtaSection from '@/components/home/CtaSection';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import { Helmet } from 'react-helmet-async';
 
 const Index = () => {
   useEffect(() => {
@@ -39,6 +40,11 @@ const Index = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Home - Kahawa Wendani SDA Church</title>
+        <meta name="description" content="Welcome to Kahawa Wendani SDA Church, a vibrant Seventh-day Adventist community in Nairobi. Join us for worship and fellowship." />
+        <link rel="canonical" href="https://kahawawendanisda.org/" />
+      </Helmet>
       <Header />
       <main>
         <Hero />
