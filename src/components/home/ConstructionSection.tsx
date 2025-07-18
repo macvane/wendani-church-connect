@@ -19,7 +19,7 @@ const ConstructionSection = () => {
       title: "Land Acquisition",
       date: "August 2023",
       description: "We successfully acquired 2 acres of land in a prime location for our new church building.",
-      image: "https://images.unsplash.com/photo-1501854140801-50d01698950b?q=80&w=2600",
+      image: "https://images.unsplash.com/photo-1501854140801-50d01698950b?q=80&w=1200",
       completed: true
     },
     {
@@ -40,7 +40,7 @@ const ConstructionSection = () => {
       title: "Foundation Work",
       date: "Planned: June 2024",
       description: "Site clearing and foundation work will begin, setting the structural base for our new church.",
-      image: "https://images.unsplash.com/photo-1496307653780-42ee777d4833?q=80&w=2600",
+      image: "https://images.unsplash.com/photo-1496307653780-42ee777d4833?q=80&w=1200",
       completed: false
     }
   ];
