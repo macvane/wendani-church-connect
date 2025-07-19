@@ -12,7 +12,7 @@ const downloads = [
     id: 1,
     title: "Weekly Church Announcements",
     description: "The most recent bulletin with announcements, upcoming events, and church activities.",
-    date: "June 06, 2025",
+    date: "July 19, 2025",
     type: "PDF",
     fileSize: "1.2 MB",
     url: "https://docs.google.com/presentation/d/1RwfQVcfcxvabG0Dy1NU8rYDsus_17IFQ/embed?start=false&loop=false&delayms=3000", 
