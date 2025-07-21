@@ -81,13 +81,10 @@ const Benevolence = () => {
         <section className="section bg-white">
           <div className="container">
             <div className="max-w-3xl mx-auto text-center">
-              <h2 className="section-title">About Our Benevolence Ministry</h2>
+              <h2 className="section-title">About Our Benevolence Department</h2>
               <div className="prose max-w-none animate-delay-1">
                 <p className="text-lg mb-4">
-                  The Benevolence Ministry at Kahawa Wendani SDA Church seeks to provide temporary financial assistance to individuals and families experiencing economic hardship. We aim to help those in need while encouraging financial responsibility and self-sufficiency.
-                </p>
-                <p className="text-lg">
-                  If you are facing a financial emergency or need assistance with basic necessities, please complete the form below. All requests are confidential and will be reviewed by our Benevolence Committee.
+                  The Benevolence Department at Kahawa Wendani SDA Church is dedicated to offering support to our registered church members during one of life's most difficult moments: the loss of a loved one. Our primary mission is to provide financial assistance to help ease the immediate burdens that accompany bereavement.
                 </p>
               </div>
             </div>
@@ -215,8 +212,7 @@ const Benevolence = () => {
                       <h4 className="font-semibold text-blue-800 mb-2">Who Qualifies as a Dependent?</h4>
                       <ul className="list-disc pl-5 text-blue-800 text-sm space-y-1">
                         <li>Children under the age of 18 years old</li>
-                        <li>Children up to 21 years old if they are currently enrolled in college</li>
-                        <li>Other family members who are financially dependent on you</li>
+                        <li>Children up to 21 years old if they are currently enrolled in college</li> 
                       </ul>
                     </div>
                     
