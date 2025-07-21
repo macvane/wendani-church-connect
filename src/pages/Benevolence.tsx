@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react'; // Import useRef
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { Helmet } from 'react-helmet-async';
-// If you still want toasts for general app messages, you can keep useToast
-// import { useToast } from '@/hooks/use-toast'; 
+import { useToast } from '@/hooks/use-toast'; // Re-enabled useToast for feedback
 
 interface Dependent {
   name: string;
@@ -12,13 +11,13 @@ interface Dependent {
 }
 
 const Benevolence = () => {
-  // Make sure this API key is correctly set in your .env file
-  const apiKey = import.meta.env.VITE_WEB3FORMS_BENEVOLENCE_API_KEY; 
+  const apiKey = import.meta.env.VITE_WEB3FORMS_BENEVOLENCE_API_KEY;
   
-  // No longer strictly needed for Web3Forms direct submission, 
-  // but good for showing immediate button state
-  const [isSubmitting, setIsSubmitting] = useState(false); 
+  // A ref to the form element to allow us to reset it after submission
+  const formRef = useRef<HTMLFormElement>(null);
+  const { toast } = useToast(); // Initialize the toast hook
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [dependents, setDependents] = useState<Dependent[]>([
     { name: '', phone: '', relationship: '' }
   ]);
@@ -34,19 +33,65 @@ const Benevolence = () => {
   };
 
   const removeDependent = (index: number) => {
-    // Ensure at least one dependent field remains
     if (dependents.length > 1) {
       setDependents(dependents.filter((_, i) => i !== index));
     }
   };
-
-  // Optional: A local submit handler to manage isSubmitting state
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  
+  // *** NEW: The onSubmit handler for the form ***
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); // Prevent the default form submission behavior
     setIsSubmitting(true);
-    // action="https://api.web3forms.com/submit"
-    // No need for a custom fetch here.
-    // Web3Forms will handle redirection after submission.
+
+    // Create FormData from the form element. This automatically collects all named inputs.
+    const formData = new FormData(e.currentTarget);
+    formData.append("subject", "New Benevolence Request from Website"); // Add subject
+    
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        toast({
+          title: "Request Submitted!",
+          description: "Your benevolence request has been sent successfully.",
+        });
+        
+        // Clear the form for the next user
+        formRef.current?.reset(); // Reset all standard form fields
+        setDependents([{ name: '', phone: '', relationship: '' }]); // Reset the dependents state
+        
+        // Redirect to the thank-you page after a short delay
+        setTimeout(() => {
+          window.location.href = 'http://kahawawendanisda.org/thank-you';
+        }, 2000);
+
+      } else {
+        console.error("Submission Error:", result);
+        toast({
+          title: "Submission Error",
+          description: result.message || "An error occurred. Please try again.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error("Network or Fetch Error:", error);
+      toast({
+        title: "Network Error",
+        description: "Could not submit the form. Please check your connection and try again.",
+        variant: "destructive",
+      });
+    } finally {
+      // Set submitting to false whether it succeeded or failed
+      // but delay it slightly if redirecting to avoid a flicker
+      setTimeout(() => setIsSubmitting(false), 2000); 
+    }
   };
+
 
   return (
     <>
@@ -98,12 +143,11 @@ const Benevolence = () => {
               <div className="bg-white rounded-lg shadow-md p-8">
                 <h2 className="text-2xl font-bold mb-6 text-center">Benevolence Request Form</h2>
                 
-                {/* Add onSubmit handler to the form if you want to manage isSubmitting state */}
-                <form action="https://api.web3forms.com/submit" method="POST" className="space-y-6">
-                  <input type="hidden" name="access_key" value={apiKey}></input>
-                  {/* Web3Forms redirect URL */}
-                  <input type="hidden" name="redirect" value="http://kahawawendanisda.org/thank-you" />
-                  <input type="hidden" name="subject" value="Benevolence Registration Form" />
+                {/* *** MODIFIED: Attached ref and onSubmit handler, removed action/method *** */}
+                <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
+                  {/* The access key is still required by Web3Forms */}
+                  <input type="hidden" name="access_key" value={apiKey} />
+                  {/* *** REMOVED: Hidden inputs for redirect and subject are now handled in JS *** */}
                   
                   {/* Head of Family Information */}
                   <div>
@@ -116,7 +160,7 @@ const Benevolence = () => {
                         <input 
                           type="text" 
                           id="headOfFamilyName" 
-                          name="headOfFamilyName" // Keep name for Web3Forms
+                          name="headOfFamilyName"
                           placeholder="Full name"
                           required
                           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
@@ -130,7 +174,7 @@ const Benevolence = () => {
                         <input 
                           type="tel" 
                           id="headOfFamilyPhone" 
-                          name="headOfFamilyPhone" // Keep name for Web3Forms
+                          name="headOfFamilyPhone"
                           placeholder="+254 700 000000"
                           required
                           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
@@ -144,7 +188,7 @@ const Benevolence = () => {
                         <input 
                           type="email" 
                           id="headOfFamilyEmail" 
-                          name="headOfFamilyEmail" // Keep name for Web3Forms
+                          name="headOfFamilyEmail"
                           placeholder="youremail@gmail.com"
                           required
                           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
@@ -157,11 +201,12 @@ const Benevolence = () => {
                         </label>
                         <select 
                           id="membershipStatus" 
-                          name="membershipStatus" // Keep name for Web3Forms
+                          name="membershipStatus"
                           required
+                          defaultValue="" // Set default value for select
                           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                         >
-                          <option value="">Select Status</option>
+                          <option value="" disabled>Select Status</option>
                           <option value="registered-member">Registered Member of Wendani Church</option>
                           <option value="sabbath-school-member">Sabbath School Member</option>
                           <option value="regular-attendee">Regular Attendee</option>
@@ -182,7 +227,7 @@ const Benevolence = () => {
                         <input 
                           type="text" 
                           id="spouseName" 
-                          name="spouseName" // Keep name for Web3Forms
+                          name="spouseName"
                           placeholder="Spouse's full name"
                           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                         />
@@ -195,7 +240,7 @@ const Benevolence = () => {
                         <input 
                           type="text" 
                           id="spouseChurch" 
-                          name="spouseChurch" // Keep name for Web3Forms
+                          name="spouseChurch"
                           placeholder="Church name"
                           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                         />
@@ -203,11 +248,10 @@ const Benevolence = () => {
                     </div>
                   </div>
 
-                  {/* Dependents - MODIFIED SECTION */}
+                  {/* Dependents Section */}
                   <div>
                     <h3 className="text-lg font-bold mb-4 border-b border-gray-200 pb-2">Dependents Information</h3>
                     
-                    {/* Dependent Qualification Information */}
                     <div className="bg-blue-50 p-4 rounded-md border border-blue-200 mb-4">
                       <h4 className="font-semibold text-blue-800 mb-2">Who Qualifies as a Dependent?</h4>
                       <ul className="list-disc pl-5 text-blue-800 text-sm space-y-1">
@@ -241,7 +285,6 @@ const Benevolence = () => {
                               placeholder="Dependent's name"
                               value={dependent.name}
                               onChange={(e) => handleDependentChange(index, 'name', e.target.value)}
-                              // *** IMPORTANT CHANGE HERE ***
                               name={`dependents[${index}][name]`} 
                               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                             />
@@ -254,7 +297,6 @@ const Benevolence = () => {
                               placeholder="Phone number"
                               value={dependent.phone}
                               onChange={(e) => handleDependentChange(index, 'phone', e.target.value)}
-                              // *** IMPORTANT CHANGE HERE ***
                               name={`dependents[${index}][phone]`}
                               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                             />
@@ -267,7 +309,6 @@ const Benevolence = () => {
                               placeholder="e.g., Son, Daughter, Relative"
                               value={dependent.relationship}
                               onChange={(e) => handleDependentChange(index, 'relationship', e.target.value)}
-                              // *** IMPORTANT CHANGE HERE ***
                               name={`dependents[${index}][relationship]`}
                               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                             />
@@ -295,7 +336,7 @@ const Benevolence = () => {
                         </label>
                         <textarea 
                           id="reason" 
-                          name="reason" // Keep name for Web3Forms
+                          name="reason"
                           required
                           rows={4}
                           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
@@ -309,7 +350,7 @@ const Benevolence = () => {
                         </label>
                         <textarea 
                           id="additionalInfo" 
-                          name="additionalInfo" // Keep name for Web3Forms
+                          name="additionalInfo"
                           rows={3}
                           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                           placeholder="Any additional information that might be helpful for us to know..."
@@ -342,62 +383,6 @@ const Benevolence = () => {
             </div>
           </div>
         </section>
-        
-        {/* Ways to Help */}
-        {/* <section className="section bg-white">
-          <div className="container">
-            <div className="max-w-3xl mx-auto text-center">
-              <h2 className="section-title">Ways to Support Our Benevolence Fund</h2>
-              <p className="section-subtitle animate-delay-1">
-                Your generosity helps us provide assistance to those in need in our church and community.
-              </p>
-              
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
-                <div className="bg-gray-50 p-6 rounded-lg text-center">
-                  <div className="h-16 w-16 bg-church-100 rounded-full mx-auto flex items-center justify-center mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-church-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-bold mb-2">Financial Gifts</h3>
-                  <p className="text-gray-600">
-                    Donate to our benevolence fund through the church's regular giving channels.
-                  </p>
-                </div>
-                
-                <div className="bg-gray-50 p-6 rounded-lg text-center animate-delay-1">
-                  <div className="h-16 w-16 bg-church-100 rounded-full mx-auto flex items-center justify-center mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-church-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-bold mb-2">Volunteer</h3>
-                  <p className="text-gray-600">
-                    Join our benevolence committee or help with specific assistance projects.
-                  </p>
-                </div>
-                
-                <div className="bg-gray-50 p-6 rounded-lg text-center animate-delay-2">
-                  <div className="h-16 w-16 bg-church-100 rounded-full mx-auto flex items-center justify-center mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-church-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-bold mb-2">Pray</h3>
-                  <p className="text-gray-600">
-                    Pray for those facing financial hardship and for wisdom for our benevolence committee.
-                  </p>
-                </div>
-              </div>
-              
-              <div className="mt-8">
-                <a href="/contact" className="btn btn-primary btn-lg">
-                  Contact Us to Learn More
-                </a>
-              </div>
-            </div>
-          </div>
-        </section> */}
         
       </main>
       
