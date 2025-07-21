@@ -13,7 +13,7 @@ interface Dependent {
 
 const Benevolence = () => {
   // Make sure this API key is correctly set in your .env file
-  const apiKey = import.meta.env.VITE_WEB3FORMS_API_KEY; 
+  const apiKey = import.meta.env.VITE_WEB3FORMS_BENEVOLENCE_API_KEY; 
   
   // No longer strictly needed for Web3Forms direct submission, 
   // but good for showing immediate button state
