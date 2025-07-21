@@ -1,14 +1,14 @@
-
 import React, { useState } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { useToast } from '@/hooks/use-toast';
-import { sendToGoogleSheet } from '@/utils/googleSheets';
+// REMOVED: No longer importing the Google Sheets utility
 import { Helmet } from 'react-helmet-async';
 
 const ChildDedication = () => {
-  const apiKey = import.meta.env.VITE_WEB3FORMS_PRAYER_REQUEST_API_KEY;
-  const [formData, setFormData] = useState({
+  const apiKey = import.meta.env.VITE_WEB3FORMS_API_KEY;
+  
+  const initialFormState = {
     childName: '',
     dateOfBirth: '',
     gender: '',
@@ -21,8 +21,9 @@ const ChildDedication = () => {
     address: '',
     dedicationDate: '',
     additionalInfo: '',
-  });
-  
+  };
+
+  const [formData, setFormData] = useState(initialFormState);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   
@@ -31,43 +32,51 @@ const ChildDedication = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
   
+  // *** MODIFIED: The function is now simplified to only handle Web3Forms submission ***
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
+    const web3FormData = new FormData();
+    web3FormData.append("access_key", apiKey);
+    web3FormData.append("subject", "New Child Dedication Request from Website");
+
+    Object.entries(formData).forEach(([key, value]) => {
+      web3FormData.append(key, value);
+    });
+    
     try {
-      await sendToGoogleSheet({
-        ...formData,
-      }, 'dedication');
-      
-      toast({
-        title: "Dedication Request Submitted",
-        description: "Thank you for your submission. We will contact you soon regarding the child dedication ceremony.",
+      // The logic is now a simple, single fetch request
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: web3FormData,
       });
-      
-      setFormData({
-        childName: '',
-        dateOfBirth: '',
-        gender: '',
-        fatherName: '',
-        fatherEmail: '',
-        fatherPhone: '',
-        motherName: '',
-        motherEmail: '',
-        motherPhone: '',
-        address: '',
-        dedicationDate: '',
-        additionalInfo: '',
-      });
-    } catch (error) {
+
+      const result = await response.json();
+
+      if (result.success) {
+        // If the submission is successful, show the toast and reset the form
+        toast({
+          title: "Dedication Request Submitted",
+          description: "Thank you! Our team will contact you soon to confirm the details.",
+        });
+        
+        setFormData(initialFormState);
+      } else {
+        // If the API returns an error, throw it to be caught by the catch block
+        throw new Error(result.message || 'An unknown error occurred during submission.');
+      }
+
+    } catch (error: any) {
+      // This will catch any network errors or errors thrown from the success check
       console.error("Error submitting dedication request:", error);
       toast({
         title: "Submission Failed",
-        description: "There was a problem submitting your request. Please try again.",
+        description: error.message || "There was a problem submitting your request. Please try again.",
         variant: "destructive",
       });
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false); // Re-enable the submit button
     }
   };
 
@@ -87,9 +96,9 @@ const ChildDedication = () => {
           <div className="absolute inset-0">
             <div className="absolute inset-0 bg-black bg-opacity-70 z-10"></div>
             <img 
-              src="https://plus.unsplash.com/premium_photo-1725408058301-c1b959db6cc9?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+              src="https://i.pinimg.com/1200x/0b/32/0d/0b320d42b9347cb5925ec04d2657675b.jpg" 
               alt="Child Dedication" 
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover object-bottom"
             />
           </div>
           <div className="container relative z-20 text-white text-center">
@@ -110,7 +119,7 @@ const ChildDedication = () => {
                   Child dedication is a ceremony in which parents make a public commitment before God, their family, and the church congregation to raise their child according to God's Word and God's ways.
                 </p>
                 <p className="text-lg">
-                  At Kahawa Wendani SDA Church, we perform child dedications during the first Sabbath of every month. To register your child for dedication, please fill out the form below.
+                  At Kahawa Wendani SDA Church, we perform child dedication during the first Sabbath of every month. To register your child for dedication, please fill out the form below.
                 </p>
               </div>
             </div>
@@ -124,10 +133,8 @@ const ChildDedication = () => {
               <div className="bg-white rounded-lg shadow-md p-8">
                 <h2 className="text-2xl font-bold mb-6 text-center">Child Dedication Registration Form</h2>
                 
-                <form action="https://api.web3forms.com/submit" method="POST" className="space-y-6">
-                  <input type="hidden" name="access_key" value={apiKey}></input>
-                  <input type="hidden" name="redirect" value="http://kahawawendanisda.org/thank-you" />
-                  <input type="hidden" name="subject" value="Child Dedication Registration Form" />
+                {/* The form JSX remains unchanged */}
+                <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
                     <h3 className="text-lg font-bold mb-4 border-b border-gray-200 pb-2">Child Information</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -289,37 +296,6 @@ const ChildDedication = () => {
                   <div>
                     <h3 className="text-lg font-bold mb-4 border-b border-gray-200 pb-2">Additional Information</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {/* <div>
-                        <label htmlFor="address" className="block font-medium mb-1 text-gray-700">
-                          Home Address <span className="text-red-500">*</span>
-                        </label>
-                        <input 
-                          type="text" 
-                          id="address" 
-                          name="address" 
-                          placeholder="Current residence"
-                          value={formData.address}
-                          onChange={handleChange}
-                          required
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
-                        />
-                      </div> */}
-                      
-                      {/* <div>
-                        <label htmlFor="dedicationDate" className="block font-medium mb-1 text-gray-700">
-                          Preferred Dedication Date <span className="text-red-500">*</span>
-                        </label>
-                        <input 
-                          type="date" 
-                          id="dedicationDate" 
-                          name="dedicationDate"
-                          value={formData.dedicationDate}
-                          onChange={handleChange}
-                          required
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
-                        />
-                      </div> */}
-                      
                       <div className="md:col-span-2">
                         <label htmlFor="additionalInfo" className="block font-medium mb-1 text-gray-700">
                           Additional Information

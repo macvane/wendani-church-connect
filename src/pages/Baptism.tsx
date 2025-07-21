@@ -8,11 +8,9 @@ import Footer from '@/components/layout/Footer';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
-import { Calendar } from 'lucide-react';
-import { sendToGoogleSheet } from '@/utils/googleSheets';
+// REMOVED: No longer importing Google Sheets utility
 import { Helmet } from 'react-helmet-async';
 
 const formSchema = z.object({
@@ -51,25 +49,42 @@ const Baptism = () => {
     },
   });
 
+  // *** MODIFIED: This function now only handles Web3Forms submission ***
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
-    
+
+    const web3FormData = new FormData();
+    web3FormData.append("access_key", apiKey);
+    web3FormData.append("subject", "New Baptism Request from Website");
+
+    // Append all validated data from react-hook-form
+    Object.entries(data).forEach(([key, value]) => {
+      web3FormData.append(key, String(value));
+    });
+
     try {
-      await sendToGoogleSheet({
-        ...data,
-      }, 'baptism');
-      
-      toast({
-        title: "Baptism Request Submitted",
-        description: "Thank you! Our pastoral team will contact you soon about next steps.",
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: web3FormData,
       });
-      
-      form.reset();
-    } catch (error) {
+
+      const result = await response.json();
+
+      if (result.success) {
+        toast({
+          title: "Baptism Request Submitted",
+          description: "Thank you! Our pastoral team will contact you soon about next steps.",
+        });
+        
+        form.reset(); // Reset the form on successful submission
+      } else {
+        throw new Error(result.message || 'An unknown error occurred.');
+      }
+    } catch (error: any) {
       console.error("Error submitting form:", error);
       toast({
         title: "Submission Failed",
-        description: "There was a problem submitting your request. Please try again.",
+        description: error.message || "There was a problem submitting your request. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -117,10 +132,9 @@ const Baptism = () => {
               </div>
               
               <Form {...form}>
-                <form action="https://api.web3forms.com/submit" method="POST" className="space-y-6">
-                  <input type="hidden" name="access_key" value={apiKey}></input>
-                  <input type="hidden" name="redirect" value="http://kahawawendanisda.org/thank-you" />
-                  <input type="hidden" name="subject" value="Baptism Registration Form" />
+                {/* *** MODIFIED: The form now uses the onSubmit handler from react-hook-form *** */}
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                  {/* *** REMOVED: Hidden inputs are no longer needed *** */}
                  
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField
@@ -142,7 +156,7 @@ const Baptism = () => {
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Email </FormLabel>
+                          <FormLabel>Email</FormLabel>
                           <FormControl>
                             <Input type="email" placeholder="Your email address" {...field} />
                           </FormControl>
