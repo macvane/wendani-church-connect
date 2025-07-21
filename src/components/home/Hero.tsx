@@ -63,7 +63,7 @@ const Hero = () => {
         >
           <div className="absolute inset-0 bg-black bg-opacity-50 z-10"></div>
           <div
-            className="absolute inset-0 bg-cover bg-center"
+            className="absolute inset-0 bg-cover bg-right md:bg-center"
             style={{ backgroundImage: `url(${slide.image})` }}
           ></div>
 
