@@ -57,7 +57,7 @@ export const allEventsData = [
     location: "Church Main Sanctuary",
     department: "Stewardship Dpt.",
     description: "Get ready for a delicious experience! The Stewardship department invites you to a special Stewardship Sabbath",
-    thumbnail: "/events/stewardship.jpg",
+    thumbnail: "/posters/stewardship.jpg",
   },
   {
     id: 6,
