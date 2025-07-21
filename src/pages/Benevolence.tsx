@@ -209,6 +209,17 @@ const Benevolence = () => {
                   {/* Dependents - MODIFIED SECTION */}
                   <div>
                     <h3 className="text-lg font-bold mb-4 border-b border-gray-200 pb-2">Dependents Information</h3>
+                    
+                    {/* Dependent Qualification Information */}
+                    <div className="bg-blue-50 p-4 rounded-md border border-blue-200 mb-4">
+                      <h4 className="font-semibold text-blue-800 mb-2">Who Qualifies as a Dependent?</h4>
+                      <ul className="list-disc pl-5 text-blue-800 text-sm space-y-1">
+                        <li>Children under the age of 18 years old</li>
+                        <li>Children up to 21 years old if they are currently enrolled in college</li>
+                        <li>Other family members who are financially dependent on you</li>
+                      </ul>
+                    </div>
+                    
                     <p className="text-sm text-gray-600 mb-4">List the dependents you are applying for (children, relatives, etc.)</p>
                     
                     {dependents.map((dependent, index) => (
