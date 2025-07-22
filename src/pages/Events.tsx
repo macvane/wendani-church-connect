@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import CountdownTimer from '@/components/home/CountdownTimer';
 import { Calendar, MapPin, Clock } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { isDatePassed } from '@/utils/dateUtils';
@@ -187,6 +188,9 @@ const Events = () => {
             </p>
           </div>
         </section>
+        
+        {/* Countdown Timer */}
+        <CountdownTimer />
         
         {/* Events Tabs */}
         <section className="section bg-white">
