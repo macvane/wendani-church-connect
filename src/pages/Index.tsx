@@ -1,6 +1,10 @@
 
 import React, { useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
+
+// Components
 import Hero from '@/components/home/Hero';
+import Countdown from '@/components/home/Countdown';
 import AboutSection from '@/components/home/AboutSection';
 import ConstructionSection from '@/components/home/ConstructionSection';
 import MediaSection from '@/components/home/MediaSection';
@@ -14,7 +18,6 @@ import ImageSlideshow from '@/components/home/ImageSlideshow';
 import CtaSection from '@/components/home/CtaSection';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import { Helmet } from 'react-helmet-async';
 
 const Index = () => {
   useEffect(() => {
@@ -48,6 +51,7 @@ const Index = () => {
       <Header />
       <main>
         <Hero />
+        <Countdown />
         <AboutSection />
         <BaptismSection />
         <EventsSection />
