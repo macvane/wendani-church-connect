@@ -81,7 +81,7 @@ const Blogs = () => {
                     selectedCategory={selectedCategory}
                     setSelectedCategory={setSelectedCategory}
                   />
-                  <BlogSubscribe />
+                  {/* <BlogSubscribe /> */}
                 </div>
               </div>
             </div>

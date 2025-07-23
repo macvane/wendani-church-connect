@@ -170,12 +170,6 @@ const Prayer = () => {
                   This tells the form to run our JavaScript function instead of reloading the page.
                 */}
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  {/* 
-                    CHANGE 2: The hidden input for `redirect` is no longer needed and can be removed.
-                    The `access_key` is now handled in our JavaScript function.
-                  */}
-                  <input type="hidden" name="access_key" value={apiKey} />
-                  <input type="hidden" name="subject" value="Prayer Request from Website" />
 
                   {/* All form fields remain exactly the same */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

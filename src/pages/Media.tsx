@@ -5,13 +5,14 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Helmet } from 'react-helmet-async';
+import { Youtube } from 'lucide-react';
 
 const choirs = [
   {
     id: "church-choir",
     name: "Church Choir",
     description: "Our main church choir ministers through beautiful hymns and anthems during divine service and special programs.",
-    leader: "Mr. Shikuku",
+    leader: "Mr. Gilbert Shikuku",
     contact: "",
     message: "Music is a divine language that transcends barriers and speaks directly to the soul. Join us as we use our voices to worship and praise our Creator.",
     videos: [
@@ -24,7 +25,8 @@ const choirs = [
       { id: "bBk9d4FfVfk", title: "Umefedheheshwa" },
       { id: "YYGgXoAf7gA", title: "Tafuta Daima" },
       { id: "yqKdm0Js3gw", title: "Pendo La Agape" },
-    ]
+    ],
+    youtube: "https://www.youtube.com/@kahawawendanisdachurchchoi2566"
   },
   {
     id: "youth-choir",
@@ -42,7 +44,8 @@ const choirs = [
       { id: "yY5OuyLo588", title: "Tunahangaika" },
       { id: "yY5OuyLo588", title: "Tumealikwa Karamuni" },
       { id: "ZGbM1oTzrVM", title: "Usisongwesongwe" },
-    ]
+    ],
+    youtube: "https://www.youtube.com/@kahawawendaniyouthssdachoi4582"
   },
   {
     id: "ambassadors-choir",
@@ -61,7 +64,8 @@ const choirs = [
       { id: "quzdmqQoXGk", title: "Tamka Neno" },
       { id: "jU3uUZVredo", title: "Kinyonge Hakitaingia" },
       { id: "UyXrGFvm9mc", title: "Mambo Ya Kale" },
-    ]
+    ],
+    youtube: "https://www.youtube.com/@kahawawendanisdaambassadors"
   },
   // {
   //   id: "childrens-choir",
@@ -163,13 +167,20 @@ const Media = () => {
                           <p className="text-gray-700 mb-4">
                             {choir.message}
                           </p>
-                          <Link
-                            to='/contact'
-                          >
-                            <button className="btn btn-primary btn-lg">
-                              Contact Us to Join
-                            </button>
-                          </Link>
+                          <div>
+                            <h4 className="font-bold mb-2">Our Socials</h4>
+                            <div className='flex item-center gap-4'>
+                            <a 
+                              href={choir.youtube} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="bg-church-600 hover:bg-church-700 text-white p-2 rounded-full transition hover:scale-110 duration-300"
+                              aria-label="YouTube Channel"
+                            >
+                              <Youtube size={18} />
+                            </a>
+                          </div>
+                          </div>
                         </div>
                       </div>
                     </div>

@@ -23,7 +23,7 @@ const BlogPost = () => {
             <p className="text-gray-600 mb-8">
               The blog post you are looking for does not exist or has been removed.
             </p>
-            <Link to="/blogs" className="btn btn-primary">
+            <Link to="/blogs" className="btn btn-primary px-5 py-3">
               Back to All Blogs
             </Link>
           </div>

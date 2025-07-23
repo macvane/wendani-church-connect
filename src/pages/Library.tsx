@@ -248,7 +248,7 @@ const Library = () => {
                           <p className="text-sm">
                             For inquiries, contact our librarian at:
                             <br />
-                            <span className="font-medium">library@kahawawendanisda.org</span>
+                            <span className="font-medium"><a className='hover:underline dec' href="mailto:info@kahawawendanisda.org">info@kahawawendanisda.org</a></span>
                           </p>
                         </div>
                       </div>

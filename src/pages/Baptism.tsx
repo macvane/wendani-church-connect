@@ -17,12 +17,9 @@ const formSchema = z.object({
   fullName: z.string().min(2, { message: "Full name must be at least 2 characters." }),
   email: z.string().email({ message: "Please enter a valid email address." }),
   phone: z.string().min(10, { message: "Please enter a valid phone number." }),
-  address: z.string().min(5, { message: "Address must be at least 5 characters." }),
   birthDate: z.string().min(1, { message: "Birth date is required." }),
-  preferredDate: z.string().optional(),
   hasBibleStudy: z.boolean().default(false),
   hasBeenBaptized: z.boolean().default(false),
-  howDidYouHear: z.string().min(1, { message: "Please tell us how you found out about us." }),
   questions: z.string().optional(),
 });
 
@@ -39,12 +36,9 @@ const Baptism = () => {
       fullName: '',
       email: '',
       phone: '',
-      address: '',
       birthDate: '',
-      preferredDate: '',
       hasBibleStudy: false,
       hasBeenBaptized: false,
-      howDidYouHear: '',
       questions: '',
     },
   });
