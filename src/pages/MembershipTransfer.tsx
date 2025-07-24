@@ -487,7 +487,7 @@ const MembershipTransfer = () => {
                     
                     <div className='pt-4 border-t'>
                        <h4 className="font-medium text-lg mt-2">
-                        Church Board 
+                        Church Board Details (Church Transferring From)
                       </h4>
                     </div>
                     <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>

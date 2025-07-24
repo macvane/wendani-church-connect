@@ -19,7 +19,6 @@ const ChildDedication = () => {
     motherEmail: '',
     motherPhone: '',
     address: '',
-    dedicationDate: '',
     additionalInfo: '',
   };
 
