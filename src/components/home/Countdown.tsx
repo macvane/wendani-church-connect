@@ -39,7 +39,7 @@ const Countdown = () => {
         <span className="text-4xl md:text-6xl font-light ">
           {String(timeLeft[interval]).padStart(2, '0')}
         </span>
-        <span className="block bg-church-600 px-3 text-sm  uppercase">{interval}</span>
+        <span className="block bg-gray-600 rounded-md px-3 text-sm  uppercase">{interval}</span>
       </div>
     );
   });

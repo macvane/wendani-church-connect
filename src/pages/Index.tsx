@@ -59,6 +59,7 @@ const Index = () => {
         <MediaSection />
         <ConstructionSection />
         <PastorateSection />
+        {/* <ImageSlideshow /> */}
         <BlogPreview />
         <CtaSection />
       </main>

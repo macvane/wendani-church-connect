@@ -59,18 +59,18 @@ const EventsSection = () => {
             upcomingEvents.map((event, index) => (
               <div 
                 key={event.id}
-                className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col sm:flex-row "
+                className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col lg:flex-row"
                 style={{animationDelay: `${index * 0.1 + 0.2}s`}}
               >
-                <div className="sm:w-1/3">
+                <div className="w-full ">
                   <img 
                     src={event.thumbnail} 
                     alt={event.title} 
                     loading="lazy"
-                    className="w-full h-48  object-cover"
+                    className="w-full h-[17rem]  object-cover"
                   />
                 </div>
-                <div className="p-6 sm:w-2/3 flex flex-col">
+                <div className="p-6 w-full flex flex-col">
                   <div className="flex items-start justify-between mb-2">
                     <h3 className="font-bold text-xl">{event.title}</h3>
                     <span className="bg-church-600 text-white text-xs px-2 py-1 rounded">
