@@ -54,7 +54,7 @@ const EventsSection = () => {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="w-[85%] mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
           {upcomingEvents.length > 0 ? (
             upcomingEvents.map((event, index) => (
               <div 
