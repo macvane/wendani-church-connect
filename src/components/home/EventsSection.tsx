@@ -54,7 +54,7 @@ const EventsSection = () => {
           </p>
         </div>
         
-        <div className="w-[85%] mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="md:w-[85%] mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
           {upcomingEvents.length > 0 ? (
             upcomingEvents.map((event, index) => (
               <div 
@@ -67,7 +67,7 @@ const EventsSection = () => {
                     src={event.thumbnail} 
                     alt={event.title} 
                     loading="lazy"
-                    className="w-full h-[17rem]  object-cover"
+                    className="w-full h-[12rem] md:h-[17rem]  object-cover"
                   />
                 </div>
                 <div className="p-6 w-full flex flex-col">
