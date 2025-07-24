@@ -59,7 +59,7 @@ const EventsSection = () => {
             upcomingEvents.map((event, index) => (
               <div 
                 key={event.id}
-                className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col lg:flex-row"
+                className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col"
                 style={{animationDelay: `${index * 0.1 + 0.2}s`}}
               >
                 <div className="w-full ">

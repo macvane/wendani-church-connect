@@ -10,36 +10,6 @@ import { Helmet } from 'react-helmet-async';
 // Create a shared events data structure for the whole application
 export const allEventsData = [
   {
-    id: 1,
-    title: "Communication Sabbath",
-    date: "May 17, 2025",
-    time: "8:00 AM - 5:00 PM",
-    location: "Church Main Sanctuary",
-    department: "Communication Dpt.",
-    description: "Review of the church's quarterly activities, financial reports, and planning for the next quarter.",
-    thumbnail: "/thumbnails/com.jpg",
-  },
-  {
-    id: 2,
-    title: "AMM Audio Recording",
-    date: "July 06, 2025",
-    time: "8:00 AM - 5:00 PM",
-    location: "TBC",
-    department: "AMM",
-    description: "The moment is here! AMM Ministries invites you to be part of the live audience for their highly anticipated 'Volume 2' audio recording.",
-    thumbnail: "https://i.pinimg.com/736x/7f/cf/c3/7fcfc334245f2c84c5b187441def5803.jpg",
-  },
-  {
-    id: 3,
-    title: "Publishing Sabbath",
-    date: "July 05, 2025",
-    time: "8:00 AM - 5:00 PM",
-    location: "Church Main Sanctuary",
-    department: "Publishing Dpt",
-    description: "Join us for Publishing Sabbath as we celebrate the vital ministry of sharing God's word through the written page",
-    thumbnail: "https://images.unsplash.com/photo-1718745015015-09cd064a263b?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  },
-  {
     id: 4,
     title: "Evangelism Sabbath",
     date: "July 12, 2025",
@@ -67,17 +37,7 @@ export const allEventsData = [
     location: "Church Main Sanctuary",
     department: "Children Ministries",
     description: "Join children from all our sister churches for a special day of joyful songs, amazing stories, fun activities, and powerful worship made just for you. It's going to be a blast!",
-    thumbnail: "https://i.pinimg.com/736x/8c/c5/67/8cc567e015621cd2e2ed35a384dbf61c.jpg",
-  },
-  {
-    id: 7,
-    title: "District Music Sabbath",
-    date: "June 21, 2025",
-    time: "8:00 AM - 5:00 PM",
-    location: "K.Sukari Church",
-    department: "Music Dept.",
-    description: "Special resurrection service celebrating Christ's victory over death with choir performances and special readings.",
-    thumbnail: "https://i.pinimg.com/736x/6e/02/66/6e026627a6dd1008e61dad40b3cf8289.jpg",
+    thumbnail: "/thumbnails/childrensabbath.jpg",
   },
   {
     id: 8,
@@ -216,7 +176,7 @@ const Events = () => {
                         src={event.thumbnail} 
                         alt={event.title} 
                         loading="lazy"
-                        className="w-full h-[15rem] object-cover"
+                        className="w-full h-[14rem] object-cover"
                       />
                       <div className="p-6">
                         <div className="flex items-start justify-between mb-2">
