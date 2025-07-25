@@ -75,6 +75,10 @@ const Footer = () => {
                 <span className="font-medium">Midweek Prayer</span>
                 <span className="text-gray-400">Wednesday 5:30 PM - 6:30 PM</span>
               </li>
+              <li className="flex flex-col">
+                <span className="font-medium">Vespers </span>
+                <span className="text-gray-400">Friday 5:30 PM - 6:30 PM</span>
+              </li>
             </ul>
           </div>
           

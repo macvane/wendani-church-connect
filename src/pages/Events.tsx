@@ -45,7 +45,7 @@ export const allEventsData = [
     date: "Aug 02, 2025",
     time: "8:00 AM - 5:00 PM",
     location: "Church Main Sactuary",
-    department: "AMR Sabbath",
+    department: "AMR Dept.",
     description: "Join us for a special Sabbath led by the Adventist Muslim Relations (AMR) department, where we'll explore paths to understanding and connection.",
     thumbnail: "https://i.pinimg.com/736x/a5/c8/2d/a5c82d61d567394a178cff6d84dfc231.jpg",
   }

@@ -77,7 +77,7 @@ const Header = () => {
           <img 
             src="/logo.png" 
             alt="Kahawa Wendani SDA Church Logo" 
-            className="h-[2rem] md:h-[4rem] object-contain"
+            className="h-[2rem] md:h-[5rem] object-contain"
           />
         </Link>
         
