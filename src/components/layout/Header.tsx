@@ -75,7 +75,7 @@ const Header = () => {
           className="flex items-center space-x-2"
         >
           <img 
-            src="/logo.png" 
+            src="/new-logo.png" 
             alt="Kahawa Wendani SDA Church Logo" 
             className="h-[2rem] md:h-[5rem] object-contain"
           />
