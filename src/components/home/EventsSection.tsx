@@ -67,7 +67,7 @@ const EventsSection = () => {
                     src={event.thumbnail} 
                     alt={event.title} 
                     loading="lazy"
-                    className="w-full h-[12rem] md:h-[17rem]  object-cover"
+                    className="w-full h-[12rem] md:h-[17rem]  object-cover object-top"
                   />
                 </div>
                 <div className="p-6 w-full flex flex-col">

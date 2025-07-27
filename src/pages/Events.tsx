@@ -48,6 +48,16 @@ export const allEventsData = [
     department: "AMR Dept.",
     description: "Join us for a special Sabbath led by the Adventist Muslim Relations (AMR) department, where we'll explore paths to understanding and connection.",
     thumbnail: "https://i.pinimg.com/736x/a5/c8/2d/a5c82d61d567394a178cff6d84dfc231.jpg",
+  },
+  {
+    id: 8,
+    title: "Ambassadors Cookery",
+    date: "July 27, 2025",
+    time: "9:00 AM - 3:00 PM",
+    location: "Church Main Sactuary",
+    department: "Ambassadors Dept.",
+    description: "Join our friendly hands-on workshop and discover the joy of creating delicious cakes, cookies, and breads from scratch.",
+    thumbnail: "/posters/cookery.jpg",
   }
 ];
 
@@ -176,7 +186,7 @@ const Events = () => {
                         src={event.thumbnail} 
                         alt={event.title} 
                         loading="lazy"
-                        className="w-full h-[14rem] object-cover"
+                        className="w-full h-[14rem] object-cover object-top"
                       />
                       <div className="p-6">
                         <div className="flex items-start justify-between mb-2">
