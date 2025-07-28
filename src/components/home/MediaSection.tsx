@@ -28,9 +28,9 @@ const MediaSection = () => {
 
   // These would be replaced with actual video IDs from the church's YouTube channel
   const sermonVideos = [
+    { id: "zHmiP1nN3TM?si=EU2u3rEeAwFRY0dc", title: "Rock Solid With God" }, 
     { id: "u_103Y7ZuHM?si=DLQjoK-G89AftwsQ", title: "The Secret of Giving and Living" }, 
     { id: "nsAcW67cu2Y?si=ZZOc2u-fc-DQc4-A&amp;start=12571", title: "Ransomed & Glorified" }, 
-    { id: "GbRx-TpWQiY?si=pmVMvM7jwcFuJkVA&amp;start=13398", title: " Make No Delay" }, 
   ];
   
   const musicVideos = [
