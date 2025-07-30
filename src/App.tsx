@@ -3,8 +3,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useState } from "react";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import React, { useState } from "react";
 import ScrollToTop from "./components/layout/ScrollToTop";
 import Index from "./pages/Index";
 import About from "./pages/About";
@@ -24,6 +24,24 @@ import Donate from "./pages/Donate";
 import MembershipTransfer from "./pages/MembershipTransfer";
 import ThankYou from "./pages/ThankYou";
 
+import ReactGA from 'react-ga4';
+
+// Initialize Google Analytics
+const GA_MEASUREMENT_ID = "G-Q3NT78RNFM"; // Replace with your Measurement ID
+ReactGA.initialize(GA_MEASUREMENT_ID);
+
+// This component will track page views
+const AnalyticsTracker = () => {
+  const location = useLocation();
+
+  React.useEffect(() => {
+    // Send a pageview event every time the location changes
+    ReactGA.send({ hitType: "pageview", page: location.pathname + location.search });
+  }, [location]);
+
+  return null;
+};
+
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
   
@@ -33,6 +51,7 @@ const App = () => {
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <AnalyticsTracker />
           <ScrollToTop />
           <Routes>
             <Route path="/" element={<Index />} />
@@ -58,5 +77,7 @@ const App = () => {
     </QueryClientProvider>
   );
 };
+
+
 
 export default App;

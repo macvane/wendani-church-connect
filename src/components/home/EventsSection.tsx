@@ -20,7 +20,6 @@ const EventsSection = () => {
       })
       .slice(0, 4); // Get only the first 4 upcoming events
       
-    console.log('Upcoming events for homepage:', upcoming);
     setUpcomingEvents(upcoming);
   }, []);
   
