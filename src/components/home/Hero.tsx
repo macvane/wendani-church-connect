@@ -4,21 +4,31 @@ import { cn } from '@/lib/utils';
 import { Link } from 'react-router-dom';
 
 const slides = [
+  
+  {
+    // YOUR NEW POSTER SLIDE
+    image: "/posters/camp.png", // <--- REPLACE WITH YOUR POSTER IMAGE PATH
+    // No title or subtitle, since the poster has the info
+    hasOverlay: true // <--- THIS WILL PREVENT THE OVERLAY
+  },
   {
     image: "/assets/hero.JPG",
     title: "Welcome to Kahawa Wendani SDA Church",
-    subtitle: "Where faith meets community"
+    subtitle: "Where faith meets community",
+    hasOverlay: true
   },
   {
     image: "https://images.unsplash.com/photo-1523803326055-9729b9e02e5a?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     title: "Join Us in Worship",
-    subtitle: "Every Sabbath at 8:00 AM"
+    subtitle: "Every Sabbath at 8:00 AM",
+    hasOverlay: true
   },
   {
     image: "https://images.unsplash.com/photo-1426604966848-d7adac402bff?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     title: "Growing in Faith Together",
-    subtitle: "Building a community of believers"
-  }
+    subtitle: "Building a community of believers",
+    hasOverlay: true
+  },
 ];
 
 const Hero = () => {
@@ -61,74 +71,80 @@ const Hero = () => {
             currentSlide === index ? "opacity-100 z-10" : "opacity-0 z-0"
           )}
         >
-          <div className="absolute inset-0 bg-black bg-opacity-50 z-10"></div>
+          {/* --- OVERLAY FIX STARTS HERE --- */}
+          {slide.hasOverlay && (
+            <div className="absolute inset-0 bg-black bg-opacity-50 z-10"></div>
+          )}
+          {/* --- OVERLAY FIX ENDS HERE --- */}
+
           <div
             className="absolute inset-0 bg-cover bg-right md:bg-center"
             style={{ backgroundImage: `url(${slide.image})` }}
           ></div>
+          
+          {/* Only show text content if the slide is supposed to have it */}
+          {(slide.title || slide.subtitle) && (
+            <div className="absolute inset-0 flex items-center z-20">
+              <div className="container mx-auto px-4">
+                <div className="max-w-3xl mx-auto text-center text-white">
+                  
+                  {index === 0 ? (
+                    // Static, non-animated content for the first slide
+                    <>
+                      <h1 className="font-bold mb-4">
+                        {slide.title}
+                      </h1>
+                      <p className="text-xl md:text-2xl mb-8">
+                        {slide.subtitle}
+                      </p>
+                      <div className="flex gap-4 justify-center">
+                        <Link to="/about" className="btn btn-primary btn-lg">
+                          Learn More
+                        </Link>
+                        <Link to="/contact" className="btn btn-outline btn-lg border-white text-white hover:bg-white hover:text-gray-900">
+                          Join Us
+                        </Link>
+                      </div>
+                    </>
+                  ) : (
+                    // Your original animated content for all other slides
+                    <>
+                      <h1
+                        className={cn(
+                          "font-bold mb-4 transition-all duration-1000 transform",
+                          currentSlide === index ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0"
+                        )}
+                      >{slide.title}</h1>
+                      <p
+                        className={cn(
+                          "text-xl md:text-2xl mb-8 transition-all duration-1000 delay-300 transform",
+                          currentSlide === index ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0"
+                        )}
+                      >{slide.subtitle}</p>
+                      <div
+                        className={cn(
+                          "flex gap-4 justify-center transition-all duration-1000 delay-500 transform",
+                          currentSlide === index ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0"
+                        )}
+                      >
+                        <Link to="/about" className="btn btn-primary btn-lg">
+                          Learn More
+                        </Link>
+                        <Link to="/contact" className="btn btn-outline btn-lg border-white text-white hover:bg-white hover:text-gray-900">
+                          Join Us
+                        </Link>
+                      </div>
+                    </>
+                  )}
 
-          <div className="absolute inset-0 flex items-center z-20">
-            <div className="container mx-auto px-4">
-              <div className="max-w-3xl mx-auto text-center text-white">
-                
-                {/* --- LCP FIX STARTS HERE --- */}
-                {index === 0 ? (
-                  // Static, non-animated content for the first slide
-                  <>
-                    <h1 className="font-bold mb-4">
-                      {slide.title}
-                    </h1>
-                    <p className="text-xl md:text-2xl mb-8">
-                      {slide.subtitle}
-                    </p>
-                    <div className="flex gap-4 justify-center">
-                      <Link to="/about" className="btn btn-primary btn-lg">
-                        Learn More
-                      </Link>
-                      <Link to="/contact" className="btn btn-outline btn-lg border-white text-white hover:bg-white hover:text-gray-900">
-                        Join Us
-                      </Link>
-                    </div>
-                  </>
-                ) : (
-                  // Your original animated content for all other slides
-                  <>
-                    <h1
-                      className={cn(
-                        "font-bold mb-4 transition-all duration-1000 transform",
-                        currentSlide === index ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0"
-                      )}
-                    >{slide.title}</h1>
-                    <p
-                      className={cn(
-                        "text-xl md:text-2xl mb-8 transition-all duration-1000 delay-300 transform",
-                        currentSlide === index ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0"
-                      )}
-                    >{slide.subtitle}</p>
-                    <div
-                      className={cn(
-                        "flex gap-4 justify-center transition-all duration-1000 delay-500 transform",
-                        currentSlide === index ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0"
-                      )}
-                    >
-                      <Link to="/about" className="btn btn-primary btn-lg">
-                        Learn More
-                      </Link>
-                      <Link to="/contact" className="btn btn-outline btn-lg border-white text-white hover:bg-white hover:text-gray-900">
-                        Join Us
-                      </Link>
-                    </div>
-                  </>
-                )}
-                 {/* --- LCP FIX ENDS HERE --- */}
-
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       ))}
 
-      {/* Navigation Arrows - EXACTLY AS YOU PROVIDED */}
+      {/* Navigation Arrows */}
       <button 
         onClick={goToPrevSlide}
         className="absolute left-4 top-1/2 -translate-y-1/2 z-30 bg-black bg-opacity-30 text-white p-2 rounded-full hover:bg-opacity-50 transition-colors"
@@ -144,7 +160,7 @@ const Hero = () => {
         <ChevronRight size={24} />
       </button>
       
-      {/* Slide Indicators - EXACTLY AS YOU PROVIDED */}
+      {/* Slide Indicators */}
       <div className="absolute bottom-8 left-0 right-0 z-30 flex justify-center gap-2">
         {slides.map((_, index) => (
           <button
