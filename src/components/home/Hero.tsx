@@ -7,7 +7,7 @@ const slides = [
   
   {
     // YOUR NEW POSTER SLIDE
-    image: "/posters/camp.png", // <--- REPLACE WITH YOUR POSTER IMAGE PATH
+    image: "/posters/camp1.jpg", // <--- REPLACE WITH YOUR POSTER IMAGE PATH
     // No title or subtitle, since the poster has the info
     hasOverlay: true // <--- THIS WILL PREVENT THE OVERLAY
   },
