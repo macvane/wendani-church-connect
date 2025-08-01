@@ -5,12 +5,12 @@ import { Link } from 'react-router-dom';
 
 const slides = [
   
-  {
+  
     // YOUR NEW POSTER SLIDE
-    image: "/posters/camp1.jpg", // <--- REPLACE WITH YOUR POSTER IMAGE PATH
+    // image: "/posters/camp1.jpg", // <--- REPLACE WITH YOUR POSTER IMAGE PATH
     // No title or subtitle, since the poster has the info
-    hasOverlay: true // <--- THIS WILL PREVENT THE OVERLAY
-  },
+    // hasOverlay: true // <--- THIS WILL PREVENT THE OVERLAY
+  
   {
     image: "/assets/hero.JPG",
     title: "Welcome to Kahawa Wendani SDA Church",
@@ -78,7 +78,7 @@ const Hero = () => {
           {/* --- OVERLAY FIX ENDS HERE --- */}
 
           <div
-            className="absolute inset-0 bg-cover bg-right md:bg-center"
+            className="absolute inset-0 bg-cover bg-center"
             style={{ backgroundImage: `url(${slide.image})` }}
           ></div>
           
