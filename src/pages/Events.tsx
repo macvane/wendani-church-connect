@@ -10,7 +10,7 @@ import { Helmet } from 'react-helmet-async';
 // Create a shared events data structure for the whole application
 export const allEventsData = [
   {
-    id: 4,
+    id: 1,
     title: "Evangelism Sabbath",
     date: "July 12, 2025",
     time: "8:00 AM - 5:00 PM",
@@ -20,7 +20,7 @@ export const allEventsData = [
     thumbnail: "https://i.pinimg.com/736x/30/06/a6/3006a6eaf3e2e72edc43068cde53ab94.jpg",
   },
   {
-    id: 5,
+    id: 2,
     title: "Stewardship Sabbath",
     date: "July 19, 2025",
     time: "8:00 AM - 5:00 PM",
@@ -30,7 +30,7 @@ export const allEventsData = [
     thumbnail: "/posters/stewardship.jpg",
   },
   {
-    id: 6,
+    id: 3,
     title: "District Children Ministry Sabbath",
     date: "July 26, 2025",
     time: "8:00 AM - 5:00 PM",
@@ -40,17 +40,17 @@ export const allEventsData = [
     thumbnail: "/thumbnails/childrensabbath.jpg",
   },
   {
-    id: 8,
+    id: 4,
     title: "AMR Sabbath",
     date: "Aug 02, 2025",
     time: "8:00 AM - 5:00 PM",
     location: "Church Main Sactuary",
     department: "AMR Dept.",
     description: "Join us for a special Sabbath led by the Adventist Muslim Relations (AMR) department, where we'll explore paths to understanding and connection.",
-    thumbnail: "https://i.pinimg.com/736x/a5/c8/2d/a5c82d61d567394a178cff6d84dfc231.jpg",
+    thumbnail: "/posters/amr.jpg",
   },
   {
-    id: 8,
+    id: 5,
     title: "Ambassadors Cookery",
     date: "July 27, 2025",
     time: "9:00 AM - 3:00 PM",
@@ -58,6 +58,16 @@ export const allEventsData = [
     department: "Ambassadors Dept.",
     description: "Join our friendly hands-on workshop and discover the joy of creating delicious cakes, cookies, and breads from scratch.",
     thumbnail: "/posters/cookery.jpg",
+  },
+  {
+    id: 5,
+    title: "Camp Meeting 2025",
+    date: "Aug 10, 2025",
+    time: "8:00 AM - 5:00 PM",
+    location: "Church Main Sactuary",
+    department: "Camp Meeting",
+    description: "Mark your calendars! Our 2025 Camp Meeting will take place from 10th to 16th August 2025. ",
+    thumbnail: "/posters/camp.jpg",
   }
 ];
 
@@ -186,7 +196,7 @@ const Events = () => {
                         src={event.thumbnail} 
                         alt={event.title} 
                         loading="lazy"
-                        className="w-full h-[14rem] object-cover object-top"
+                        className="w-full h-[14rem] object-cover object-center"
                       />
                       <div className="p-6">
                         <div className="flex items-start justify-between mb-2">
