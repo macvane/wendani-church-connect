@@ -8,16 +8,16 @@ import { Helmet } from 'react-helmet-async';
 
 // Sample documents data with view URLs
 const downloads = [
-  // {
-  //   id: 1,
-  //   title: "Camp Meeting 2025 Booklet",
-  //   description: "Explore the full schedule, speakers, and events in the official Camp Meeting 2025 program booklet.",
-  //   date: "Aug 06, 2025",
-  //   type: "PDF",
-  //   fileSize: "1.4 MB",
-  //   url: "https://kahawawendanisda.org/camp%20meeting%202025%20booklet.pdf", 
-  //   viewUrl: "https://kahawawendanisda.org/camp%20meeting%202025%20booklet.pdf",
-  // },
+  {
+    id: 1,
+    title: "Camp Meeting 2025 Booklet",
+    description: "Explore the full schedule, speakers, and events in the official Camp Meeting 2025 program booklet.",
+    date: "Aug 06, 2025",
+    type: "PDF",
+    fileSize: "1.4 MB",
+    url: "https://kahawawendanisda.org/campmeeting2025booklet.pdf", 
+    viewUrl: "https://kahawawendanisda.org/campmeeting2025booklet.pdf",
+  },
   {
     id: 2,
     title: "Weekly Church Announcements",
