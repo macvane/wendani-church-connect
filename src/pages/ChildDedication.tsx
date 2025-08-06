@@ -180,7 +180,7 @@ const ChildDedication = () => {
                           required
                           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                         >
-                          <option value="">Select Gender</option>
+                          <option value="" disabled>Select Gender</option>
                           <option value="male">Male</option>
                           <option value="female">Female</option>
                         </select>
@@ -209,7 +209,7 @@ const ChildDedication = () => {
                       
                       <div>
                         <label htmlFor="fatherEmail" className="block font-medium mb-1 text-gray-700">
-                          Email Address 
+                          Email Address <span className='font-light text-gray-400 text-sm'>(Optional)</span>
                         </label>
                         <input 
                           type="email" 
@@ -261,7 +261,7 @@ const ChildDedication = () => {
                       
                       <div>
                         <label htmlFor="motherEmail" className="block font-medium mb-1 text-gray-700">
-                          Email Address 
+                          Email Address <span className='font-light text-gray-400 text-sm'>(Optional)</span>
                         </label>
                         <input 
                           type="email" 
@@ -297,7 +297,7 @@ const ChildDedication = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="md:col-span-2">
                         <label htmlFor="additionalInfo" className="block font-medium mb-1 text-gray-700">
-                          Additional Information
+                          Additional Information <span className='font-light text-gray-400 text-sm'>(Optional)</span>
                         </label>
                         <textarea 
                           id="additionalInfo" 

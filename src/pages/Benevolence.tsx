@@ -330,23 +330,22 @@ const Benevolence = () => {
                   <div>
                     <h3 className="text-lg font-bold mb-4 border-b border-gray-200 pb-2">Request Details</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="md:col-span-2">
+                      {/* <div className="md:col-span-2">
                         <label htmlFor="reason" className="block font-medium mb-1 text-gray-700">
                           Reason for Request <span className="text-red-500">*</span>
                         </label>
                         <textarea 
                           id="reason" 
                           name="reason"
-                          required
                           rows={4}
                           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                           placeholder="Please explain your situation and the reason for your request..."
                         ></textarea>
-                      </div>
+                      </div> */}
                       
                       <div className="md:col-span-2">
                         <label htmlFor="additionalInfo" className="block font-medium mb-1 text-gray-700">
-                          Additional Information
+                          Additional Information <span className='text-sm'>(Optional)</span>
                         </label>
                         <textarea 
                           id="additionalInfo" 

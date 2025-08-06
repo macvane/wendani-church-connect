@@ -175,7 +175,7 @@ const Prayer = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label htmlFor="name" className="block font-medium mb-1 text-gray-700">
-                        Your Name 
+                        Your Name <span className='font-light text-gray-400 text-sm'>(Optional)</span>
                       </label>
                       <input 
                         type="text" 
@@ -190,7 +190,7 @@ const Prayer = () => {
                     
                     <div>
                       <label htmlFor="email" className="block font-medium mb-1 text-gray-700">
-                        Email Address 
+                        Email Address <span className='font-light text-gray-400 text-sm'>(Optional)</span>
                       </label>
                       <input 
                         type="email" 
@@ -206,7 +206,7 @@ const Prayer = () => {
                   
                   <div>
                     <label htmlFor="phone" className="block font-medium mb-1 text-gray-700">
-                      Phone Number
+                      Phone Number <span className='font-light text-gray-400 text-sm'>(Optional)</span>
                     </label>
                     <input 
                       type="tel" 
@@ -257,7 +257,7 @@ const Prayer = () => {
                     ></textarea>
                   </div>
                   
-                  <div className="flex items-center">
+                  {/* <div className="flex items-center">
                     <input 
                       type="checkbox" 
                       id="isConfidential" 
@@ -269,7 +269,7 @@ const Prayer = () => {
                     <label htmlFor="isConfidential" className="ml-2 block text-gray-700">
                       Keep this request confidential (only prayer team leaders will see it)
                     </label>
-                  </div>
+                  </div> */}
                   
                   <div className="flex justify-center pt-4">
                     <button 
