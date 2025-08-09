@@ -51,6 +51,16 @@ export const allEventsData = [
   },
   {
     id: 5,
+    title: "Normal Sabbath",
+    date: "Aug 09, 2025",
+    time: "8:00 AM - 5:00 PM",
+    location: "Church Main Sactuary",
+    department: "Sabbath",
+    description: "Join us for a special Sabbath themed: Gracious Invitation. Feel most welcomed!",
+    thumbnail: "/posters/normal.jpg",
+  },
+  {
+    id: 6,
     title: "Ambassadors Cookery",
     date: "July 27, 2025",
     time: "9:00 AM - 3:00 PM",
@@ -60,7 +70,7 @@ export const allEventsData = [
     thumbnail: "/posters/cookery.jpg",
   },
   {
-    id: 5,
+    id: 7,
     title: "Camp Meeting 2025",
     date: "Aug 10, 2025",
     time: "8:00 AM - 5:00 PM",
