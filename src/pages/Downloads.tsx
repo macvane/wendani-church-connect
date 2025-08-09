@@ -25,8 +25,8 @@ const downloads = [
     date: "Aug 09, 2025",
     type: "PDF",
     fileSize: "73.3 KB",
-    url: "https://kahawawendanisda.org/announcements/9thAugBulletin.pdf", 
-    viewUrl: "https://kahawawendanisda.org/announcements/9thAugBulletin.pdf",
+    url: "https://kahawawendanisda.org/announcements/9thAugBulletin1.pdf", 
+    viewUrl: "https://kahawawendanisda.org/announcements/9thAugBulletin1.pdf",
   },
   {
     id: 3,
