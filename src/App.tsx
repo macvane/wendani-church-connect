@@ -24,23 +24,9 @@ import Donate from "./pages/Donate";
 import MembershipTransfer from "./pages/MembershipTransfer";
 import ThankYou from "./pages/ThankYou";
 
-import ReactGA from 'react-ga4';
 
-// Initialize Google Analytics
-const GA_MEASUREMENT_ID = "G-Q3NT78RNFM"; // Replace with your Measurement ID
-ReactGA.initialize(GA_MEASUREMENT_ID);
 
-// This component will track page views
-const AnalyticsTracker = () => {
-  const location = useLocation();
 
-  React.useEffect(() => {
-    // Send a pageview event every time the location changes
-    ReactGA.send({ hitType: "pageview", page: location.pathname + location.search });
-  }, [location]);
-
-  return null;
-};
 
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
@@ -51,7 +37,6 @@ const App = () => {
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <AnalyticsTracker />
           <ScrollToTop />
           <Routes>
             <Route path="/" element={<Index />} />
