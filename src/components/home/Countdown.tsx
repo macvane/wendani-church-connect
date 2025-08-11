@@ -55,7 +55,7 @@ const Countdown = () => {
         </div>
 
         <div className="flex justify-center items-center space-x-4 md:space-x-8">
-          {timerComponents.length ? timerComponents : <span className="text-2xl md:text-4xl font-bold text-center">The camp meeting has begun!</span>}
+          {timerComponents.length ? timerComponents : <div className="text-2xl md:text-4xl font-bold text-center flex flex-col justify-center items-center space-y-2"><p>The camp meeting has begun!</p></div>}
         </div>
       </div>
     </section>
