@@ -72,7 +72,7 @@ export const allEventsData = [
   {
     id: 7,
     title: "Camp Meeting 2025",
-    date: "Aug 10, 2025",
+    date: "Aug 16, 2025",
     time: "8:00 AM - 5:00 PM",
     location: "Church Main Sactuary",
     department: "Camp Meeting",
