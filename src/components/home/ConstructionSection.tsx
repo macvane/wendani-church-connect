@@ -18,7 +18,7 @@ const ConstructionSection = () => {
     {
       title: "Land Acquisition",
       date: "August 2023",
-      description: "We successfully acquired 2 acres of land in a prime location for our new church building.",
+      description: "We successfully acquired 1/2 acre of land in a prime location for our new church building.",
       image: "https://images.unsplash.com/photo-1501854140801-50d01698950b?q=80&w=1200",
       completed: true
     },
@@ -38,9 +38,9 @@ const ConstructionSection = () => {
     },
     {
       title: "Foundation Work",
-      date: "Planned: June 2024",
-      description: "Site clearing and foundation work will begin, setting the structural base for our new church.",
-      image: "https://images.unsplash.com/photo-1496307653780-42ee777d4833?q=80&w=1200",
+      date: "August 2025",
+      description: "Site clearing and foundation work has begun, setting the structural base for our new church.",
+      image: "/assets/dev.jpeg",
       completed: false
     }
   ];
@@ -51,7 +51,7 @@ const ConstructionSection = () => {
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-church-800 bg-opacity-85 z-10"></div>
         <img 
-          src="https://images.unsplash.com/photo-1501854140801-50d01698950b?q=80&w=2600"
+          src="/assets/image (45).jpg"
           alt="Church Construction"
           loading="lazy"
           className="w-full h-full object-cover"
@@ -80,6 +80,7 @@ const ConstructionSection = () => {
                           <img 
                             src={milestone.image} 
                             alt={milestone.title} 
+                            loading='lazy'
                             className="w-full h-full object-cover"
                           />
                           {milestone.completed && (
@@ -122,10 +123,10 @@ const ConstructionSection = () => {
                 <div>
                   <div className="flex justify-between mb-1 text-sm font-medium">
                     <span>Foundation</span>
-                    <span>0%</span>
+                    <span>3%</span>
                   </div>
                   <div className="w-full bg-gray-300 rounded-full h-2">
-                    <div className="bg-church-500 h-2 rounded-full" style={{ width: '0%' }}></div>
+                    <div className="bg-church-500 h-2 rounded-full" style={{ width: '3%' }}></div>
                   </div>
                 </div>
                 
