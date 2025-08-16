@@ -179,9 +179,6 @@ const Events = () => {
           </div>
         </section>
         
-        {/* Countdown Timer */}
-        <CountdownTimer />
-        
         {/* Events Tabs */}
         <section className="section bg-white">
           <div className="container">
