@@ -51,7 +51,6 @@ const Index = () => {
       <Header />
       <main>
         <Hero />
-        <Countdown />
         <AboutSection />
         <BaptismSection />
         <EventsSection />
