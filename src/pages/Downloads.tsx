@@ -10,23 +10,13 @@ import { Helmet } from 'react-helmet-async';
 const downloads = [
   {
     id: 1,
-    title: "Camp Meeting 2025 Booklet",
-    description: "Explore the full schedule, speakers, and events in the official Camp Meeting 2025 program booklet.",
-    date: "Aug 06, 2025",
-    type: "PDF",
-    fileSize: "1.4 MB",
-    url: "https://kahawawendanisda.org/campmeeting2025booklet.pdf", 
-    viewUrl: "https://kahawawendanisda.org/campmeeting2025booklet.pdf",
-  },
-  {
-    id: 2,
     title: "Weekly Church Announcements",
     description: "The most recent bulletin with announcements, upcoming events, and church activities.",
-    date: "Aug 16, 2025",
+    date: "Aug 30, 2025",
     type: "PDF",
     fileSize: "73.3 KB",
-    url: "https://kahawawendanisda.org/announcements/16thAugustANNOUNCEMENTS.pdf", 
-    viewUrl: "https://kahawawendanisda.org/announcements/16thAugustANNOUNCEMENTS.pdf",
+    url: "https://kahawawendanisda.org/announcements/30thAugustANNOUNCEMENTS.pdf", 
+    viewUrl: "https://kahawawendanisda.org/announcements/30thAugustANNOUNCEMENTS.pdf",
   },
   {
     id: 3,
