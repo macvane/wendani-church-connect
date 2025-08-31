@@ -1,5 +1,6 @@
 
 import React, { useRef } from 'react';
+import WistiaEmbed from './ContructionPromo';
 import { Link } from 'react-router-dom';
 import {
   Carousel,
@@ -105,72 +106,10 @@ const ConstructionSection = () => {
           </Carousel>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-          <div className="animate-on-scroll">
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
-              <h3 className="text-2xl font-bold mb-4">Our Progress So Far</h3>
-              <div className="space-y-4">
-                <div>
-                  <div className="flex justify-between mb-1 text-sm font-medium">
-                    <span>Land Acquisition</span>
-                    <span>100%</span>
-                  </div>
-                  <div className="w-full bg-gray-300 rounded-full h-2">
-                    <div className="bg-church-500 h-2 rounded-full" style={{ width: '100%' }}></div>
-                  </div>
-                </div>
-                
-                <div>
-                  <div className="flex justify-between mb-1 text-sm font-medium">
-                    <span>Foundation</span>
-                    <span>3%</span>
-                  </div>
-                  <div className="w-full bg-gray-300 rounded-full h-2">
-                    <div className="bg-church-500 h-2 rounded-full" style={{ width: '3%' }}></div>
-                  </div>
-                </div>
-                
-                <div>
-                  <div className="flex justify-between mb-1 text-sm font-medium">
-                    <span>Structural Work</span>
-                    <span>0%</span>
-                  </div>
-                  <div className="w-full bg-gray-300 rounded-full h-2">
-                    <div className="bg-church-500 h-2 rounded-full" style={{ width: '0%' }}></div>
-                  </div>
-                </div>
-                
-                <div>
-                  <div className="flex justify-between mb-1 text-sm font-medium">
-                    <span>Interior & Finishes</span>
-                    <span>0%</span>
-                  </div>
-                  <div className="w-full bg-gray-300 rounded-full h-2">
-                    <div className="bg-church-500 h-2 rounded-full" style={{ width: '0%' }}></div>
-                  </div>
-                </div>
-                
-                <div>
-                  <div className="flex justify-between mb-1 text-sm font-medium">
-                    <span>Overall Completion</span>
-                    <span>0%</span>
-                  </div>
-                  <div className="w-full bg-gray-300 rounded-full h-2">
-                    <div className="bg-church-500 h-2 rounded-full" style={{ width: '0%' }}></div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="mt-6">
-                <div className="flex justify-between mb-2">
-                  <span className="font-medium">Funds Raised:</span>
-                  <span className="font-medium">KES 8,500,000</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-medium">Target:</span>
-                  <span className="font-medium">KES 100,000,000</span>
-                </div>
-              </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 ">
+          <div className="animate-on-scroll animate-delay-2">
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20 w-full ">
+              <WistiaEmbed />
             </div>
           </div>
           
