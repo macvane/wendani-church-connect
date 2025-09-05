@@ -38,7 +38,17 @@ export const allEventsData = [
     location: "K.Sukari SDA Church",
     department: "Family Life",
     description: "Celebrate Family Life Sabbath with us. A full day of fellowship, worship, and programs designed to strengthen families in Christ. ",
-    thumbnail: "/placeholder.svg",
+    thumbnail: "https://i.pinimg.com/736x/89/40/71/894071be5f8a81c0728ea1fc2deedcad.jpg",
+  },
+  {
+    id: 3,
+    title: "Holy Communion Sabbath",
+    date: "Sep 27, 2025",
+    time: "8:00 AM - 5:00 PM",
+    location: "Church Main Sactuary",
+    department: "Deaconary",
+    description: "Join us for Holy Communion Sabbath a sacred day of worship, reflection, and renewal as we share in the Lord’s Supper.",
+    thumbnail: "https://i.pinimg.com/736x/34/ba/24/34ba24065590465282be3d9cabd3ed50.jpg",
   },
 ];
 

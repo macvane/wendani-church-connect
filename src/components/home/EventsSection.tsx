@@ -18,7 +18,7 @@ const EventsSection = () => {
         const dateB = new Date(b.date.split('-')[0]);
         return dateA.getTime() - dateB.getTime();
       })
-      .slice(0, 4); // Get only the first 4 upcoming events
+      .slice(0, 2); // Get only the first 4 upcoming events
       
     setUpcomingEvents(upcoming);
   }, []);
@@ -61,20 +61,20 @@ const EventsSection = () => {
                 className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col"
                 style={{animationDelay: `${index * 0.1 + 0.2}s`}}
               >
-                <div className="w-full ">
+                <div className="w-full h-[12rem] md:h-[17rem] relative">
                   <img 
                     src={event.thumbnail} 
                     alt={event.title} 
                     loading="lazy"
-                    className="w-full h-[12rem] md:h-[17rem]  object-cover object-top"
+                    className="w-full h-full object-cover object-top"
                   />
+                  <div className="absolute top-4 right-4 bg-church-600 text-white text-xs px-2 py-1 rounded">
+                    {event.department}
+                  </div>
                 </div>
                 <div className="p-6 w-full flex flex-col">
                   <div className="flex items-start justify-between mb-2">
                     <h3 className="font-bold text-xl">{event.title}</h3>
-                    <span className="bg-church-600 text-white text-xs px-2 py-1 rounded">
-                      {event.department}
-                    </span>
                   </div>
                   <div className="flex items-center text-gray-600 mb-2">
                     <Calendar size={16} className="mr-2" />
