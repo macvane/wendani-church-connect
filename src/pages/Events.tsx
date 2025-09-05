@@ -28,7 +28,7 @@ export const allEventsData = [
     location: "Church Main Sactuary",
     department: "AYM",
     description: "Join us for a spirit-filled Sabbath of music and worship with our Youth Choir. Be uplifted by inspiring hymns and heartfelt praise. ",
-    thumbnail: "/posters/aym.jpg",
+    thumbnail: "/posters/aymsabbath.jpg",
   },
   {
     id: 2,
