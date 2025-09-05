@@ -12,66 +12,6 @@ import { Helmet } from 'react-helmet-async';
 export const allEventsData = [
   {
     id: 1,
-    title: "Evangelism Sabbath",
-    date: "July 12, 2025",
-    time: "8:00 AM - 5:00 PM",
-    location: "Church Main Sanctuary",
-    department: "Evangelism Dpt.",
-    description: "Community health expo offering free health screenings, nutrition information, exercise demonstrations, and health lectures.",
-    thumbnail: "https://i.pinimg.com/736x/30/06/a6/3006a6eaf3e2e72edc43068cde53ab94.jpg",
-  },
-  {
-    id: 2,
-    title: "Stewardship Sabbath",
-    date: "July 19, 2025",
-    time: "8:00 AM - 5:00 PM",
-    location: "Church Main Sanctuary",
-    department: "Stewardship Dpt.",
-    description: "Get ready for a delicious experience! The Stewardship department invites you to a special Stewardship Sabbath",
-    thumbnail: "/posters/stewardship.jpg",
-  },
-  {
-    id: 3,
-    title: "District Children Ministry Sabbath",
-    date: "July 26, 2025",
-    time: "8:00 AM - 5:00 PM",
-    location: "Church Main Sanctuary",
-    department: "Children Ministries",
-    description: "Join children from all our sister churches for a special day of joyful songs, amazing stories, fun activities, and powerful worship made just for you. It's going to be a blast!",
-    thumbnail: "/thumbnails/childrensabbath.jpg",
-  },
-  {
-    id: 4,
-    title: "AMR Sabbath",
-    date: "Aug 02, 2025",
-    time: "8:00 AM - 5:00 PM",
-    location: "Church Main Sactuary",
-    department: "AMR Dept.",
-    description: "Join us for a special Sabbath led by the Adventist Muslim Relations (AMR) department, where we'll explore paths to understanding and connection.",
-    thumbnail: "/posters/amr.jpg",
-  },
-  {
-    id: 5,
-    title: "Normal Sabbath",
-    date: "Aug 09, 2025",
-    time: "8:00 AM - 5:00 PM",
-    location: "Church Main Sactuary",
-    department: "Sabbath",
-    description: "Join us for a special Sabbath themed: Gracious Invitation. Feel most welcomed!",
-    thumbnail: "/posters/normal.jpg",
-  },
-  {
-    id: 6,
-    title: "Ambassadors Cookery",
-    date: "July 27, 2025",
-    time: "9:00 AM - 3:00 PM",
-    location: "Church Main Sactuary",
-    department: "Ambassadors Dept.",
-    description: "Join our friendly hands-on workshop and discover the joy of creating delicious cakes, cookies, and breads from scratch.",
-    thumbnail: "/posters/cookery.jpg",
-  },
-  {
-    id: 7,
     title: "Camp Meeting 2025",
     date: "Aug 16, 2025",
     time: "8:00 AM - 5:00 PM",
@@ -79,7 +19,27 @@ export const allEventsData = [
     department: "Camp Meeting",
     description: "Mark your calendars! Our 2025 Camp Meeting will take place from 10th to 16th August 2025. ",
     thumbnail: "/posters/camp.jpg",
-  }
+  },
+  {
+    id: 2,
+    title: "Youth Choir Sabbath & Hymn Inspiration",
+    date: "Sep 06, 2025",
+    time: "8:00 AM - 5:00 PM",
+    location: "Church Main Sactuary",
+    department: "AYM",
+    description: "Join us for a spirit-filled Sabbath of music and worship with our Youth Choir. Be uplifted by inspiring hymns and heartfelt praise. ",
+    thumbnail: "/posters/aym.jpg",
+  },
+  {
+    id: 2,
+    title: "District Family Life Sabbath",
+    date: "Sep 13, 2025",
+    time: "8:00 AM - 5:00 PM",
+    location: "K.Sukari SDA Church",
+    department: "Family Life",
+    description: "Celebrate Family Life Sabbath with us. A full day of fellowship, worship, and programs designed to strengthen families in Christ. ",
+    thumbnail: "/placeholder.svg",
+  },
 ];
 
 interface Event {
@@ -203,18 +163,21 @@ const Events = () => {
                       className="bg-white rounded-lg shadow-md overflow-hidden "
                       style={{animationDelay: `${index * 0.1}s`}}
                     >
-                      <img 
-                        src={event.thumbnail} 
-                        alt={event.title} 
-                        loading="lazy"
-                        className="w-full h-[14rem] object-cover object-center"
-                      />
+                      <div className='h-[14rem] relative '>
+                        <img 
+                          src={event.thumbnail} 
+                          alt={event.title} 
+                          loading="lazy"
+                          className="w-full h-full object-cover object-top"
+                        />
+                        <div className="absolute top-2 right-2 bg-church-600 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
+                          {event.department}
+                        </div>
+                      </div>
                       <div className="p-6">
                         <div className="flex items-start justify-between mb-2">
                           <h3 className="font-bold text-xl">{event.title}</h3>
-                          <span className="bg-church-600 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
-                            {event.department}
-                          </span>
+                          
                         </div>
                         
                         <div className="flex items-center text-gray-600 mb-2">
