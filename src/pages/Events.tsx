@@ -22,7 +22,7 @@ export const allEventsData = [
   },
   {
     id: 2,
-    title: "Youth Choir Sabbath & Hymn Inspiration",
+    title: "Youth Sabbath | Choir Day & Music Concert",
     date: "Sep 06, 2025",
     time: "8:00 AM - 5:00 PM",
     location: "Church Main Sactuary",
@@ -38,7 +38,7 @@ export const allEventsData = [
     location: "K.Sukari SDA Church",
     department: "Family Life",
     description: "Celebrate Family Life Sabbath with us. A full day of fellowship, worship, and programs designed to strengthen families in Christ. ",
-    thumbnail: "https://i.pinimg.com/736x/89/40/71/894071be5f8a81c0728ea1fc2deedcad.jpg",
+    thumbnail: "/posters/familylife.jpg",
   },
   {
     id: 3,

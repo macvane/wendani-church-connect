@@ -19,7 +19,7 @@ const downloads = [
     viewUrl: "https://kahawawendanisda.org/announcements/30thAugustANNOUNCEMENTS.pdf",
   },
   {
-    id: 1,
+    id: 2,
     title: "Church Website Guide",
     description: "This manual walks you through every feature, ensuring you stay connected, supported, and spiritually nourished.",
     date: "Sep 05, 2025",
@@ -29,7 +29,7 @@ const downloads = [
     viewUrl: "https://kahawawendanisda.org/guide/ChurchWebsiteGuide.pdf",
   },
   {
-    id: 3,
+    id: 4,
     title: "Church Manual",
     description: "The official church constitution and bylaws that govern our church operations.",
     date: "January 15, 2024",
