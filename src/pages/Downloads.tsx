@@ -19,14 +19,14 @@ const downloads = [
     viewUrl: "https://kahawawendanisda.org/announcements/announcements6thSep2025.pdf",
   },
   {
-    id: 4,
+    id: 2,
     title: "Family Togetherness Week Of Prayer",
     description: "Access the official booklet for Family Togetherness Week of Prayer, featuring daily readings, messages, and spiritual resources to guide families in worship and growth.",
     date: "Sep 06, 2025",
     type: "PDF",
     fileSize: "235 MB",
-    url: "https://kahawawendanisda.org/downloads/AFM_2025FTWOP-Gods_Great_Gifts-ENGLISH.pdf", 
-    viewUrl: "https://kahawawendanisda.org/downloads/AFM_2025FTWOP-Gods_Great_Gifts-ENGLISH.pdf",
+    url: "https://kahawawendanisda.org/resources/AFM_2025FTWOP-Gods_Great_Gifts-ENGLISH.pdf", 
+    viewUrl: "https://kahawawendanisda.org/resources/AFM_2025FTWOP-Gods_Great_Gifts-ENGLISH.pdf",
   },
   {
     id: 2,
@@ -159,7 +159,7 @@ const Downloads = () => {
                         <span className="mx-2">•</span>
                         <span>Size: {material.fileSize}</span>
                       </div>
-                      <div className="flex flex-col md:flex-row gap-2">
+                      <div className="flex gap-2">
                         <button
                           onClick={() => window.open(material.viewUrl)}
                           className="flex items-center justify-center flex-1 py-2 px-3 bg-church-500 text-white rounded-md hover:bg-church-600 transition-colors text-sm"
@@ -218,7 +218,7 @@ const Downloads = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="mt-auto pt-4 border-t border-gray-100 flex flex-col md:flex-row gap-2">
+                    <div className="mt-auto pt-4 border-t border-gray-100 flex gap-2">
                       <button
                         onClick={() => window.open(item.viewUrl)}
                         className="flex items-center justify-center w-1/2 py-2 bg-church-500 text-white rounded-md hover:bg-church-600 transition-colors"
