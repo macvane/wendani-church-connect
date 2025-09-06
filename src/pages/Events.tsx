@@ -31,7 +31,17 @@ export const allEventsData = [
     thumbnail: "/posters/aymsabbath.jpg",
   },
   {
-    id: 2,
+    id: 3,
+    title: "District Family Life Week Of Prayer",
+    date: "Sep 07 - 13, 2025",
+    time: "5:30 PM - 7:00 PM",
+    location: "Church Main Sactuary",
+    department: "Family Life",
+    description: "Join us for District Family Life Week of Prayer. Experience uplifting worship, inspiring messages, and meaningful programs designed to nurture and strengthen families in Christ.",
+    thumbnail: "/posters/familylife.jpg",
+  },
+  {
+    id: 4,
     title: "District Family Life Sabbath",
     date: "Sep 13, 2025",
     time: "8:00 AM - 5:00 PM",
@@ -41,7 +51,7 @@ export const allEventsData = [
     thumbnail: "/posters/familylife.jpg",
   },
   {
-    id: 3,
+    id: 5,
     title: "Holy Communion Sabbath",
     date: "Sep 27, 2025",
     time: "8:00 AM - 5:00 PM",
