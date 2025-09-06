@@ -19,7 +19,7 @@ const downloads = [
     viewUrl: "https://kahawawendanisda.org/announcements/announcements6thSep2025.pdf",
   },
   {
-    id: 2,
+    id: 4,
     title: "Family Togetherness Week Of Prayer",
     description: "Access the official booklet for Family Togetherness Week of Prayer, featuring daily readings, messages, and spiritual resources to guide families in worship and growth.",
     date: "Sep 06, 2025",
