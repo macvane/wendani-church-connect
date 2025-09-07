@@ -38,7 +38,7 @@ export const allEventsData = [
     location: "Church Main Sactuary",
     department: "Family Life",
     description: "Join us for District Family Life Week of Prayer. Experience uplifting worship, inspiring messages, and meaningful programs designed to nurture and strengthen families in Christ.",
-    thumbnail: "/posters/familylife.jpg",
+    thumbnail: "/posters/togetherness.jpg",
   },
   {
     id: 4,
@@ -48,7 +48,7 @@ export const allEventsData = [
     location: "K.Sukari SDA Church",
     department: "Family Life",
     description: "Celebrate Family Life Sabbath with us. A full day of fellowship, worship, and programs designed to strengthen families in Christ. ",
-    thumbnail: "/posters/familylife.jpg",
+    thumbnail: "/posters/togetherness.jpg",
   },
   {
     id: 5,
