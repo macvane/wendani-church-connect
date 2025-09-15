@@ -28,9 +28,9 @@ const MediaSection = () => {
 
   // These would be replaced with actual video IDs from the church's YouTube channel
   const sermonVideos = [
+    { id: "iYN3uHIR6qs", title: "I Will Go With My Family" }, 
+    { id: "ZkxoLb-rJOg", title: "No Uniform, No Singing" },
     { id: "x-ot9xGKkZ0?si=1GAeoe3aMwNoqmDK", title: "Lost But Not Forgotten" }, 
-    { id: "zHmiP1nN3TM?si=EU2u3rEeAwFRY0dc", title: "Rock Solid With God" }, 
-    { id: "u_103Y7ZuHM?si=DLQjoK-G89AftwsQ", title: "The Secret of Giving and Living" }, 
   ];
   
   const musicVideos = [
