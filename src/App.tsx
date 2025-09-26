@@ -23,6 +23,14 @@ import NotFound from "./pages/NotFound";
 import Donate from "./pages/Donate";
 import MembershipTransfer from "./pages/MembershipTransfer";
 import ThankYou from "./pages/ThankYou";
+import AdminLogin from "./pages/admin/AdminLogin";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import DashboardOverview from "./pages/admin/DashboardOverview";
+import PrayersPage from "./pages/admin/PrayersPage";
+import BlogManagementPage from "./pages/admin/BlogManagementPage";
+import AnnouncementsPage from "./pages/admin/AnnouncementsPage";
+import EventsPage from "./pages/admin/EventsPage";
+import ContactsPage from "./pages/admin/ContactsPage";
 
 
 
@@ -55,6 +63,15 @@ const App = () => {
             <Route path="/donate" element={<Donate />} />
             <Route path="/membership-transfer" element={<MembershipTransfer />} />
             <Route path="/thank-you" element={<ThankYou />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin/dashboard" element={<AdminDashboard />}>
+              <Route index element={<DashboardOverview />} />
+              <Route path="prayers" element={<PrayersPage />} />
+              <Route path="blogs" element={<BlogManagementPage />} />
+              <Route path="announcements" element={<AnnouncementsPage />} />
+              <Route path="events" element={<EventsPage />} />
+              <Route path="contacts" element={<ContactsPage />} />
+            </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
