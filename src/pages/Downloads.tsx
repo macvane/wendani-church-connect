@@ -15,7 +15,7 @@ const downloads = [
     date: "Oct 04, 2025",
     type: "PDF",
     fileSize: "73.3 KB",
-    url: "https://kahawa+wendanisda.org/announcements/CHURCHANNOUNCEMENTS4THOCT.pdf", 
+    url: "https://kahawawendanisda.org/announcements/CHURCHANNOUNCEMENTS4THOCT.pdf", 
     viewUrl: "https://kahawawendanisda.org/announcements/CHURCHANNOUNCEMENTS4THOCT.pdf",
   },
   {
