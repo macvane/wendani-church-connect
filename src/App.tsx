@@ -31,6 +31,10 @@ import BlogManagementPage from "./pages/admin/BlogManagementPage";
 import AnnouncementsPage from "./pages/admin/AnnouncementsPage";
 import EventsPage from "./pages/admin/EventsPage";
 import ContactsPage from "./pages/admin/ContactsPage";
+import BaptismRequestsPage from "./pages/admin/BaptismRequestsPage";
+import DedicationsPage from "./pages/admin/DedicationsPage";
+import MembershipTransfersPage from "./pages/admin/MembershipTransfersPage";
+import BenevolencePage from "./pages/admin/BenevolencePage";
 
 
 
@@ -67,6 +71,10 @@ const App = () => {
             <Route path="/admin/dashboard" element={<AdminDashboard />}>
               <Route index element={<DashboardOverview />} />
               <Route path="prayers" element={<PrayersPage />} />
+              <Route path="baptisms" element={<BaptismRequestsPage />} />
+              <Route path="dedications" element={<DedicationsPage />} />
+              <Route path="memberships" element={<MembershipTransfersPage />} />
+              <Route path="benevolence" element={<BenevolencePage />} />
               <Route path="blogs" element={<BlogManagementPage />} />
               <Route path="announcements" element={<AnnouncementsPage />} />
               <Route path="events" element={<EventsPage />} />
