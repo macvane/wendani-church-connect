@@ -21,6 +21,16 @@ export const allEventsData = [
     thumbnail: "/posters/camp.jpg",
   },
   {
+    id: 1,
+    title: "Development Sabbath",
+    date: "Oct 04, 2025",
+    time: "8:00 AM - 5:00 PM",
+    location: "Church Main Sactuary",
+    department: "Development Dpt.",
+    description: "Mark your calendars! Our Development Sabbath will take place on 4th October 2025. ",
+    thumbnail: "/posters/development.png",
+  },
+  {
     id: 2,
     title: "Youth Sabbath | Choir Day & Music Concert",
     date: "Sep 06, 2025",
