@@ -15,8 +15,8 @@ const downloads = [
     date: "Sep 20, 2025",
     type: "PDF",
     fileSize: "73.3 KB",
-    url: "https://kahawawendanisda.org/announcements/CHURCHANNOUNCEMENT20THSEPTEMBER.pdf", 
-    viewUrl: "https://kahawawendanisda.org/announcements/CHURCHANNOUNCEMENT20THSEPTEMBER.pdf",
+    url: "https://kahawawendanisda.org/announcements/Announcements11THOct2025.pptx", 
+    viewUrl: "https://kahawawendanisda.org/announcements/Announcements11THOct2025.pptx",
   },
   {
     id: 2,
