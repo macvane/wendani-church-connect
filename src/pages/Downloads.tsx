@@ -12,7 +12,7 @@ const downloads = [
     id: 1,
     title: "Weekly Church Announcements",
     description: "The most recent bulletin with announcements, upcoming events, and church activities.",
-    date: "Sep 20, 2025",
+    date: "Oct 11, 2025",
     type: "PDF",
     fileSize: "73.3 KB",
     url: "https://kahawawendanisda.org/announcements/Announcements11THOct2025.pptx", 
