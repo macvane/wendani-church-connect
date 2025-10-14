@@ -37,7 +37,7 @@ import MembershipTransfersPage from "./pages/admin/MembershipTransfersPage";
 import BenevolencePage from "./pages/admin/BenevolencePage";
 import UsersPage from "./pages/admin/UsersPage";
 
-
+import ProtectedRoute from "./pages/admin/ProtectedRoute";
 
 
 
@@ -69,18 +69,21 @@ const App = () => {
             <Route path="/membership-transfer" element={<MembershipTransfer />} />
             <Route path="/thank-you" element={<ThankYou />} />
             <Route path="/admin/login" element={<AdminLogin />} />
-            <Route path="/admin/dashboard" element={<AdminDashboard />}>
-              <Route index element={<DashboardOverview />} />
-              <Route path="prayers" element={<PrayersPage />} />
-              <Route path="baptisms" element={<BaptismRequestsPage />} />
-              <Route path="dedications" element={<DedicationsPage />} />
-              <Route path="memberships" element={<MembershipTransfersPage />} />
-              <Route path="benevolence" element={<BenevolencePage />} />
-              <Route path="blogs" element={<BlogManagementPage />} />
-              <Route path="announcements" element={<AnnouncementsPage />} />
-              <Route path="events" element={<EventsPage />} />
-              <Route path="contacts" element={<ContactsPage />} />
-              <Route path="users" element={<UsersPage />} />
+            <Route path="/unauthorized" element={<div>Access Denied</div>} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="/admin/dashboard" element={<AdminDashboard />}>
+                <Route index element={<DashboardOverview />} />
+                <Route path="prayers" element={<PrayersPage />} />
+                <Route path="baptisms" element={<BaptismRequestsPage />} />
+                <Route path="dedications" element={<DedicationsPage />} />
+                <Route path="memberships" element={<MembershipTransfersPage />} />
+                <Route path="benevolence" element={<BenevolencePage />} />
+                <Route path="blogs" element={<BlogManagementPage />} />
+                <Route path="announcements" element={<AnnouncementsPage />} />
+                <Route path="events" element={<EventsPage />} />
+                <Route path="contacts" element={<ContactsPage />} />
+                <Route path="users" element={<UsersPage />} />
+              </Route>
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>

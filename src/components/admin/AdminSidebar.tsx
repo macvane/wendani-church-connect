@@ -110,8 +110,8 @@ export function AdminSidebar() {
             </div>
             {state !== 'collapsed' && (
               <div>
-                <h2 className="text-lg font-serif font-bold">Church Admin</h2>
-                <p className="text-xs text-muted-foreground">Dashboard</p>
+                <h2 className="text-lg font-serif font-bold">Church Portal</h2>
+                <p className="text-xs text-muted-foreground">Portal</p>
               </div>
             )}
           </div>

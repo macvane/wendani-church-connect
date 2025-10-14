@@ -9,8 +9,8 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const isLoggedIn = localStorage.getItem('isAdminLoggedIn');
-    if (!isLoggedIn) {
+    const user = localStorage.getItem('user');
+    if (!user) {
       navigate('/admin/login');
     }
   }, [navigate]);
