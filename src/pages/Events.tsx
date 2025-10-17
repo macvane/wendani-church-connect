@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { isDatePassed } from '@/utils/dateUtils';
 import { Helmet } from 'react-helmet-async';
 
+
 // Create a shared events data structure for the whole application
 export const allEventsData = [
   {

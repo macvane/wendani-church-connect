@@ -148,7 +148,7 @@ const BaptismRequestsPage = () => {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>#</TableHead>
+                    <TableHead>No.</TableHead>
                     <TableHead>Name</TableHead>
                     <TableHead>Email</TableHead>
                     <TableHead>Phone</TableHead>
@@ -163,7 +163,7 @@ const BaptismRequestsPage = () => {
                     <TableRow key={req.id}>
                       <TableCell>{index + 1}</TableCell>
                       <TableCell>{req.full_name}</TableCell>
-                      <TableCell>{req.email || '—'}</TableCell>
+                      <TableCell>{req.email || 'null'}</TableCell>
                       <TableCell>{req.phone_number}</TableCell>
                       <TableCell>{format(new Date(req.date_of_birth), 'MMM d, yyyy')}</TableCell>
                       <TableCell>{req.is_study ? 'Yes' : 'No'}</TableCell>

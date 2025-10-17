@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
@@ -7,13 +8,14 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
-import { dummyEvents } from '@/data/adminData';
-import { Search, Calendar, Eye, Edit, Trash2, Plus, Users, Upload, ImagePlus } from 'lucide-react';
+import { Search, Calendar, Eye, Edit, Trash2, Plus, Upload, Users } from 'lucide-react';
 import { format } from 'date-fns';
 
+const BASE_URL = 'http://127.0.0.1:8000/form'; // adjust to your Django API base URL
+
 const EventsPage = () => {
+  const [events, setEvents] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
@@ -23,72 +25,124 @@ const EventsPage = () => {
     venue: '',
     date: '',
     time: '',
-    capacity: '',
+    department: '',
     image: null as File | null,
   });
+  const [loading, setLoading] = useState(false);
 
-  const filteredEvents = dummyEvents.filter((event) => {
-    const matchesSearch = event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         event.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         event.organizer.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || event.status === statusFilter;
-    return matchesSearch && matchesStatus;
-  });
-
-  const handleCreateEvent = () => {
-    console.log('Creating event:', formData);
-    setIsCreateOpen(false);
-    setFormData({ title: '', description: '', venue: '', date: '', time: '', capacity: '', image: null });
+  // Fetch all events
+  const fetchEvents = async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}/events/list/`);
+      setEvents(res.data);
+    } catch (err) {
+      console.error('Error fetching events:', err);
+    }
   };
 
-  const handleEditEvent = () => {
-    console.log('Updating event:', selectedEvent.id, formData);
-    setIsEditOpen(false);
-    setFormData({ title: '', description: '', venue: '', date: '', time: '', capacity: '', image: null });
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
+  // Handle create
+  const handleCreateEvent = async () => {
+    const token = localStorage.getItem('access');
+    const form = new FormData();
+    Object.entries(formData).forEach(([key, value]) => {
+      if (value) form.append(key, value as any);
+    });
+
+    try {
+      setLoading(true);
+      await axios.post(`${BASE_URL}/events/`, form, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      setIsCreateOpen(false);
+      fetchEvents();
+      setFormData({ title: '', description: '', venue: '', date: '', time: '', department: '', image: null });
+    } catch (err) {
+      console.error('Error creating event:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
+  // Handle edit
+  const handleEditEvent = async () => {
+    const token = localStorage.getItem('access');
+    const form = new FormData();
+    form.append('id', selectedEvent.id);
+    Object.entries(formData).forEach(([key, value]) => {
+      if (value) form.append(key, value as any);
+    });
+
+    try {
+      setLoading(true);
+      await axios.put(`${BASE_URL}/events/`, form, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      setIsEditOpen(false);
+      fetchEvents();
+    } catch (err) {
+      console.error('Error updating event:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle delete
+  const handleDeleteEvent = async (id: number) => {
+    if (!confirm('Are you sure you want to delete this event?')) return;
+    const token = localStorage.getItem('access');
+    try {
+      await axios.delete(`${BASE_URL}/events/`, {
+        headers: { Authorization: `Bearer ${token}` },
+        data: { id },
+      });
+      fetchEvents();
+    } catch (err) {
+      console.error('Error deleting event:', err);
+    }
+  };
+
+  // Open Edit Dialog
   const openEditDialog = (event: any) => {
     setSelectedEvent(event);
     setFormData({
       title: event.title,
       description: event.description,
-      venue: event.location,
+      venue: event.venue,
       date: event.date,
       time: event.time,
-      capacity: event.capacity.toString(),
+      department: event.department,
       image: null,
     });
     setIsEditOpen(true);
   };
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'published':
-        return <Badge variant="secondary" className="bg-green-100 text-green-800">Published</Badge>;
-      case 'draft':
-        return <Badge variant="secondary" className="bg-gray-100 text-gray-800">Draft</Badge>;
-      case 'cancelled':
-        return <Badge variant="secondary" className="bg-red-100 text-red-800">Cancelled</Badge>;
-      default:
-        return <Badge variant="secondary">{status}</Badge>;
-    }
-  };
+  // Filter events
+  const filteredEvents = events.filter((event) =>
+    event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    event.description.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-serif font-bold mb-2">Events Management</h1>
-        <p className="text-muted-foreground">
-          Create, manage, and track church events and registrations.
-        </p>
+        <p className="text-muted-foreground">Create, manage, and update church events.</p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Events Management</CardTitle>
-          <CardDescription>
-            Organize church events, track registrations, and manage event details.
-          </CardDescription>
+          <CardTitle>Manage Events</CardTitle>
+          <CardDescription>Upload and organize upcoming church events.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col sm:flex-row gap-4 mb-6">
@@ -101,106 +155,63 @@ const EventsPage = () => {
                 className="pl-10"
               />
             </div>
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-3 py-2 border rounded-md bg-background"
-            >
-              <option value="all">All Status</option>
-              <option value="published">Published</option>
-              <option value="draft">Draft</option>
-              <option value="cancelled">Cancelled</option>
-            </select>
             <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
               <DialogTrigger asChild>
                 <Button>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Create Event
+                  <Plus className="w-4 h-4 mr-2" /> Create Event
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                   <DialogTitle>Create New Event</DialogTitle>
-                  <DialogDescription>
-                    Add event details including image, venue, date, and time.
-                  </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
-                  <div className="grid gap-2">
-                    <Label htmlFor="title">Event Title</Label>
-                    <Input
-                      id="title"
-                      value={formData.title}
-                      onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                      placeholder="Enter event title"
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="description">Description</Label>
-                    <Textarea
-                      id="description"
-                      value={formData.description}
-                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                      placeholder="Enter event description"
-                      rows={3}
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="venue">Venue</Label>
-                    <Input
-                      id="venue"
-                      value={formData.venue}
-                      onChange={(e) => setFormData({ ...formData, venue: e.target.value })}
-                      placeholder="Enter venue location"
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="grid gap-2">
-                      <Label htmlFor="date">Date</Label>
-                      <Input
-                        id="date"
-                        type="date"
-                        value={formData.date}
-                        onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                      />
+                  {['title', 'description', 'venue', 'date', 'time', 'department'].map((field) => (
+                    <div key={field} className="grid gap-2">
+                      <Label htmlFor={field}>{field.charAt(0).toUpperCase() + field.slice(1)}</Label>
+                      {field === 'description' ? (
+                        <Textarea
+                          id={field}
+                          value={(formData as any)[field]}
+                          onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
+                        />
+                      ) : field === 'department' ? (
+                        <select
+                          value={formData.department}
+                          onChange={(e) => setFormData({ ...formData, department: e.target.value })}
+                          className="border rounded-md px-3 py-2"
+                        >
+                          <option value="">Select Department</option>
+                          <option value="AYS">Youth Ministries</option>
+                          <option value="FL">Family Life</option>
+                          <option value="MUS">Music</option>
+                        </select>
+                      ) : (
+                        <Input
+                          id={field}
+                          type={field === 'date' ? 'date' : field === 'time' ? 'time' : 'text'}
+                          value={(formData as any)[field]}
+                          onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
+                        />
+                      )}
                     </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="time">Time</Label>
-                      <Input
-                        id="time"
-                        type="time"
-                        value={formData.time}
-                        onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-                      />
-                    </div>
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="capacity">Capacity</Label>
-                    <Input
-                      id="capacity"
-                      type="number"
-                      value={formData.capacity}
-                      onChange={(e) => setFormData({ ...formData, capacity: e.target.value })}
-                      placeholder="Maximum attendees"
-                    />
-                  </div>
+                  ))}
                   <div className="grid gap-2">
                     <Label htmlFor="image">Event Image</Label>
                     <Input
                       id="image"
                       type="file"
                       accept="image/*"
-                      onChange={(e) => setFormData({ ...formData, image: e.target.files?.[0] || null })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, image: e.target.files?.[0] || null })
+                      }
                     />
                   </div>
                 </div>
                 <DialogFooter>
-                  <Button variant="outline" onClick={() => setIsCreateOpen(false)}>
-                    Cancel
-                  </Button>
-                  <Button onClick={handleCreateEvent}>
-                    <Upload className="w-4 h-4 mr-2" />
-                    Create Event
+                  <Button variant="outline" onClick={() => setIsCreateOpen(false)}>Cancel</Button>
+                  <Button onClick={handleCreateEvent} disabled={loading}>
+                    <Upload className="w-4 h-4 mr-2" /> {loading ? 'Creating...' : 'Create Event'}
                   </Button>
                 </DialogFooter>
               </DialogContent>
@@ -211,45 +222,31 @@ const EventsPage = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Event Title</TableHead>
-                  <TableHead>Date & Time</TableHead>
-                  <TableHead>Location</TableHead>
-                  <TableHead>Organizer</TableHead>
-                  <TableHead>Registrations</TableHead>
-                  <TableHead>Status</TableHead>
+                  <TableHead>#</TableHead>
+                  <TableHead>Title</TableHead>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Venue</TableHead>
+                  <TableHead>Department</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredEvents.map((event) => (
+                {filteredEvents.map((event, index) => (
                   <TableRow key={event.id}>
-                    <TableCell className="font-medium">{event.title}</TableCell>
-                    <TableCell>
-                      <div className="text-sm">
-                        <div>{format(new Date(event.date), 'MMM d, yyyy')}</div>
-                        <div className="text-muted-foreground">{event.time}</div>
-                      </div>
-                    </TableCell>
-                    <TableCell>{event.location}</TableCell>
-                    <TableCell>{event.organizer}</TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-1">
-                        <Users className="w-4 h-4" />
-                        <span>{event.registrations}/{event.capacity}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>{getStatusBadge(event.status)}</TableCell>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{event.title}</TableCell>
+                    <TableCell>{format(new Date(event.date), 'MMM d, yyyy')}</TableCell>
+                    <TableCell>{event.venue}</TableCell>
+                    <TableCell>{event.department}</TableCell>
                     <TableCell>
                       <div className="flex gap-2">
-                        <Button variant="outline" size="sm">
-                          <Eye className="w-4 h-4 mr-1" />
-                          View
+                        <Button variant="outline" size="sm" onClick={() => alert(`Event ID: ${event.id}`)}>
+                          <Eye className="w-4 h-4 mr-1" /> View
                         </Button>
                         <Button variant="outline" size="sm" onClick={() => openEditDialog(event)}>
-                          <Edit className="w-4 h-4 mr-1" />
-                          Edit
+                          <Edit className="w-4 h-4 mr-1" /> Edit
                         </Button>
-                        <Button variant="destructive" size="sm">
+                        <Button variant="destructive" size="sm" onClick={() => handleDeleteEvent(event.id)}>
                           <Trash2 className="w-4 h-4" />
                         </Button>
                       </div>
@@ -259,104 +256,8 @@ const EventsPage = () => {
               </TableBody>
             </Table>
           </div>
-
-          {filteredEvents.length === 0 && (
-            <div className="text-center py-8 text-muted-foreground">
-              No events found matching your criteria.
-            </div>
-          )}
         </CardContent>
       </Card>
-
-      <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
-        <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>Edit Event</DialogTitle>
-            <DialogDescription>
-              Update event details including image, venue, date, and time.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid gap-2">
-              <Label htmlFor="edit-title">Event Title</Label>
-              <Input
-                id="edit-title"
-                value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                placeholder="Enter event title"
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="edit-description">Description</Label>
-              <Textarea
-                id="edit-description"
-                value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                placeholder="Enter event description"
-                rows={3}
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="edit-venue">Venue</Label>
-              <Input
-                id="edit-venue"
-                value={formData.venue}
-                onChange={(e) => setFormData({ ...formData, venue: e.target.value })}
-                placeholder="Enter venue location"
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="edit-date">Date</Label>
-                <Input
-                  id="edit-date"
-                  type="date"
-                  value={formData.date}
-                  onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="edit-time">Time</Label>
-                <Input
-                  id="edit-time"
-                  type="time"
-                  value={formData.time}
-                  onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-                />
-              </div>
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="edit-capacity">Capacity</Label>
-              <Input
-                id="edit-capacity"
-                type="number"
-                value={formData.capacity}
-                onChange={(e) => setFormData({ ...formData, capacity: e.target.value })}
-                placeholder="Maximum attendees"
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="edit-image">Event Image - Optional</Label>
-              <Input
-                id="edit-image"
-                type="file"
-                accept="image/*"
-                onChange={(e) => setFormData({ ...formData, image: e.target.files?.[0] || null })}
-              />
-              <p className="text-sm text-muted-foreground">Leave empty to keep current image</p>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsEditOpen(false)}>
-              Cancel
-            </Button>
-            <Button onClick={handleEditEvent}>
-              <Edit className="w-4 h-4 mr-2" />
-              Update Event
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };
