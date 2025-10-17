@@ -10,6 +10,7 @@ import Index from "./pages/Index";
 import About from "./pages/About";
 import Media from "./pages/Media";
 import Events from "./pages/Events";
+import EventDetail from "./pages/EventDetail";
 import Prayer from "./pages/Prayer";
 import Contact from "./pages/Contact";
 import Downloads from "./pages/Downloads";
@@ -56,6 +57,7 @@ const App = () => {
             <Route path="/about" element={<About />} />
             <Route path="/media" element={<Media />} />
             <Route path="/events" element={<Events />} />
+            <Route path="/events/:slug" element={<EventDetail />} />
             <Route path="/prayer" element={<Prayer />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/downloads" element={<Downloads />} />

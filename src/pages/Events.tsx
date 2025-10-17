@@ -7,12 +7,14 @@ import { Calendar, MapPin, Clock } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { isDatePassed } from '@/utils/dateUtils';
 import { Helmet } from 'react-helmet-async';
+import { Link } from 'react-router-dom';
 
 // Create a shared events data structure for the whole application
 export const allEventsData = [
   {
     id: 1,
     title: "Development Sabbath",
+    slug: "development-sabbath",
     date: "Oct 04, 2025",
     time: "8:00 AM - 5:00 PM",
     location: "Church Main Sactuary",
@@ -25,6 +27,7 @@ export const allEventsData = [
   {
   id: 2,
   title: "ADVENTURERS’ FAMILY CAMP OUT",
+  slug: "adventurers-family-camp-out",
   date: "Nov 11 – 16, 2025",
   time: "8:00 AM - 5:00 PM",
   location: "KAMITI HOSTEL GROUNDS",
@@ -35,6 +38,7 @@ export const allEventsData = [
 {
   id: 5,
   title: "DISTRICT AYS SABBATH",
+  slug: "district-ays-sabbath",
   date: "Nov 22, 2025",
   time: "8:00 AM - 5:00 PM",
   location: "Kahawa Sukari SDA Church",
@@ -47,6 +51,7 @@ export const allEventsData = [
   {
   id: 3,
   title: "ANNUAL PATHFINDER FAIR",
+  slug: "annual-pathfinder-fair",
   date: "Nov 23, 2025",
   time: "8:00 AM - 5:00 PM",
   location: "RIVERSIDE BURUBURU",
@@ -58,6 +63,7 @@ export const allEventsData = [
   {
   id: 4,
   title: "PATHFINDER CAMPOUT",
+  slug: "pathfinder-campout",
   date: "Dec 9 – 14, 2025",
   time: "8:00 AM - 5:00 PM",
   location: "NYAHURURU ADVENTIST PRIMARY SCHOOL",
@@ -68,6 +74,7 @@ export const allEventsData = [
 {
   id: 6,
   title: "DISTRICT AYS YOUTH MISSION/CRUSADE",
+  slug: "district-ays-youth-mission-crusade",
   date: "Dec 14 – 27, 2025",
   time: "8:00 AM - 5:00 PM",
   location: "Mukurweini, Nyeri County",
@@ -81,6 +88,7 @@ export const allEventsData = [
 interface Event {
   id: number;
   title: string;
+  slug: string;
   date: string;
   time: string;
   location: string;
@@ -230,15 +238,17 @@ const Events = () => {
                           <span>{event.location}</span>
                         </div>
                         
-                        <p className="text-gray-700 mb-4 line-clamp-">
+                        <p className="text-gray-700 mb-4 line-clamp-2">
                           {event.description}
                         </p>
                         
-                        {/* <div className="flex justify-end">
-                          <button className="text-church-600 font-medium hover:text-church-800 transition-colors">
+                        <div className="flex justify-end">
+                          <Link to={`/events/${event.slug}`}>
+                            <button className="text-church-600 font-medium hover:text-church-800 transition-colors">
                             View Details →
                           </button>
-                        </div> */}
+                          </Link>
+                        </div>
                       </div>
                     </div>
                   ))}
