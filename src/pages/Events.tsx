@@ -82,6 +82,17 @@ export const allEventsData = [
   description: "The District AYS Youth Mission/Crusade will run from 14th to 27th December 2025 in Mukurweini, Nyeri County. Let’s remember our youths in prayer as they prepare, and all are encouraged to plan and participate.",
   thumbnail: "https://i.pinimg.com/736x/18/77/57/1877571d94437db2b3e59ff7b2a0e657.jpg",
 },
+{
+  id: 7,
+  title: "CHURCH CHOIR SABBATH",
+  slug: "church-choir-sabbath",
+  date: "Oct 25, 2025",
+  time: "8:00 AM - 5:00 PM",
+  location: "Main Sanctuary",
+  department: "Ays Dept.",
+  description: "Join us for a powerful Sabbath filled with uplifting music and heartfelt worship! Multiple invited choirs will minister through song, celebrating God’s grace and inspiring the church family. Our guest speaker, Pr. Robert Nyarandi, will share a special message centered on the theme “Grace That Saves.” Experience praise, fellowship, and a deeper connection with God through music and the Word. Don’t miss this unforgettable worship experience!",
+  thumbnail: "/posters/choir sabbath 25 oct.jpg",
+},
 
 ];
 
@@ -172,6 +183,7 @@ const Events = () => {
             <img 
               src="/assets/image (47).jpg" 
               alt="Church Events" 
+              
               className="w-full h-full object-cover"
             />
           </div>
@@ -200,7 +212,7 @@ const Events = () => {
               </div>
               
               <TabsContent value="upcoming">
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {upcomingEvents.map((event, index) => (
                     <div 
                       key={event.id}
