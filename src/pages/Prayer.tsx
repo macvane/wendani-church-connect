@@ -3,18 +3,15 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { useToast } from '@/hooks/use-toast';
 import { Helmet } from 'react-helmet-async';
-// The sendToGoogleSheet import is no longer needed
-// import { sendToGoogleSheet } from '@/utils/googleSheets';
+import { prayerAPI } from '@/utils/api';
 
 const Prayer = () => {
-  const apiKey = import.meta.env.VITE_WEB3FORMS_PRAYER_REQUEST_API_KEY;
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
-    requestType: 'personal',
+    requestType: 'personal request',
     prayerRequest: '',
-    isConfidential: false,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
@@ -45,69 +42,42 @@ const Prayer = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
   
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, checked } = e.target;
-    setFormData(prev => ({ ...prev, [name]: checked }));
-  };
-  
-  // --- This is the updated handleSubmit function ---
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    // 1. Prevent the default browser redirect
     e.preventDefault();
     setIsSubmitting(true);
 
-    // 2. Prepare the data for Web3Forms
-    const submissionData = {
-      ...formData,
-      access_key: apiKey,
-      subject: "New Prayer Request from Website",
-    };
-
     try {
-      // 3. Send the data using fetch
-      const response = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(submissionData),
+      const response = await prayerAPI.create({
+        full_name: formData.name || undefined,
+        email: formData.email || undefined,
+        phone_number: formData.phone || undefined,
+        prayer_type: formData.requestType,
+        prayer_request: formData.prayerRequest,
       });
 
-      const result = await response.json();
-
-      if (result.success) {
-        // 4. On success, show a toast message
+      if (response.ok) {
         toast({
           title: "Prayer Request Submitted",
           description: "Thank you for sharing your prayer request. Our prayer team will be praying for you.",
         });
         
-        // 5. KEY STEP: Reset the form fields to their initial state
         setFormData({
           name: '',
           email: '',
           phone: '',
-          requestType: 'personal',
+          requestType: 'personal request',
           prayerRequest: '',
-          isConfidential: false,
         });
-
       } else {
-        // Handle submission errors from Web3Forms
-        console.error("Web3Forms submission error:", result);
-        throw new Error(result.message || "Submission failed.");
+        throw new Error("Submission failed");
       }
-
     } catch (error) {
-      console.error("Error submitting prayer request:", error);
       toast({
         title: "Submission Failed",
         description: "There was a problem submitting your prayer request. Please try again.",
         variant: "destructive",
       });
     } finally {
-      // 6. Re-enable the submit button
       setIsSubmitting(false);
     }
   };
@@ -231,11 +201,10 @@ const Prayer = () => {
                       required
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                     >
-                      <option value="personal">Personal Request</option>
-                      <option value="family">Family Request</option>
-                      <option value="health">Health & Healing</option>
-                      <option value="financial">Financial Need</option>
-                      <option value="guidance">Guidance & Direction</option>
+                      <option value="personal request">Personal Request</option>
+                      <option value="family request">Family Request</option>
+                      <option value="health & healing">Health & Healing</option>
+                      <option value="guidance & direction">Guidance & Direction</option>
                       <option value="thanksgiving">Thanksgiving</option>
                       <option value="other">Other</option>
                     </select>

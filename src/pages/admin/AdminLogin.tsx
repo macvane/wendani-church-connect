@@ -19,18 +19,36 @@ const AdminLogin = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Dummy login - accept admin@church.com / admin123
-    if (email === 'admin@church.com' && password === 'admin123') {
-      localStorage.setItem('isAdminLoggedIn', 'true');
-      toast({
-        title: "Login Successful",
-        description: "Welcome to the admin dashboard!",
+    try {
+      const response = await fetch('https://macvane.pythonanywhere.com/api/token/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
       });
-      navigate('/admin/dashboard');
-    } else {
+
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem('access_token', data.access);
+        localStorage.setItem('refresh_token', data.refresh);
+        localStorage.setItem('isAdminLoggedIn', 'true');
+        
+        toast({
+          title: "Login Successful",
+          description: "Welcome to the admin dashboard!",
+        });
+        navigate('/admin/dashboard');
+      } else {
+        const error = await response.json();
+        toast({
+          title: "Login Failed",
+          description: error.detail || "Invalid credentials. Please try again.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
       toast({
         title: "Login Failed",
-        description: "Invalid credentials. Use admin@church.com / admin123",
+        description: "Unable to connect to server. Please try again later.",
         variant: "destructive",
       });
     }
@@ -93,11 +111,6 @@ const AdminLogin = () => {
               {isLoading ? 'Signing in...' : 'Sign In'}
             </Button>
           </form>
-          <div className="mt-4 p-3 bg-muted rounded-md text-sm text-muted-foreground">
-            <p className="font-medium">Demo Credentials:</p>
-            <p>Email: admin@church.com</p>
-            <p>Password: admin123</p>
-          </div>
         </CardContent>
       </Card>
     </div>
