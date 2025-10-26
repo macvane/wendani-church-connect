@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
@@ -7,71 +7,177 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
-import { dummyEvents } from '@/data/adminData';
-import { Search, Calendar, Eye, Edit, Trash2, Plus, Users, Upload, ImagePlus } from 'lucide-react';
+import { Search, Calendar, Eye, Edit, Trash2, Plus, ImagePlus } from 'lucide-react';
 import { format } from 'date-fns';
+import { eventAPI } from '@/utils/api';
+import { useToast } from '@/hooks/use-toast';
+
+interface Event {
+  id: number;
+  title: string;
+  description: string;
+  venue: string;
+  date: string;
+  time: string;
+  image: string;
+  created_at: string;
+}
 
 const EventsPage = () => {
+  const [events, setEvents] = useState<Event[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState<any>(null);
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     venue: '',
     date: '',
     time: '',
-    capacity: '',
     image: null as File | null,
   });
+  const { toast } = useToast();
 
-  const filteredEvents = dummyEvents.filter((event) => {
-    const matchesSearch = event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         event.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         event.organizer.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || event.status === statusFilter;
-    return matchesSearch && matchesStatus;
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
+  const fetchEvents = async () => {
+    try {
+      const response = await eventAPI.list();
+      if (response.ok) {
+        const data = await response.json();
+        setEvents(data);
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to fetch events",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filteredEvents = events.filter((event) => {
+    return event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+           event.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+           event.venue.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
-  const handleCreateEvent = () => {
-    console.log('Creating event:', formData);
-    setIsCreateOpen(false);
-    setFormData({ title: '', description: '', venue: '', date: '', time: '', capacity: '', image: null });
+  const handleCreateEvent = async () => {
+    if (!formData.title || !formData.description || !formData.venue || !formData.date || !formData.time || !formData.image) {
+      toast({
+        title: "Error",
+        description: "Please fill in all fields",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const data = new FormData();
+    data.append('title', formData.title);
+    data.append('description', formData.description);
+    data.append('venue', formData.venue);
+    data.append('date', formData.date);
+    data.append('time', formData.time);
+    data.append('image', formData.image);
+
+    try {
+      const response = await eventAPI.create(data);
+      if (response.ok) {
+        toast({
+          title: "Success",
+          description: "Event created successfully",
+        });
+        fetchEvents();
+        setIsCreateOpen(false);
+        setFormData({ title: '', description: '', venue: '', date: '', time: '', image: null });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to create event",
+        variant: "destructive",
+      });
+    }
   };
 
-  const handleEditEvent = () => {
-    console.log('Updating event:', selectedEvent.id, formData);
-    setIsEditOpen(false);
-    setFormData({ title: '', description: '', venue: '', date: '', time: '', capacity: '', image: null });
+  const handleEditEvent = async () => {
+    if (!selectedEvent || !formData.title || !formData.description || !formData.venue || !formData.date || !formData.time) {
+      toast({
+        title: "Error",
+        description: "Please fill in all required fields",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const data = new FormData();
+    data.append('title', formData.title);
+    data.append('description', formData.description);
+    data.append('venue', formData.venue);
+    data.append('date', formData.date);
+    data.append('time', formData.time);
+    if (formData.image) {
+      data.append('image', formData.image);
+    }
+
+    try {
+      const response = await eventAPI.update(selectedEvent.id, data);
+      if (response.ok) {
+        toast({
+          title: "Success",
+          description: "Event updated successfully",
+        });
+        fetchEvents();
+        setIsEditOpen(false);
+        setFormData({ title: '', description: '', venue: '', date: '', time: '', image: null });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to update event",
+        variant: "destructive",
+      });
+    }
   };
 
-  const openEditDialog = (event: any) => {
+  const handleDelete = async (id: number) => {
+    if (!confirm('Are you sure you want to delete this event?')) return;
+
+    try {
+      const response = await eventAPI.delete(id);
+      if (response.ok) {
+        toast({
+          title: "Success",
+          description: "Event deleted successfully",
+        });
+        fetchEvents();
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to delete event",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const openEditDialog = (event: Event) => {
     setSelectedEvent(event);
     setFormData({
       title: event.title,
       description: event.description,
-      venue: event.location,
+      venue: event.venue,
       date: event.date,
       time: event.time,
-      capacity: event.capacity.toString(),
       image: null,
     });
     setIsEditOpen(true);
-  };
-
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'published':
-        return <Badge variant="secondary" className="bg-green-100 text-green-800">Published</Badge>;
-      case 'draft':
-        return <Badge variant="secondary" className="bg-gray-100 text-gray-800">Draft</Badge>;
-      case 'cancelled':
-        return <Badge variant="secondary" className="bg-red-100 text-red-800">Cancelled</Badge>;
-      default:
-        return <Badge variant="secondary">{status}</Badge>;
-    }
   };
 
   return (
@@ -101,16 +207,6 @@ const EventsPage = () => {
                 className="pl-10"
               />
             </div>
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-3 py-2 border rounded-md bg-background"
-            >
-              <option value="all">All Status</option>
-              <option value="published">Published</option>
-              <option value="draft">Draft</option>
-              <option value="cancelled">Cancelled</option>
-            </select>
             <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
               <DialogTrigger asChild>
                 <Button>
@@ -175,16 +271,6 @@ const EventsPage = () => {
                     </div>
                   </div>
                   <div className="grid gap-2">
-                    <Label htmlFor="capacity">Capacity</Label>
-                    <Input
-                      id="capacity"
-                      type="number"
-                      value={formData.capacity}
-                      onChange={(e) => setFormData({ ...formData, capacity: e.target.value })}
-                      placeholder="Maximum attendees"
-                    />
-                  </div>
-                  <div className="grid gap-2">
                     <Label htmlFor="image">Event Image</Label>
                     <Input
                       id="image"
@@ -199,7 +285,7 @@ const EventsPage = () => {
                     Cancel
                   </Button>
                   <Button onClick={handleCreateEvent}>
-                    <Upload className="w-4 h-4 mr-2" />
+                    <ImagePlus className="w-4 h-4 mr-2" />
                     Create Event
                   </Button>
                 </DialogFooter>
@@ -214,57 +300,58 @@ const EventsPage = () => {
                   <TableHead>Event Title</TableHead>
                   <TableHead>Date & Time</TableHead>
                   <TableHead>Location</TableHead>
-                  <TableHead>Organizer</TableHead>
-                  <TableHead>Registrations</TableHead>
-                  <TableHead>Status</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredEvents.map((event) => (
-                  <TableRow key={event.id}>
-                    <TableCell className="font-medium">{event.title}</TableCell>
-                    <TableCell>
-                      <div className="text-sm">
-                        <div>{format(new Date(event.date), 'MMM d, yyyy')}</div>
-                        <div className="text-muted-foreground">{event.time}</div>
-                      </div>
-                    </TableCell>
-                    <TableCell>{event.location}</TableCell>
-                    <TableCell>{event.organizer}</TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-1">
-                        <Users className="w-4 h-4" />
-                        <span>{event.registrations}/{event.capacity}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>{getStatusBadge(event.status)}</TableCell>
-                    <TableCell>
-                      <div className="flex gap-2">
-                        <Button variant="outline" size="sm">
-                          <Eye className="w-4 h-4 mr-1" />
-                          View
-                        </Button>
-                        <Button variant="outline" size="sm" onClick={() => openEditDialog(event)}>
-                          <Edit className="w-4 h-4 mr-1" />
-                          Edit
-                        </Button>
-                        <Button variant="destructive" size="sm">
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </div>
+                {loading ? (
+                  <TableRow>
+                    <TableCell colSpan={4} className="text-center py-8">
+                      Loading...
                     </TableCell>
                   </TableRow>
-                ))}
+                ) : filteredEvents.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
+                      No events found matching your criteria.
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  filteredEvents.map((event) => (
+                    <TableRow key={event.id}>
+                      <TableCell className="font-medium">{event.title}</TableCell>
+                      <TableCell>
+                        <div className="text-sm">
+                          <div>{format(new Date(event.date), 'MMM d, yyyy')}</div>
+                          <div className="text-muted-foreground">{event.time}</div>
+                        </div>
+                      </TableCell>
+                      <TableCell>{event.venue}</TableCell>
+                      <TableCell>
+                        <div className="flex gap-2">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => window.open(`https://macvane.pythonanywhere.com${event.image}`, '_blank')}
+                          >
+                            <Eye className="w-4 h-4 mr-1" />
+                            View
+                          </Button>
+                          <Button variant="outline" size="sm" onClick={() => openEditDialog(event)}>
+                            <Edit className="w-4 h-4 mr-1" />
+                            Edit
+                          </Button>
+                          <Button variant="destructive" size="sm" onClick={() => handleDelete(event.id)}>
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
               </TableBody>
             </Table>
           </div>
-
-          {filteredEvents.length === 0 && (
-            <div className="text-center py-8 text-muted-foreground">
-              No events found matching your criteria.
-            </div>
-          )}
         </CardContent>
       </Card>
 
@@ -324,16 +411,6 @@ const EventsPage = () => {
                   onChange={(e) => setFormData({ ...formData, time: e.target.value })}
                 />
               </div>
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="edit-capacity">Capacity</Label>
-              <Input
-                id="edit-capacity"
-                type="number"
-                value={formData.capacity}
-                onChange={(e) => setFormData({ ...formData, capacity: e.target.value })}
-                placeholder="Maximum attendees"
-              />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="edit-image">Event Image - Optional</Label>
