@@ -1,20 +1,99 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { dummyBaptisms } from '@/data/adminData';
 import { Search, Eye, CheckCircle, XCircle, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
+import { baptismAPI } from '@/utils/api';
+import { useToast } from '@/hooks/use-toast';
+
+interface BaptismRequest {
+  id: number;
+  full_name: string;
+  email: string;
+  phone_number: string;
+  date_of_birth: string;
+  is_baptised: boolean;
+  is_study: boolean;
+  status: string;
+  additional_information: string;
+  created_at: string;
+}
 
 const BaptismRequestsPage = () => {
+  const [requests, setRequests] = useState<BaptismRequest[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const { toast } = useToast();
 
-  const filteredRequests = dummyBaptisms.filter((request) => {
-    const matchesSearch = request.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         request.email.toLowerCase().includes(searchTerm.toLowerCase());
+  useEffect(() => {
+    fetchRequests();
+  }, []);
+
+  const fetchRequests = async () => {
+    try {
+      const response = await baptismAPI.list();
+      if (response.ok) {
+        const data = await response.json();
+        setRequests(data);
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to fetch baptism requests",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUpdateStatus = async (id: number, status: string) => {
+    try {
+      const response = await baptismAPI.updateStatus(id, status);
+      if (response.ok) {
+        setRequests(requests.map(r => r.id === id ? { ...r, status } : r));
+        toast({
+          title: "Success",
+          description: `Request ${status}`,
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to update status",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    if (!confirm('Are you sure you want to delete this request?')) return;
+
+    try {
+      const response = await baptismAPI.delete(id);
+      if (response.ok) {
+        setRequests(requests.filter(r => r.id !== id));
+        toast({
+          title: "Success",
+          description: "Request deleted",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to delete request",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const filteredRequests = requests.filter((request) => {
+    const matchesSearch = request.full_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         request.email?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === 'all' || request.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
@@ -86,45 +165,63 @@ const BaptismRequestsPage = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredRequests.map((request) => (
-                  <TableRow key={request.id}>
-                    <TableCell className="font-medium">{request.name}</TableCell>
-                    <TableCell>{request.email}</TableCell>
-                    <TableCell>{request.phone}</TableCell>
-                    <TableCell>{format(new Date(request.dateOfBirth), 'MMM d, yyyy')}</TableCell>
-                    <TableCell>{request.previousBaptism}</TableCell>
-                    <TableCell>{format(new Date(request.createdAt), 'MMM d, yyyy')}</TableCell>
-                    <TableCell>{getStatusBadge(request.status)}</TableCell>
-                    <TableCell>
-                      <div className="flex gap-2">
-                        <Button variant="outline" size="sm">
-                          <Eye className="w-4 h-4 mr-1" />
-                          View
-                        </Button>
-                        <Button variant="outline" size="sm" className="text-green-600">
-                          <CheckCircle className="w-4 h-4 mr-1" />
-                          Approve
-                        </Button>
-                        <Button variant="outline" size="sm" className="text-red-600">
-                          <XCircle className="w-4 h-4 mr-1" />
-                          Reject
-                        </Button>
-                        <Button variant="destructive" size="sm">
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </div>
+                {loading ? (
+                  <TableRow>
+                    <TableCell colSpan={8} className="text-center py-8">
+                      Loading...
                     </TableCell>
                   </TableRow>
-                ))}
+                ) : filteredRequests.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
+                      No baptism requests found matching your criteria.
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  filteredRequests.map((request) => (
+                    <TableRow key={request.id}>
+                      <TableCell className="font-medium">{request.full_name}</TableCell>
+                      <TableCell>{request.email || 'N/A'}</TableCell>
+                      <TableCell>{request.phone_number || 'N/A'}</TableCell>
+                      <TableCell>{format(new Date(request.date_of_birth), 'MMM d, yyyy')}</TableCell>
+                      <TableCell>{request.is_baptised ? 'Yes' : 'No'}</TableCell>
+                      <TableCell>{format(new Date(request.created_at), 'MMM d, yyyy')}</TableCell>
+                      <TableCell>{getStatusBadge(request.status)}</TableCell>
+                      <TableCell>
+                        <div className="flex gap-2">
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="text-green-600"
+                            onClick={() => handleUpdateStatus(request.id, 'approved')}
+                          >
+                            <CheckCircle className="w-4 h-4 mr-1" />
+                            Approve
+                          </Button>
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="text-red-600"
+                            onClick={() => handleUpdateStatus(request.id, 'rejected')}
+                          >
+                            <XCircle className="w-4 h-4 mr-1" />
+                            Reject
+                          </Button>
+                          <Button 
+                            variant="destructive" 
+                            size="sm"
+                            onClick={() => handleDelete(request.id)}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
               </TableBody>
             </Table>
           </div>
-
-          {filteredRequests.length === 0 && (
-            <div className="text-center py-8 text-muted-foreground">
-              No baptism requests found matching your criteria.
-            </div>
-          )}
         </CardContent>
       </Card>
     </div>

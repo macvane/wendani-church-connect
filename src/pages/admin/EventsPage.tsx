@@ -19,6 +19,7 @@ interface Event {
   venue: string;
   date: string;
   time: string;
+  department: string;
   image: string;
   created_at: string;
 }
@@ -36,6 +37,7 @@ const EventsPage = () => {
     venue: '',
     date: '',
     time: '',
+    department: 'Sabbath School',
     image: null as File | null,
   });
   const { toast } = useToast();
@@ -69,7 +71,7 @@ const EventsPage = () => {
   });
 
   const handleCreateEvent = async () => {
-    if (!formData.title || !formData.description || !formData.venue || !formData.date || !formData.time || !formData.image) {
+    if (!formData.title || !formData.description || !formData.venue || !formData.date || !formData.time || !formData.department || !formData.image) {
       toast({
         title: "Error",
         description: "Please fill in all fields",
@@ -84,6 +86,7 @@ const EventsPage = () => {
     data.append('venue', formData.venue);
     data.append('date', formData.date);
     data.append('time', formData.time);
+    data.append('department', formData.department);
     data.append('image', formData.image);
 
     try {
@@ -95,7 +98,7 @@ const EventsPage = () => {
         });
         fetchEvents();
         setIsCreateOpen(false);
-        setFormData({ title: '', description: '', venue: '', date: '', time: '', image: null });
+        setFormData({ title: '', description: '', venue: '', date: '', time: '', department: 'Sabbath School', image: null });
       }
     } catch (error) {
       toast({
@@ -107,7 +110,7 @@ const EventsPage = () => {
   };
 
   const handleEditEvent = async () => {
-    if (!selectedEvent || !formData.title || !formData.description || !formData.venue || !formData.date || !formData.time) {
+    if (!selectedEvent || !formData.title || !formData.description || !formData.venue || !formData.date || !formData.time || !formData.department) {
       toast({
         title: "Error",
         description: "Please fill in all required fields",
@@ -122,6 +125,7 @@ const EventsPage = () => {
     data.append('venue', formData.venue);
     data.append('date', formData.date);
     data.append('time', formData.time);
+    data.append('department', formData.department);
     if (formData.image) {
       data.append('image', formData.image);
     }
@@ -135,7 +139,7 @@ const EventsPage = () => {
         });
         fetchEvents();
         setIsEditOpen(false);
-        setFormData({ title: '', description: '', venue: '', date: '', time: '', image: null });
+        setFormData({ title: '', description: '', venue: '', date: '', time: '', department: 'Sabbath School', image: null });
       }
     } catch (error) {
       toast({
@@ -175,6 +179,7 @@ const EventsPage = () => {
       venue: event.venue,
       date: event.date,
       time: event.time,
+      department: event.department || 'Sabbath School',
       image: null,
     });
     setIsEditOpen(true);
@@ -269,6 +274,32 @@ const EventsPage = () => {
                         onChange={(e) => setFormData({ ...formData, time: e.target.value })}
                       />
                     </div>
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="department">Department</Label>
+                    <select
+                      id="department"
+                      value={formData.department}
+                      onChange={(e) => setFormData({ ...formData, department: e.target.value })}
+                      className="px-3 py-2 border rounded-md bg-background"
+                    >
+                      <option value="Sabbath School">Sabbath School</option>
+                      <option value="Youth Ministries">Youth Ministries (AYS)</option>
+                      <option value="Children's Ministries">Children's Ministries (CM)</option>
+                      <option value="Family Life">Family Life (FL)</option>
+                      <option value="Adventist Women's Ministries">Adventist Women's Ministries (AWM)</option>
+                      <option value="Adventist Men's Ministries">Adventist Men's Ministries (AMM)</option>
+                      <option value="Health Ministries">Health Ministries (HM)</option>
+                      <option value="Education">Education (ED)</option>
+                      <option value="Stewardship">Stewardship (STW)</option>
+                      <option value="Public Affairs & Religious Liberty">Public Affairs & Religious Liberty (PARL)</option>
+                      <option value="Publishing">Publishing (PUB)</option>
+                      <option value="Communication">Communication (COM)</option>
+                      <option value="Public Campus Ministries">Public Campus Ministries (PCM)</option>
+                      <option value="Adventurers">Adventurers (ADV)</option>
+                      <option value="Music">Music (MUS)</option>
+                      <option value="Deacons">Deacons (DEA)</option>
+                    </select>
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="image">Event Image</Label>
@@ -411,6 +442,32 @@ const EventsPage = () => {
                   onChange={(e) => setFormData({ ...formData, time: e.target.value })}
                 />
               </div>
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="edit-department">Department</Label>
+              <select
+                id="edit-department"
+                value={formData.department}
+                onChange={(e) => setFormData({ ...formData, department: e.target.value })}
+                className="px-3 py-2 border rounded-md bg-background"
+              >
+                <option value="Sabbath School">Sabbath School</option>
+                <option value="Youth Ministries">Youth Ministries (AYS)</option>
+                <option value="Children's Ministries">Children's Ministries (CM)</option>
+                <option value="Family Life">Family Life (FL)</option>
+                <option value="Adventist Women's Ministries">Adventist Women's Ministries (AWM)</option>
+                <option value="Adventist Men's Ministries">Adventist Men's Ministries (AMM)</option>
+                <option value="Health Ministries">Health Ministries (HM)</option>
+                <option value="Education">Education (ED)</option>
+                <option value="Stewardship">Stewardship (STW)</option>
+                <option value="Public Affairs & Religious Liberty">Public Affairs & Religious Liberty (PARL)</option>
+                <option value="Publishing">Publishing (PUB)</option>
+                <option value="Communication">Communication (COM)</option>
+                <option value="Public Campus Ministries">Public Campus Ministries (PCM)</option>
+                <option value="Adventurers">Adventurers (ADV)</option>
+                <option value="Music">Music (MUS)</option>
+                <option value="Deacons">Deacons (DEA)</option>
+              </select>
             </div>
             <div className="grid gap-2">
               <Label htmlFor="edit-image">Event Image - Optional</Label>
