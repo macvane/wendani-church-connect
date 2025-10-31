@@ -1,27 +1,51 @@
-
 import React, { useRef, useEffect, useState } from 'react';
 import { Calendar } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { allEventsData } from '@/pages/Events';
-import { isDatePassed } from '@/utils/dateUtils';
+import { eventAPI } from '@/utils/api';
+import { format } from 'date-fns';
+
+interface Event {
+  id: number;
+  title: string;
+  description: string;
+  venue: string;
+  date: string;
+  time: string;
+  image: string;
+  created_at: string;
+}
 
 const EventsSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const [upcomingEvents, setUpcomingEvents] = useState<typeof allEventsData>([]);
+  const [upcomingEvents, setUpcomingEvents] = useState<Event[]>([]);
+  const [loading, setLoading] = useState(true);
   
   useEffect(() => {
-    // Filter and sort upcoming events
-    const upcoming = [...allEventsData]
-      .filter(event => !isDatePassed(event.date))
-      .sort((a, b) => {
-        const dateA = new Date(a.date.split('-')[0]);
-        const dateB = new Date(b.date.split('-')[0]);
-        return dateA.getTime() - dateB.getTime();
-      })
-      .slice(0, 2); // Get only the first 4 upcoming events
-      
-    setUpcomingEvents(upcoming);
+    fetchEvents();
   }, []);
+
+  const fetchEvents = async () => {
+    try {
+      const response = await eventAPI.list();
+      if (response.ok) {
+        const data = await response.json();
+        const now = new Date();
+        now.setHours(0, 0, 0, 0);
+        
+        // Filter upcoming events and get first 2
+        const upcoming = data
+          .filter((event: Event) => new Date(event.date) >= now)
+          .sort((a: Event, b: Event) => new Date(a.date).getTime() - new Date(b.date).getTime())
+          .slice(0, 2);
+        
+        setUpcomingEvents(upcoming);
+      }
+    } catch (error) {
+      console.error('Error fetching events:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
   
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -54,7 +78,11 @@ const EventsSection = () => {
         </div>
         
         <div className="md:w-[85%] mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-          {upcomingEvents.length > 0 ? (
+          {loading ? (
+            <div className="col-span-2 text-center py-12">
+              <p className="text-lg text-gray-600">Loading events...</p>
+            </div>
+          ) : upcomingEvents.length > 0 ? (
             upcomingEvents.map((event, index) => (
               <div 
                 key={event.id}
@@ -63,14 +91,14 @@ const EventsSection = () => {
               >
                 <div className="w-full h-[12rem] md:h-[17rem] relative">
                   <img 
-                    src={event.thumbnail} 
+                    src={`https://macvane.pythonanywhere.com${event.image}`}
                     alt={event.title} 
                     loading="lazy"
                     className="w-full h-full object-cover object-top"
+                    onError={(e) => {
+                      e.currentTarget.src = 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=500&auto=format&fit=crop&q=60';
+                    }}
                   />
-                  <div className="absolute top-4 right-4 bg-church-600 text-white text-xs px-2 py-1 rounded">
-                    {event.department}
-                  </div>
                 </div>
                 <div className="p-6 w-full flex flex-col">
                   <div className="flex items-start justify-between mb-2">
@@ -78,14 +106,17 @@ const EventsSection = () => {
                   </div>
                   <div className="flex items-center text-gray-600 mb-2">
                     <Calendar size={16} className="mr-2" />
-                    <span>{event.date} • {event.time}</span>
+                    <span>{format(new Date(event.date), 'MMM d, yyyy')} • {event.time}</span>
                   </div>
                   <p className="text-gray-600 mb-4">
-                    Location: {event.location}
+                    Location: {event.venue}
+                  </p>
+                  <p className="text-gray-600 mb-4 line-clamp-2">
+                    {event.description}
                   </p>
                   <div className="mt-auto">
                     <Link 
-                      to={`/events/${event.slug}`}
+                      to={`/events/${event.id}`}
                       className="text-church-600 font-medium hover:text-church-700"
                     >
                       View Details →

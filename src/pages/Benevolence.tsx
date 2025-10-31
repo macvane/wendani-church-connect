@@ -1,8 +1,9 @@
-import React, { useState, useRef } from 'react'; // Import useRef
+import React, { useState } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { Helmet } from 'react-helmet-async';
-import { useToast } from '@/hooks/use-toast'; // Re-enabled useToast for feedback
+import { useToast } from '@/hooks/use-toast';
+import { benevolenceAPI } from '@/utils/api';
 
 interface Dependent {
   name: string;
@@ -11,13 +12,17 @@ interface Dependent {
 }
 
 const Benevolence = () => {
-  const apiKey = import.meta.env.VITE_WEB3FORMS_BENEVOLENCE_API_KEY;
-  
-  // A ref to the form element to allow us to reset it after submission
-  const formRef = useRef<HTMLFormElement>(null);
-  const { toast } = useToast(); // Initialize the toast hook
-
+  const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    headOfFamilyName: '',
+    headOfFamilyPhone: '',
+    headOfFamilyEmail: '',
+    membershipStatus: '',
+    spouseName: '',
+    spouseChurch: '',
+    additionalInfo: '',
+  });
   const [dependents, setDependents] = useState<Dependent[]>([
     { name: '', phone: '', relationship: '' }
   ]);
@@ -38,57 +43,55 @@ const Benevolence = () => {
     }
   };
   
-  // *** NEW: The onSubmit handler for the form ***
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // Prevent the default form submission behavior
+    e.preventDefault();
     setIsSubmitting(true);
 
-    // Create FormData from the form element. This automatically collects all named inputs.
-    const formData = new FormData(e.currentTarget);
-    formData.append("subject", "New Benevolence Request from Website"); // Add subject
-    
     try {
-      const response = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        body: formData,
+      const response = await benevolenceAPI.create({
+        head_full_name: formData.headOfFamilyName,
+        head_phone_number: formData.headOfFamilyPhone,
+        email: formData.headOfFamilyEmail,
+        membership_status: formData.membershipStatus,
+        spouse_name: formData.spouseName || undefined,
+        church_name: formData.spouseChurch || undefined,
+        additional: formData.additionalInfo || undefined,
+        dependents: dependents.map(d => ({
+          name: d.name,
+          phone_number: d.phone,
+          relationship: d.relationship,
+        })),
       });
 
-      const result = await response.json();
-
-      if (result.success) {
+      if (response.ok) {
         toast({
           title: "Request Submitted!",
           description: "Your benevolence request has been sent successfully.",
         });
         
-        // Clear the form for the next user
-        formRef.current?.reset(); // Reset all standard form fields
-        setDependents([{ name: '', phone: '', relationship: '' }]); // Reset the dependents state
-        
-        // Redirect to the thank-you page after a short delay
-        setTimeout(() => {
-          window.location.href = 'http://kahawawendanisda.org/thank-you';
-        }, 2000);
-
-      } else {
-        console.error("Submission Error:", result);
-        toast({
-          title: "Submission Error",
-          description: result.message || "An error occurred. Please try again.",
-          variant: "destructive",
+        // Reset form
+        setFormData({
+          headOfFamilyName: '',
+          headOfFamilyPhone: '',
+          headOfFamilyEmail: '',
+          membershipStatus: '',
+          spouseName: '',
+          spouseChurch: '',
+          additionalInfo: '',
         });
+        setDependents([{ name: '', phone: '', relationship: '' }]);
+      } else {
+        throw new Error('Failed to submit benevolence request');
       }
     } catch (error) {
-      console.error("Network or Fetch Error:", error);
+      console.error("Error submitting benevolence request:", error);
       toast({
-        title: "Network Error",
-        description: "Could not submit the form. Please check your connection and try again.",
+        title: "Submission Failed",
+        description: "Could not submit the form. Please try again.",
         variant: "destructive",
       });
     } finally {
-      // Set submitting to false whether it succeeded or failed
-      // but delay it slightly if redirecting to avoid a flicker
-      setTimeout(() => setIsSubmitting(false), 2000); 
+      setIsSubmitting(false);
     }
   };
 
@@ -157,14 +160,16 @@ const Benevolence = () => {
                         <label htmlFor="headOfFamilyName" className="block font-medium mb-1 text-gray-700">
                           Head of Family Name <span className="text-red-500">*</span>
                         </label>
-                        <input 
-                          type="text" 
-                          id="headOfFamilyName" 
-                          name="headOfFamilyName"
-                          placeholder="Full name"
-                          required
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
-                        />
+                            <input 
+                              type="text" 
+                              id="headOfFamilyName" 
+                              name="headOfFamilyName"
+                              placeholder="Full name"
+                              value={formData.headOfFamilyName}
+                              onChange={(e) => setFormData({...formData, headOfFamilyName: e.target.value})}
+                              required
+                              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
+                            />
                       </div>
                       
                       <div>
@@ -176,6 +181,8 @@ const Benevolence = () => {
                           id="headOfFamilyPhone" 
                           name="headOfFamilyPhone"
                           placeholder="+254 700 000000"
+                          value={formData.headOfFamilyPhone}
+                          onChange={(e) => setFormData({...formData, headOfFamilyPhone: e.target.value})}
                           required
                           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-church-600 focus:border-transparent"
                         />

@@ -1,18 +1,13 @@
-import { useEffect, useState, useRef } from 'react'; // Added useState and useRef
+import { useEffect, useState } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { MapPin, Mail, Clock } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
-import { useToast } from '@/hooks/use-toast'; // Import useToast
+import { useToast } from '@/hooks/use-toast';
+import { contactAPI } from '@/utils/api';
 
 const Contact = () => {
-  const apiKey = import.meta.env.VITE_WEB3FORMS_API_KEY;
-
-  // State for managing form submission
   const [isSubmitting, setIsSubmitting] = useState(false);
-  // Ref for the form to allow resetting it
-  const formRef = useRef<HTMLFormElement>(null);
-  // Initialize the toast hook
   const { toast } = useToast();
 
   useEffect(() => {
@@ -36,55 +31,39 @@ const Contact = () => {
     };
   }, []);
   
-  // *** NEW: The onSubmit handler for the contact form ***
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // Prevent default browser submission
+    e.preventDefault();
     setIsSubmitting(true);
 
     const formData = new FormData(e.currentTarget);
-    
-    // The subject is now set here instead of a hidden input
-    formData.set("subject", `New Contact form submission: ${formData.get("subject")}`);
 
     try {
-      const response = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        body: formData,
+      const response = await contactAPI.create({
+        full_name: formData.get('name') as string,
+        email: formData.get('email') as string || undefined,
+        phone_number: formData.get('phone') as string,
+        subject: formData.get('subject') as string,
+        message: formData.get('message') as string,
       });
 
-      const result = await response.json();
-
-      if (result.success) {
+      if (response.ok) {
         toast({
           title: "Message Sent!",
           description: "Thank you for contacting us. We'll get back to you soon.",
         });
-
-        // Reset the form fields
-        formRef.current?.reset();
-        
-        // Redirect after a short delay to allow the user to see the message
-        setTimeout(() => {
-          window.location.href = 'http://kahawawendanisda.org/thank-you';
-        }, 2000);
-
+        e.currentTarget.reset();
       } else {
-        console.error("Submission Error:", result);
-        toast({
-          title: "Submission Error",
-          description: result.message || "An error occurred. Please try again.",
-          variant: "destructive",
-        });
-        setIsSubmitting(false); // Re-enable the button on failure
+        throw new Error('Failed to send message');
       }
     } catch (error) {
-      console.error("Fetch Error:", error);
+      console.error("Error:", error);
       toast({
-        title: "Network Error",
-        description: "Could not send the message. Please check your connection.",
+        title: "Submission Failed",
+        description: "Could not send the message. Please try again.",
         variant: "destructive",
       });
-      setIsSubmitting(false); // Re-enable the button on failure
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -163,11 +142,7 @@ const Contact = () => {
               <div className="lg:col-span-2 animate-on-scroll animate-delay-1">
                 <h2 className="text-2xl font-bold mb-6">Send Us a Message</h2>
                 
-                {/* *** MODIFIED: Attached ref and onSubmit, removed action/method *** */}
-                <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
-                  <input type="hidden" name="access_key" value={apiKey} />
-                  {/* *** REMOVED: Hidden redirect input field *** */}
-
+                <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label htmlFor="name" className="block font-medium mb-1 text-gray-700">

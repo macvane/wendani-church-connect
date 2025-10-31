@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
-// REMOVED: No longer importing Google Sheets utility
+import { baptismAPI } from '@/utils/api';
 import { Helmet } from 'react-helmet-async';
 
 const formSchema = z.object({
@@ -26,7 +26,6 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 const Baptism = () => {
-  const apiKey = import.meta.env.VITE_WEB3FORMS_PRAYER_REQUEST_API_KEY; 
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   
@@ -43,42 +42,34 @@ const Baptism = () => {
     },
   });
 
-  // *** MODIFIED: This function now only handles Web3Forms submission ***
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
 
-    const web3FormData = new FormData();
-    web3FormData.append("access_key", apiKey);
-    web3FormData.append("subject", "New Baptism Request from Website");
-
-    // Append all validated data from react-hook-form
-    Object.entries(data).forEach(([key, value]) => {
-      web3FormData.append(key, String(value));
-    });
-
     try {
-      const response = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        body: web3FormData,
+      const response = await baptismAPI.create({
+        full_name: data.fullName,
+        email: data.email,
+        phone_number: data.phone,
+        date_of_birth: data.birthDate,
+        is_baptised: data.hasBeenBaptized,
+        is_study: data.hasBibleStudy,
+        additional_information: data.questions || '',
       });
 
-      const result = await response.json();
-
-      if (result.success) {
+      if (response.ok) {
         toast({
           title: "Baptism Request Submitted",
           description: "Thank you! Our pastoral team will contact you soon about next steps.",
         });
-        
-        form.reset(); // Reset the form on successful submission
+        form.reset();
       } else {
-        throw new Error(result.message || 'An unknown error occurred.');
+        throw new Error('Failed to submit baptism request');
       }
     } catch (error: any) {
       console.error("Error submitting form:", error);
       toast({
         title: "Submission Failed",
-        description: error.message || "There was a problem submitting your request. Please try again.",
+        description: "There was a problem submitting your request. Please try again.",
         variant: "destructive",
       });
     } finally {

@@ -15,6 +15,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { membershipAPI } from '@/utils/api';
 import { Helmet } from 'react-helmet-async';
 
 // Form schema
@@ -45,7 +46,6 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 const MembershipTransfer = () => {
-  const apiKey = import.meta.env.VITE_WEB3FORMS_CLERK_API_KEY;
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
@@ -108,28 +108,35 @@ const MembershipTransfer = () => {
     setIsSubmitting(true);
 
     try {
-      const formData = new FormData();
-      formData.append("access_key", apiKey);
-
-      Object.entries(data).forEach(([key, value]) => {
-        formData.append(key, value);
+      const response = await membershipAPI.create({
+        full_name: data.fullName,
+        email: data.email,
+        phone_number: data.phone,
+        date_of_birth: data.dateOfBirth,
+        physical_address: data.address,
+        from_church_name: data.fromChurch,
+        from_district_name: data.fromDistrict,
+        from_conference_name: data.fromConference,
+        from_address: data.fromPoBox || '',
+        to_church_name: data.toChurch,
+        to_district_name: data.toDistrict,
+        to_conference_name: data.toConference,
+        to_address: data.toPoBox || '',
+        additional_notes: data.additionalNotes || undefined,
+        board_minute_number: data.minute_number,
+        first_reading_date: data.first_reading || undefined,
+        second_reading_date: data.second_reading || undefined,
+        business_number: data.church_business_minute || undefined,
       });
 
-      const res = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        body: formData,
-      });
-
-      const json = await res.json();
-
-      if (json.success) {
+      if (response.ok) {
         toast({
           title: "Form Submitted",
           description: "Your membership transfer request has been submitted successfully.",
         });
         form.reset();
       } else {
-        throw new Error(json.message || "An unknown error occurred.");
+        throw new Error('Failed to submit membership transfer request');
       }
     } catch (error) {
       console.error("Error submitting form:", error);
