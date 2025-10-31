@@ -2,12 +2,10 @@ import React, { useState } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { useToast } from '@/hooks/use-toast';
-// REMOVED: No longer importing the Google Sheets utility
+import { dedicationAPI } from '@/utils/api';
 import { Helmet } from 'react-helmet-async';
 
 const ChildDedication = () => {
-  const apiKey = import.meta.env.VITE_WEB3FORMS_API_KEY;
-  
   const initialFormState = {
     childName: '',
     dateOfBirth: '',
@@ -31,51 +29,42 @@ const ChildDedication = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
   
-  // *** MODIFIED: The function is now simplified to only handle Web3Forms submission ***
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    const web3FormData = new FormData();
-    web3FormData.append("access_key", apiKey);
-    web3FormData.append("subject", "New Child Dedication Request from Website");
-
-    Object.entries(formData).forEach(([key, value]) => {
-      web3FormData.append(key, value);
-    });
-    
     try {
-      // The logic is now a simple, single fetch request
-      const response = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        body: web3FormData,
+      const response = await dedicationAPI.create({
+        child_full_name: formData.childName,
+        date_birth: formData.dateOfBirth,
+        gender: formData.gender,
+        father_full_name: formData.fatherName,
+        father_email: formData.fatherEmail || undefined,
+        father_phone_number: formData.fatherPhone,
+        mother_full_name: formData.motherName,
+        mother_email: formData.motherEmail || undefined,
+        mother_phone_number: formData.motherPhone,
+        additional_information: formData.additionalInfo || undefined,
       });
 
-      const result = await response.json();
-
-      if (result.success) {
-        // If the submission is successful, show the toast and reset the form
+      if (response.ok) {
         toast({
           title: "Dedication Request Submitted",
           description: "Thank you! Our team will contact you soon to confirm the details.",
         });
-        
         setFormData(initialFormState);
       } else {
-        // If the API returns an error, throw it to be caught by the catch block
-        throw new Error(result.message || 'An unknown error occurred during submission.');
+        throw new Error('Failed to submit dedication request');
       }
-
     } catch (error: any) {
-      // This will catch any network errors or errors thrown from the success check
       console.error("Error submitting dedication request:", error);
       toast({
         title: "Submission Failed",
-        description: error.message || "There was a problem submitting your request. Please try again.",
+        description: "There was a problem submitting your request. Please try again.",
         variant: "destructive",
       });
     } finally {
-      setIsSubmitting(false); // Re-enable the submit button
+      setIsSubmitting(false);
     }
   };
 

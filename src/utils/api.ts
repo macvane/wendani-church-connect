@@ -189,3 +189,194 @@ export const eventAPI = {
     return apiRequest(`/form/events/${id}/`, { method: 'DELETE' });
   },
 };
+
+// Baptism (Dedications) APIs
+export const baptismAPI = {
+  create: async (data: {
+    full_name: string;
+    email: string;
+    phone_number: string;
+    date_of_birth: string;
+    is_baptised: boolean;
+    is_study: boolean;
+    additional_information?: string;
+  }) => {
+    const response = await fetch(`${API_BASE_URL}/form/baptisms/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    return response;
+  },
+
+  list: async () => {
+    return apiRequest('/form/baptisms/');
+  },
+
+  detail: async (id: number) => {
+    return apiRequest(`/form/baptisms/${id}/`);
+  },
+
+  updateStatus: async (id: number, status: string) => {
+    return apiRequest(`/form/baptisms/${id}/status_update/`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status }),
+    });
+  },
+
+  delete: async (id: number) => {
+    return apiRequest(`/form/baptisms/${id}/`, { method: 'DELETE' });
+  },
+};
+
+// Child Dedication APIs
+export const dedicationAPI = {
+  create: async (data: {
+    child_full_name: string;
+    date_birth: string;
+    gender: string;
+    father_full_name: string;
+    father_email?: string;
+    father_phone_number: string;
+    mother_full_name: string;
+    mother_email?: string;
+    mother_phone_number: string;
+    additional_information?: string;
+  }) => {
+    const response = await fetch(`${API_BASE_URL}/form/dedications/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    return response;
+  },
+
+  list: async () => {
+    return apiRequest('/form/dedications/');
+  },
+
+  detail: async (id: number) => {
+    return apiRequest(`/form/dedications/${id}/`);
+  },
+
+  updateStatus: async (id: number, status: string) => {
+    return apiRequest(`/form/dedications/${id}/status_update/`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status }),
+    });
+  },
+
+  delete: async (id: number) => {
+    return apiRequest(`/form/dedications/${id}/`, { method: 'DELETE' });
+  },
+};
+
+// Membership Transfer APIs
+export const membershipAPI = {
+  create: async (data: {
+    full_name: string;
+    email: string;
+    phone_number: string;
+    date_of_birth: string;
+    physical_address: string;
+    from_church_name: string;
+    from_district_name: string;
+    from_conference_name: string;
+    from_address: string;
+    to_church_name: string;
+    to_district_name: string;
+    to_conference_name: string;
+    to_address: string;
+    additional_notes?: string;
+    board_minute_number: string;
+    first_reading_date?: string;
+    second_reading_date?: string;
+    business_number?: string;
+  }) => {
+    const response = await fetch(`${API_BASE_URL}/form/membership/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    return response;
+  },
+
+  list: async () => {
+    return apiRequest('/form/membership/list/');
+  },
+
+  detail: async (id: number) => {
+    return apiRequest(`/form/membership/${id}/`);
+  },
+
+  delete: async (id: number) => {
+    return apiRequest(`/form/membership/${id}/`, { method: 'DELETE' });
+  },
+};
+
+// Benevolence APIs
+export const benevolenceAPI = {
+  create: async (data: {
+    head_full_name: string;
+    head_phone_number: string;
+    email: string;
+    membership_status: string;
+    spouse_name?: string;
+    church_name?: string;
+    additional?: string;
+    dependents: Array<{
+      name: string;
+      phone_number: string;
+      relationship: string;
+    }>;
+  }) => {
+    const response = await fetch(`${API_BASE_URL}/form/benevolence/submit/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    return response;
+  },
+
+  list: async () => {
+    return apiRequest('/form/benevolence/');
+  },
+
+  detail: async (id: number) => {
+    return apiRequest(`/form/benevolence/${id}/`);
+  },
+
+  delete: async (id: number) => {
+    return apiRequest(`/form/benevolence/${id}/`, { method: 'DELETE' });
+  },
+};
+
+// Contact Form APIs
+export const contactAPI = {
+  create: async (data: {
+    full_name: string;
+    email?: string;
+    phone_number: string;
+    subject: string;
+    message: string;
+  }) => {
+    const response = await fetch(`${API_BASE_URL}/form/contact/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    return response;
+  },
+
+  list: async () => {
+    return apiRequest('/form/contact/list/');
+  },
+
+  detail: async (id: number) => {
+    return apiRequest(`/form/contact/${id}/`);
+  },
+
+  delete: async (id: number) => {
+    return apiRequest(`/form/contact/${id}/`, { method: 'DELETE' });
+  },
+};

@@ -1,13 +1,24 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { File, Download, FileText, Eye, BookOpen, Users, GraduationCap, Heart } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Helmet } from 'react-helmet-async';
+import { announcementAPI } from '@/utils/api';
+import { format } from 'date-fns';
 
-// Sample documents data with view URLs
-const downloads = [
+interface Announcement {
+  id: number;
+  title: string;
+  description: string;
+  file: string;
+  size: number;
+  created_at: string;
+}
+
+// Static documents that don't come from API
+const staticDownloads = [
   {
     id: 1,
     title: "Weekly Church Announcements",
@@ -39,7 +50,7 @@ const downloads = [
     viewUrl: "https://kahawawendanisda.org/guide/ChurchWebsiteGuide.pdf",
   },
   {
-    id: 4,
+    id: 3,
     title: "Church Manual",
     description: "The official church constitution and bylaws that govern our church operations.",
     date: "January 15, 2024",
@@ -95,6 +106,32 @@ const Downloads = () => {
     title: string;
     viewUrl: string;
   }>(null);
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchAnnouncements();
+  }, []);
+
+  const fetchAnnouncements = async () => {
+    try {
+      const response = await announcementAPI.list();
+      if (response.ok) {
+        const data = await response.json();
+        setAnnouncements(data);
+      }
+    } catch (error) {
+      console.error('Error fetching announcements:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const formatFileSize = (bytes: number) => {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+  };
   
   return (
     <>
@@ -194,50 +231,99 @@ const Downloads = () => {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {downloads.map((item) => (
-                <div 
-                  key={item.id}
-                  className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden flex flex-col"
-                >
-                  <div className="p-6">
-                    <div className="flex items-start mb-4">
-                      <div className="mr-4">
-                        {item.type === 'PDF' ? (
-                          <FileText size={40} className="text-red-500" />
-                        ) : (
-                          <File size={40} className="text-blue-500" />
-                        )}
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-bold mb-2">{item.title}</h3>
-                        <p className="text-gray-600 mb-4">{item.description}</p>
-                        <div className="flex items-center text-sm text-gray-500 space-x-4">
-                          <span>Uploaded: {item.date}</span>
-                          <span>Type: {item.type}</span>
-                          <span>Size: {item.fileSize}</span>
+              {loading ? (
+                <div className="col-span-2 text-center py-8">
+                  <p className="text-gray-600">Loading announcements...</p>
+                </div>
+              ) : (
+                <>
+                  {/* Display API announcements first */}
+                  {announcements.map((item) => (
+                    <div 
+                      key={`api-${item.id}`}
+                      className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden flex flex-col"
+                    >
+                      <div className="p-6">
+                        <div className="flex items-start mb-4">
+                          <div className="mr-4">
+                            <FileText size={40} className="text-red-500" />
+                          </div>
+                          <div>
+                            <h3 className="text-xl font-bold mb-2">{item.title}</h3>
+                            <p className="text-gray-600 mb-4">{item.description}</p>
+                            <div className="flex items-center text-sm text-gray-500 space-x-4">
+                              <span>Uploaded: {format(new Date(item.created_at), 'MMM d, yyyy')}</span>
+                              <span>Type: PDF</span>
+                              <span>Size: {formatFileSize(item.size)}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="mt-auto pt-4 border-t border-gray-100 flex gap-2">
+                          <button
+                            onClick={() => window.open(`https://macvane.pythonanywhere.com${item.file}`, '_blank')}
+                            className="flex items-center justify-center w-1/2 py-2 bg-church-500 text-white rounded-md hover:bg-church-600 transition-colors"
+                          >
+                            <Eye size={18} className="mr-2" />
+                            View Document
+                          </button>
+                          <button 
+                            onClick={() => window.open(`https://macvane.pythonanywhere.com${item.file}`, '_blank')} 
+                            className="flex items-center justify-center w-1/2 py-2 bg-church-600 text-white rounded-md hover:bg-church-700 transition-colors"
+                          >
+                            <Download size={18} className="mr-2" />
+                            Download PDF
+                          </button>
                         </div>
                       </div>
                     </div>
-                    <div className="mt-auto pt-4 border-t border-gray-100 flex gap-2">
-                      <button
-                        onClick={() => window.open(item.viewUrl)}
-                        className="flex items-center justify-center w-1/2 py-2 bg-church-500 text-white rounded-md hover:bg-church-600 transition-colors"
-                      >
-                        <Eye size={18} className="mr-2" />
-                        View Document
-                      </button>
-                      <button 
-                        onClick={() => window.open(item.url)} 
-                        className="flex  items-center justify-center w-1/2 py-2 bg-church-600 text-white rounded-md hover:bg-church-700 transition-colors"
-                        
-                      >
-                        <Download size={18} className="mr-2" />
-                        Download {item.type}
-                      </button>
+                  ))}
+                  
+                  {/* Display static downloads */}
+                  {staticDownloads.map((item) => (
+                    <div 
+                      key={`static-${item.id}`}
+                      className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden flex flex-col"
+                    >
+                      <div className="p-6">
+                        <div className="flex items-start mb-4">
+                          <div className="mr-4">
+                            {item.type === 'PDF' ? (
+                              <FileText size={40} className="text-red-500" />
+                            ) : (
+                              <File size={40} className="text-blue-500" />
+                            )}
+                          </div>
+                          <div>
+                            <h3 className="text-xl font-bold mb-2">{item.title}</h3>
+                            <p className="text-gray-600 mb-4">{item.description}</p>
+                            <div className="flex items-center text-sm text-gray-500 space-x-4">
+                              <span>Uploaded: {item.date}</span>
+                              <span>Type: {item.type}</span>
+                              <span>Size: {item.fileSize}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="mt-auto pt-4 border-t border-gray-100 flex gap-2">
+                          <button
+                            onClick={() => window.open(item.viewUrl)}
+                            className="flex items-center justify-center w-1/2 py-2 bg-church-500 text-white rounded-md hover:bg-church-600 transition-colors"
+                          >
+                            <Eye size={18} className="mr-2" />
+                            View Document
+                          </button>
+                          <button 
+                            onClick={() => window.open(item.url)} 
+                            className="flex items-center justify-center w-1/2 py-2 bg-church-600 text-white rounded-md hover:bg-church-700 transition-colors"
+                          >
+                            <Download size={18} className="mr-2" />
+                            Download {item.type}
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              ))}
+                  ))}
+                </>
+              )}
             </div>
           </div>
         </section>
