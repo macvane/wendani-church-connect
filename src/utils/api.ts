@@ -309,6 +309,13 @@ export const membershipAPI = {
     return apiRequest(`/form/membership/${id}/`);
   },
 
+  updateStatus: async (id: number, status: string) => {
+    return apiRequest(`/form/membership/${id}/status_update/`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status }),
+    });
+  },
+
   delete: async (id: number) => {
     return apiRequest(`/form/membership/${id}/`, { method: 'DELETE' });
   },
@@ -344,6 +351,13 @@ export const benevolenceAPI = {
 
   detail: async (id: number) => {
     return apiRequest(`/form/benevolence/${id}/`);
+  },
+
+  updateStatus: async (id: number, status: string) => {
+    return apiRequest(`/form/benevolence/${id}/status_update/`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status }),
+    });
   },
 
   delete: async (id: number) => {
