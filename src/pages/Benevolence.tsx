@@ -478,7 +478,10 @@ const Benevolence = () => {
               <div className="bg-white rounded-lg shadow-md p-8">
                 <h2 className="text-2xl font-bold mb-6 text-center">Benevolence Request Form</h2>
                 
-                <form onSubmit={handleSubmit} className="space-y-6">
+                {/* *** MODIFIED: Attached ref and onSubmit handler, removed action/method *** */}
+                <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
+                  {/* The access key is still required by Web3Forms */}
+                  <input type="hidden" name="access_key" value={apiKey} />
                   {/* *** REMOVED: Hidden inputs for redirect and subject are now handled in JS *** */}
                   
                   {/* Head of Family Information */}
