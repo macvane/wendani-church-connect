@@ -41,7 +41,7 @@ const DedicationsPage = () => {
       const response = await dedicationAPI.list();
       if (response.ok) {
         const data = await response.json();
-        setRequests(data);
+        setRequests(data.results);
       }
     } catch (error) {
       toast({

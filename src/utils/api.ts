@@ -201,7 +201,7 @@ export const baptismAPI = {
     is_study: boolean;
     additional_information?: string;
   }) => {
-    const response = await fetch(`${API_BASE_URL}/form/baptisms/`, {
+    const response = await fetch(`${API_BASE_URL}/form/baptism/`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
@@ -210,22 +210,22 @@ export const baptismAPI = {
   },
 
   list: async () => {
-    return apiRequest('/form/baptisms/');
+    return apiRequest('/form/baptism/');
   },
 
   detail: async (id: number) => {
-    return apiRequest(`/form/baptisms/${id}/`);
+    return apiRequest(`/form/baptism/${id}/`);
   },
 
   updateStatus: async (id: number, status: string) => {
-    return apiRequest(`/form/baptisms/${id}/status_update/`, {
+    return apiRequest(`/form/baptism/${id}/status_update/`, {
       method: 'PATCH',
       body: JSON.stringify({ status }),
     });
   },
 
   delete: async (id: number) => {
-    return apiRequest(`/form/baptisms/${id}/`, { method: 'DELETE' });
+    return apiRequest(`/form/baptism/${id}/`, { method: 'DELETE' });
   },
 };
 
@@ -243,7 +243,7 @@ export const dedicationAPI = {
     mother_phone_number: string;
     additional_information?: string;
   }) => {
-    const response = await fetch(`${API_BASE_URL}/form/dedications/`, {
+    const response = await fetch(`${API_BASE_URL}/form/dedication/`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
@@ -252,22 +252,22 @@ export const dedicationAPI = {
   },
 
   list: async () => {
-    return apiRequest('/form/dedications/');
+    return apiRequest('/form/dedication/');
   },
 
   detail: async (id: number) => {
-    return apiRequest(`/form/dedications/${id}/`);
+    return apiRequest(`/form/dedication/${id}/`);
   },
 
   updateStatus: async (id: number, status: string) => {
-    return apiRequest(`/form/dedications/${id}/status_update/`, {
+    return apiRequest(`/form/dedication/${id}/status_update/`, {
       method: 'PATCH',
       body: JSON.stringify({ status }),
     });
   },
 
   delete: async (id: number) => {
-    return apiRequest(`/form/dedications/${id}/`, { method: 'DELETE' });
+    return apiRequest(`/form/dedication/${id}/`, { method: 'DELETE' });
   },
 };
 

@@ -36,7 +36,7 @@ const PrayersPage = () => {
       const response = await prayerAPI.list();
       if (response.ok) {
         const data = await response.json();
-        setPrayers(data);
+        setPrayers(data.results);
       }
     } catch (error) {
       toast({
