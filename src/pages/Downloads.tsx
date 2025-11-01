@@ -21,16 +21,6 @@ interface Announcement {
 const staticDownloads = [
   {
     id: 1,
-    title: "Weekly Church Announcements",
-    description: "The most recent bulletin with announcements, upcoming events, and church activities.",
-    date: "Oct 25, 2025",
-    type: "PDF",
-    fileSize: "73.3 KB",
-    url: "https://kahawawendanisda.org/announcements/Announcements25thOctober2025.pdf", 
-    viewUrl: "https://kahawawendanisda.org/announcements/Announcements25thOctober2025.pdf",
-  },
-  {
-    id: 2,
     title: "Family Togetherness Week Of Prayer",
     description: "Access the official booklet for Family Togetherness Week of Prayer, featuring daily readings, messages, and spiritual resources to guide families in worship and growth.",
     date: "Sep 06, 2025",
