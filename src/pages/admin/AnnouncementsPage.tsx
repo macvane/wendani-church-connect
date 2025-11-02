@@ -264,7 +264,19 @@ const AnnouncementsPage = () => {
                 {loading ? (
                   <TableRow>
                     <TableCell colSpan={5} className="text-center py-8">
-                      Loading...
+                      <div className="flex items-center justify-center py-24">
+                    <div className="relative flex items-center justify-center w-24 h-24">
+                      {/* Spinner circle */}
+                      <div className="absolute w-24 h-24 border-4 border-[#007780] border-t-light rounded-full animate-spin"></div>
+
+                      {/* Center logo */}
+                      <img 
+                        src="/logo.png" 
+                        alt="Loading..." 
+                        className="w-12 h-12 object-contain"
+                      />
+                    </div>
+                  </div>
                     </TableCell>
                   </TableRow>
                 ) : filteredAnnouncements.length === 0 ? (
