@@ -196,9 +196,20 @@ Daytime Cellphone:          ${formData.daytimeCellphone}
                   <div className="p-4 border rounded-md">
                      <h3 className="text-lg font-semibold mb-4 text-gray-800">Consent and Signature</h3>
                     <div className="prose prose-sm max-w-none text-gray-600">
-                        <p><strong>Event Participation:</strong> I consent to my child's participation in this event...</p>
-                        <p><strong>Medical Permission:</strong> I give permission for adult leaders/volunteers to administer emergency treatment...</p>
-                        <p><strong>Liability Release:</strong> On behalf of myself and my child, I fully release and agree not to sue...</p>
+                        <p><strong>Event Participation:</strong> I understand that I am required to give my consent before my child can participate in this event. 
+By signing this form, I hereby represent that I am the custodial parent or legal guardian of the 
+child listed above and that I consent to my child’s participation in this event, including 
+transportation to and from the event (if applicable).  </p>
+                        <p><strong>Medical Permission:</strong> I also give permission for adult leaders/volunteers to administer emergency treatment, contact 
+emergency personnel, and act in my stead in approving necessary medical care until I can 
+reasonably be contacted. I understand that should any medical bills be incurred, our family’s 
+insurance(s) will be primary and the East Nairobi Field liability insurance will be secondary.</p>
+                        <p><strong>Liability Release:</strong> I, on behalf of myself, my spouse, next of kin, executors, heirs, assigns, or anyone else who 
+might claim or sue on my or my child’s behalf, fully release and agree not to sue the East Nairobi 
+Field and any of its agents, employees, and/or volunteers from any and all liability, including but 
+not limited to any claims, losses, or liabilities , personal injury, disability, property damage, 
+medical expenses, and/or theft, that may arise from or relate to my child’s participation in the 
+event, including transportation to and from the event and any provision of medical care.</p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
                          <div>
