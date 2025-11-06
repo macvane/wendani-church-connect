@@ -213,8 +213,8 @@ event, including transportation to and from the event and any provision of medic
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
                          <div>
-                            <label htmlFor="parentGuardianSignature" className="block font-medium mb-1 text-gray-700">Parent/Guardian Signature (Type Full Name) <span className="text-red-500">*</span></label>
-                            <input type="text" id="parentGuardianSignature" name="parentGuardianSignature" value={formData.parentGuardianSignature} onChange={handleChange} required className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"/>
+                            <label htmlFor="parentGuardianSignature" className="block font-medium mb-1 text-gray-700">Parent/Guardian Signature <span className="text-red-500">*</span></label>
+                            <input type="text" placeholder='Type Full Name' id="parentGuardianSignature" name="parentGuardianSignature" value={formData.parentGuardianSignature} onChange={handleChange} required className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"/>
                         </div>
                         <div>
                             <label htmlFor="date" className="block font-medium mb-1 text-gray-700">Date <span className="text-red-500">*</span></label>
@@ -222,13 +222,13 @@ event, including transportation to and from the event and any provision of medic
                         </div>
                         <div>
                             <label htmlFor="daytimeCellphone" className="block font-medium mb-1 text-gray-700">Daytime Cellphone Number <span className="text-red-500">*</span></label>
-                            <input type="tel" id="daytimeCellphone" name="daytimeCellphone" value={formData.daytimeCellphone} onChange={handleChange} required className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"/>
+                            <input type="tel" placeholder='Your CellPhone Number' id="daytimeCellphone" name="daytimeCellphone" value={formData.daytimeCellphone} onChange={handleChange} required className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"/>
                         </div>
                     </div>
                   </div>
                   
                   <div className="flex justify-center pt-4">
-                    <button type="submit" disabled={isSubmitting} className={`px-8 py-3 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 transition-colors ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}>
+                    <button type="submit" disabled={isSubmitting} className={`px-8 py-3 bg-primary text-white rounded-md font-medium hover:bg-primary/90 transition-colors ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}>
                       {isSubmitting ? 'Submitting...' : 'Submit Consent Form'}
                     </button>
                   </div>
