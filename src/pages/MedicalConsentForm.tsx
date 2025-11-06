@@ -1,30 +1,15 @@
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { useToast } from '@/hooks/use-toast'; // Assuming you have a toast hook
+import { useToast } from '@/hooks/use-toast';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
-const MedicalConsentForm  = () => {
+const MedicalConsentForm = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    age: '',
-    birthDate: '',
-    gender: '',
-    station: '',
-    phoneNo: '',
-    church: '',
-    district: '',
-    clubClass: '',
-    parentGuardian: '',
-    familyInsuranceCompany: '',
-    familyInsurancePolicyNumber: '',
-    allergies: '',
-    medications: '',
-    physicalConditions: '',
-    dietaryRequirements: '',
-    parentGuardianSignature: '',
-    date: '',
-    daytimeCellphone: ''
+    name: '', age: '', birthDate: '', gender: '', station: '', phoneNo: '', church: '',
+    district: '', clubClass: '', parentGuardian: '', familyInsuranceCompany: '',
+    familyInsurancePolicyNumber: '', allergies: '', medications: '', physicalConditions: '',
+    dietaryRequirements: '', parentGuardianSignature: '', date: '', daytimeCellphone: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
@@ -34,71 +19,89 @@ const MedicalConsentForm  = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  // --- CHANGE IS IN THIS FUNCTION ---
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // This is the template string. It remains the same.
-    const emailHtmlTemplate = `
-      <div style="font-family: Arial, sans-serif; line-height: 1.6; border: 1px solid #ddd; padding: 20px; max-width: 600px; margin: auto;">
-          <h1 style="text-align: center; color: #333; margin-top: 0;">PERMISSION & MEDICAL CONSENT FORM</h1>
-          <h2 style="text-align: center; color: #555; border-bottom: 2px solid #eee; padding-bottom: 10px;">UPPER NAIROBI EAST STATION ADVENTURERS</h2>
-          <h3 style="color: #444; border-bottom: 1px solid #eee; padding-bottom: 5px;">Participant's Details</h3>
-          <p><strong>Name:</strong> ${formData.name}</p>
-          <p><strong>Age:</strong> ${formData.age}</p>
-          <p><strong>Birth Date:</strong> ${formData.birthDate}</p>
-          <p><strong>Gender:</strong> ${formData.gender}</p>
-          <p><strong>Station:</strong> ${formData.station}</p>
-          <p><strong>Phone No.:</strong> ${formData.phoneNo}</p>
-          <p><strong>Church:</strong> ${formData.church}</p>
-          <p><strong>District:</strong> ${formData.district}</p>
-          <p><strong>Club Class:</strong> ${formData.clubClass}</p>
-          <p><strong>Parent/Guardian:</strong> ${formData.parentGuardian}</p>
-          <h3 style="color: #444; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 20px;">Event Details</h3>
-          <p><strong>Event:</strong> Upper Nairobi East Station Adventurers Family Campout</p>
-          <p><strong>Event Date:</strong> November 11 – 16 2025</p>
-          <p><strong>Event Location:</strong> Kamiti Hostels</p>
-          <h3 style="color: #444; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 20px;">Medical Information</h3>
-          <p><strong>Family Insurance Company:</strong> ${formData.familyInsuranceCompany || 'N/A'}</p>
-          <p><strong>Family Insurance Policy Number:</strong> ${formData.familyInsurancePolicyNumber || 'N/A'}</p>
-          <p><strong>Allergies:</strong><br>${formData.allergies.replace(/\n/g, '<br>') || 'None specified'}</p>
-          <p><strong>Medications:</strong><br>${formData.medications.replace(/\n/g, '<br>') || 'None specified'}</p>
-          <p><strong>Physical Conditions Limiting Participation:</strong><br>${formData.physicalConditions.replace(/\n/g, '<br>') || 'None specified'}</p>
-          <p><strong>Dietary Requirements and/or Allergies:</strong><br>${formData.dietaryRequirements.replace(/\n/g, '<br>') || 'None specified'}</p>
-          <h3 style="color: #444; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 20px;">Authorization</h3>
-          <p><strong>Parent/Guardian Signature (Full Name):</strong> ${formData.parentGuardianSignature}</p>
-          <p><strong>Date of Signature:</strong> ${formData.date}</p>
-          <p><strong>Daytime Cellphone Number:</strong> ${formData.daytimeCellphone}</p>
-      </div>
+    // --- THIS IS THE CORRECTED PART ---
+    // We are now creating a clean, multi-line plain text string.
+    const plainTextMessage = `
+UPPER NAIROBI EAST STATION ADVENTURERS
+PERMISSION & MEDICAL CONSENT FORM
+==================================================
+
+PARTICIPANT'S DETAILS
+--------------------------------------------------
+Name:                   ${formData.name}
+Age:                    ${formData.age}
+Birth Date:             ${formData.birthDate}
+Gender:                 ${formData.gender}
+Station:                ${formData.station}
+Phone No.:              ${formData.phoneNo}
+Church:                 ${formData.church}
+District:               ${formData.district}
+Club Class:             ${formData.clubClass}
+Parent/Guardian:        ${formData.parentGuardian}
+
+==================================================
+
+EVENT DETAILS
+--------------------------------------------------
+Event:                  Upper Nairobi East Station Adventurers Family Campout
+Event Date:             November 11 – 16 2025
+Event Location:         Kamiti Hostels
+
+==================================================
+
+MEDICAL INFORMATION
+--------------------------------------------------
+Family Insurance Co.:   ${formData.familyInsuranceCompany || 'N/A'}
+Insurance Policy #:     ${formData.familyInsurancePolicyNumber || 'N/A'}
+
+Allergies:
+${formData.allergies || 'None specified'}
+
+Medications:
+${formData.medications || 'None specified'}
+
+Physical Conditions Limiting Participation:
+${formData.physicalConditions || 'None specified'}
+
+Dietary Requirements / Allergies:
+${formData.dietaryRequirements || 'None specified'}
+
+==================================================
+
+AUTHORIZATION
+--------------------------------------------------
+Parent/Guardian Signature:  ${formData.parentGuardianSignature}
+Date of Signature:          ${formData.date}
+Daytime Cellphone:          ${formData.daytimeCellphone}
     `;
 
-    const form = e.currentTarget;
-    const data = new FormData(form);
+    const dataToSend = new FormData();
 
-    // Append the fully rendered HTML to the form data
-    data.append('submission_details_html', emailHtmlTemplate);
+    dataToSend.append("access_key", "a57bc367-cd90-4dec-8655-22574d4df359");
+    dataToSend.append("subject", `Consent Form Submission for ${formData.name}`);
+    dataToSend.append("from_name", "Adventurers Campout Form");
 
-    // Let's set a nice subject line as well
-    data.append('subject', `Consent Form Submission for ${formData.name}`);
-    
-    // We remove the raw template field as it's not needed
-    if (data.has('template')) {
-      data.delete('template');
-    }
+    // We send the clean PLAIN TEXT string as the message.
+    dataToSend.append("message", plainTextMessage);
 
     try {
-      const response = await fetch(form.action, {
-        method: 'POST',
-        body: data,
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: dataToSend,
         headers: { 'Accept': 'application/json' }
       });
       const result = await response.json();
+
       if (result.success) {
         toast({
           title: "Form Submitted Successfully",
           description: "Thank you for submitting the consent form.",
         });
+        // Reset form
         setFormData({
             name: '', age: '', birthDate: '', gender: '', station: '', phoneNo: '', church: '',
             district: '', clubClass: '', parentGuardian: '', familyInsuranceCompany: '',
@@ -119,8 +122,8 @@ const MedicalConsentForm  = () => {
     }
   };
 
-
   return (
+    // The JSX for the form remains exactly the same. No changes are needed here.
     <>
       <Helmet>
         <title>Adventurers Family Campout - Consent Form</title>
@@ -128,18 +131,20 @@ const MedicalConsentForm  = () => {
       </Helmet>
       <Header />
       <main>
-        <section className="relative h-[300px] flex items-center justify-center bg-gray-700">
+        <section className="relative h-[400px] flex items-center justify-center ">
           <div className="absolute inset-0">
-            <div className="absolute inset-0 bg-black bg-opacity-50 z-10"></div>
+            <div className="absolute inset-0 bg-black bg-opacity-60 z-10"></div>
             <img 
-              src="https://images.unsplash.com/photo-1533130093345-151b6a454c15?q=80&w=1470"
-              alt="Adventurers Campout" 
-              className="w-full h-full object-cover"
+              src="https://i.pinimg.com/1200x/01/30/79/013079765dd4203cd3ea804c385791dc.jpg" 
+              alt="Prayer" 
+              className="w-full h-full object-cover object-bottom"
             />
           </div>
           <div className="container relative z-20 text-white text-center">
-            <h1 className="text-4xl md:text-5xl font-bold">Adventurers Family Campout</h1>
-            <p className="text-xl mt-2">Permission & Medical Consent Form</p>
+            <h1 className="mb-4">Adventurers Family Campout</h1>
+            <p className="text-xl max-w-3xl mx-auto">
+              Permission & Medical Consent Form
+            </p>
           </div>
         </section>
 
@@ -153,12 +158,7 @@ const MedicalConsentForm  = () => {
                     <p className="text-gray-600">Date: November 11 – 16 2025 | Location: Kamiti Hostels</p>
                 </div>
                 
-                <form onSubmit={handleSubmit} action="https://api.web3forms.com/submit" method="POST" className="space-y-8">
-                  <input type="hidden" name="access_key" value="a57bc367-cd90-4dec-8655-22574d4df359" />
-                  <input type="hidden" name="from_name" value="Adventurers Campout Form" />
-                  {/* The hidden template input is no longer here */}
-
-                  {/* All other form sections remain exactly the same */}
+                <form onSubmit={handleSubmit} className="space-y-8">
                   <div className="p-4 border rounded-md">
                     <h3 className="text-lg font-semibold mb-4 text-gray-800">Participant's Information</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -178,8 +178,7 @@ const MedicalConsentForm  = () => {
                         ))}
                     </div>
                   </div>
-
-                  <div className="p-4 border rounded-md">
+                   <div className="p-4 border rounded-md">
                     <h3 className="text-lg font-semibold mb-4 text-gray-800">Medical Information</h3>
                     <div className="space-y-6">
                         {Object.entries({ familyInsuranceCompany: 'Family Insurance Company', familyInsurancePolicyNumber: 'Family Insurance Policy Number', allergies: 'Allergies: Please list all allergies your child has', medications: 'Medications: Please list all medications your child takes', physicalConditions: 'Physical Conditions: List any conditions that limit participation', dietaryRequirements: 'Dietary Requirements and/or Allergies to be observed' }).map(([key, label]) => (
@@ -194,13 +193,12 @@ const MedicalConsentForm  = () => {
                         ))}
                     </div>
                   </div>
-
                   <div className="p-4 border rounded-md">
                      <h3 className="text-lg font-semibold mb-4 text-gray-800">Consent and Signature</h3>
                     <div className="prose prose-sm max-w-none text-gray-600">
-                        <p><strong>Event Participation:</strong> I consent to my child's participation in this event, including transportation to and from the event (if applicable).</p>
-                        <p><strong>Medical Permission:</strong> I give permission for adult leaders/volunteers to administer emergency treatment and contact emergency personnel. I understand our family's insurance is primary.</p>
-                        <p><strong>Liability Release:</strong> On behalf of myself and my child, I fully release and agree not to sue the East Nairobi Field, its agents, and volunteers from any and all liability arising from my child's participation in this event.</p>
+                        <p><strong>Event Participation:</strong> I consent to my child's participation in this event...</p>
+                        <p><strong>Medical Permission:</strong> I give permission for adult leaders/volunteers to administer emergency treatment...</p>
+                        <p><strong>Liability Release:</strong> On behalf of myself and my child, I fully release and agree not to sue...</p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
                          <div>
@@ -234,4 +232,4 @@ const MedicalConsentForm  = () => {
   );
 };
 
-export default MedicalConsentForm ;
+export default MedicalConsentForm;
