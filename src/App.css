@@ -18,6 +18,14 @@
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
+/* Add to your global.css or tailwind.css */
+.input, .form-input {
+  @apply w-full px-4 py-2 border border-gray-300 bg-gray-50 rounded-md 
+  focus:outline-none focus:ring-2 focus:ring-church-500 focus:border-transparent 
+  transition-shadow shadow-sm placeholder-gray-400;
+}
+
+
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);

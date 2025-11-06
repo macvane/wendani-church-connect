@@ -38,7 +38,7 @@ import MembershipTransfersPage from "./pages/admin/MembershipTransfersPage";
 import BenevolencePage from "./pages/admin/BenevolencePage";
 import UsersPage from "./pages/admin/UsersPage";
 
-
+import MedicalConsentForm from "./pages/MedicalConsentForm";
 
 
 
@@ -59,6 +59,7 @@ const App = () => {
             <Route path="/events" element={<Events />} />
             <Route path="/events/:slug" element={<EventDetail />} />
             <Route path="/prayer" element={<Prayer />} />
+            <Route path="/medical-consent-form" element={<MedicalConsentForm />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/downloads" element={<Downloads />} />
             <Route path="/blogs" element={<Blogs />} />
