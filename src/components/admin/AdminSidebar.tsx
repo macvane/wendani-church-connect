@@ -71,22 +71,7 @@ const adminMenuItems = [
     title: 'Events',
     url: '/admin/dashboard/events',
     icon: Calendar,
-  },
-  {
-    title: 'Blog Management',
-    url: '/admin/dashboard/blogs',
-    icon: BookOpen,
-  },
-  {
-    title: 'Authors',
-    url: '/admin/dashboard/authors',
-    icon: UserCheck,
-  },
-  {
-    title: 'Users',
-    url: '/admin/dashboard/users',
-    icon: Users,
-  },
+  }
 ];
 
 export function AdminSidebar() {

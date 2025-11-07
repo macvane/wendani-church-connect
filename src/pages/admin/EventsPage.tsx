@@ -315,7 +315,7 @@ const EventsPage = () => {
                       <TableCell>{event.venue}</TableCell>
                       <TableCell>
                         <div className="flex gap-2">
-                          <Button size="sm" variant="outline" onClick={() => window.open(`https://macvane.pythonanywhere.com${event.image}`, '_blank')}>
+                          <Button size="sm" variant="outline" onClick={() => window.open(`https://kahawawendanisda.org/events/${event.slug}`, '_blank')}>
                             <Eye className="w-4 h-4 mr-1" /> View
                           </Button>
                           <Button size="sm" variant="outline" onClick={() => openEditDialog(event)}>
