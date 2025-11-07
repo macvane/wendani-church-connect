@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { dashboardStats } from '@/data/adminData';
+import { prayerAPI, baptismAPI, dedicationAPI, membershipAPI, benevolenceAPI, contactAPI, eventAPI } from '@/utils/api';
 import {
   Heart,
   Droplets,
@@ -12,75 +12,152 @@ import {
   Calendar,
   Users,
   TrendingUp,
+  Loader2,
 } from 'lucide-react';
 
 const DashboardOverview = () => {
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState({
+    totalPrayers: 0,
+    pendingPrayers: 0,
+    totalBaptisms: 0,
+    pendingBaptisms: 0,
+    totalDedications: 0,
+    pendingDedications: 0,
+    totalMemberships: 0,
+    pendingMemberships: 0,
+    totalBenevolence: 0,
+    pendingBenevolence: 0,
+    totalContacts: 0,
+    newContacts: 0,
+    totalEvents: 0,
+    publishedEvents: 0,
+  });
+
+  useEffect(() => {
+    const fetchAllStats = async () => {
+      try {
+        setLoading(true);
+        
+        // Fetch all data in parallel
+        const [
+          prayersRes,
+          baptismsRes,
+          dedicationsRes,
+          membershipsRes,
+          benevolenceRes,
+          contactsRes,
+          eventsRes,
+        ] = await Promise.all([
+          prayerAPI.list(),
+          baptismAPI.list(),
+          dedicationAPI.list(),
+          membershipAPI.list(),
+          benevolenceAPI.list(),
+          contactAPI.list(),
+          eventAPI.list(),
+        ]);
+
+        const prayers = await prayersRes.json();
+        const baptisms = await baptismsRes.json();
+        const dedications = await dedicationsRes.json();
+        const memberships = await membershipsRes.json();
+        const benevolence = await benevolenceRes.json();
+        const contacts = await contactsRes.json();
+        const events = await eventsRes.json();
+
+        setStats({
+          totalPrayers: prayers.length || 0,
+          pendingPrayers: prayers.filter((p: any) => p.status === 'pending').length || 0,
+          totalBaptisms: baptisms.length || 0,
+          pendingBaptisms: baptisms.filter((b: any) => b.status === 'pending').length || 0,
+          totalDedications: dedications.length || 0,
+          pendingDedications: dedications.filter((d: any) => d.status === 'pending').length || 0,
+          totalMemberships: memberships.length || 0,
+          pendingMemberships: memberships.filter((m: any) => m.status === 'pending').length || 0,
+          totalBenevolence: benevolence.length || 0,
+          pendingBenevolence: benevolence.filter((b: any) => b.status === 'pending' || b.status === 'under_review').length || 0,
+          totalContacts: contacts.length || 0,
+          newContacts: contacts.filter((c: any) => c.status === 'new' || !c.status).length || 0,
+          totalEvents: events.length || 0,
+          publishedEvents: events.filter((e: any) => e.status === 'published').length || 0,
+        });
+      } catch (error) {
+        console.error('Error fetching dashboard stats:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAllStats();
+  }, []);
+
   const statCards = [
     {
       title: 'Prayer Requests',
-      total: dashboardStats.totalPrayers,
-      pending: dashboardStats.pendingPrayers,
+      total: stats.totalPrayers,
+      pending: stats.pendingPrayers,
       icon: Heart,
       color: 'text-red-600',
       bgColor: 'bg-red-50',
     },
     {
       title: 'Baptism Requests',
-      total: dashboardStats.totalBaptisms,
-      pending: dashboardStats.pendingBaptisms,
+      total: stats.totalBaptisms,
+      pending: stats.pendingBaptisms,
       icon: Droplets,
       color: 'text-blue-600',
       bgColor: 'bg-blue-50',
     },
     {
       title: 'Child Dedications',
-      total: dashboardStats.totalDedications,
-      pending: dashboardStats.pendingDedications,
+      total: stats.totalDedications,
+      pending: stats.pendingDedications,
       icon: Baby,
       color: 'text-pink-600',
       bgColor: 'bg-pink-50',
     },
     {
       title: 'Membership Transfers',
-      total: dashboardStats.totalMemberships,
-      pending: dashboardStats.pendingMemberships,
+      total: stats.totalMemberships,
+      pending: stats.pendingMemberships,
       icon: UserPlus,
       color: 'text-green-600',
       bgColor: 'bg-green-50',
     },
     {
       title: 'Benevolence Requests',
-      total: dashboardStats.totalBenevolence,
-      pending: dashboardStats.pendingBenevolence,
+      total: stats.totalBenevolence,
+      pending: stats.pendingBenevolence,
       icon: HandHeart,
       color: 'text-purple-600',
       bgColor: 'bg-purple-50',
     },
     {
       title: 'Contact Messages',
-      total: dashboardStats.totalContacts,
-      pending: dashboardStats.newContacts,
+      total: stats.totalContacts,
+      pending: stats.newContacts,
       icon: MessageSquare,
       color: 'text-orange-600',
       bgColor: 'bg-orange-50',
     },
     {
-      title: 'Blog Posts',
-      total: dashboardStats.totalBlogs,
-      pending: dashboardStats.pendingBlogs,
-      icon: BookOpen,
-      color: 'text-indigo-600',
-      bgColor: 'bg-indigo-50',
-    },
-    {
       title: 'Events',
-      total: dashboardStats.totalEvents,
-      pending: dashboardStats.publishedEvents,
+      total: stats.totalEvents,
+      pending: stats.publishedEvents,
       icon: Calendar,
       color: 'text-teal-600',
       bgColor: 'bg-teal-50',
     },
   ];
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
