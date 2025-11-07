@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import CountdownTimer from '@/components/home/CountdownTimer';
 import { Calendar, MapPin, Clock } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Helmet } from 'react-helmet-async';
-import { Link } from 'react-router-dom';
 import { eventAPI } from '@/utils/api';
 import { format } from 'date-fns';
 
 interface Event {
-  id: number;
+  slug: string;
   title: string;
   description: string;
   venue: string;
   date: string;
+  from_date: string;
+  to_date: string;
   time: string;
   image: string;
   created_at: string;
@@ -42,34 +42,54 @@ const Events = () => {
     }
   };
 
-  const isDatePassed = (dateString: string) => {
-    const eventDate = new Date(dateString);
+  // Determines if event has already ended (based on to_date if available)
+  const isDatePassed = (event: Event) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
+
+    // If to_date exists, check it first
+    if (event.to_date) {
+      const endDate = new Date(event.to_date);
+      return endDate < today;
+    }
+
+    // Otherwise, fall back to single date
+    const eventDate = new Date(event.date);
     return eventDate < today;
   };
 
-  const upcomingEvents = events.filter(event => !isDatePassed(event.date));
-  const pastEvents = events.filter(event => isDatePassed(event.date));
+  // Display logic
+  const getEventDateDisplay = (event: Event) => {
+    if (event.from_date && event.to_date) {
+      return `${format(new Date(event.from_date), 'MMM d')} – ${format(new Date(event.to_date), 'MMM d, yyyy')}`;
+    }
+    return format(new Date(event.date), 'MMM d, yyyy');
+  };
+
+  const upcomingEvents = events.filter((event) => !isDatePassed(event));
+  const pastEvents = events.filter((event) => isDatePassed(event));
 
   return (
     <>
       <Helmet>
         <title>Events - Kahawa Wendani SDA Church</title>
-        <meta name="description" content="Stay updated with upcoming events at Kahawa Wendani SDA Church in Nairobi. Join us for worship services, fellowship, community outreach, and special programs." />
+        <meta
+          name="description"
+          content="Stay updated with upcoming events at Kahawa Wendani SDA Church in Nairobi. Join us for worship services, fellowship, community outreach, and special programs."
+        />
         <link rel="canonical" href="https://kahawawendanisda.org/events" />
       </Helmet>
-      
+
       <Header />
-      
-      <main className="">
+
+      <main>
         {/* Hero Section */}
         <section className="relative h-[400px] flex items-center justify-center">
           <div className="absolute inset-0">
             <div className="absolute inset-0 bg-black bg-opacity-60 z-10"></div>
-            <img 
-              src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2h1cmNoJTIwZXZlbnR8ZW58MHx8MHx8fDA%3D" 
-              alt="Events" 
+            <img
+              src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=500&auto=format&fit=crop&q=60"
+              alt="Events"
               className="w-full h-full object-cover"
             />
           </div>
@@ -90,22 +110,15 @@ const Events = () => {
                 <TabsTrigger value="past">Past Events</TabsTrigger>
               </TabsList>
 
+              {/* UPCOMING EVENTS */}
               <TabsContent value="upcoming">
                 {loading ? (
                   <div className="flex items-center justify-center py-24">
                     <div className="relative flex items-center justify-center w-24 h-24">
-                      {/* Spinner circle */}
                       <div className="absolute w-24 h-24 border-4 border-[#007780] border-t-light rounded-full animate-spin"></div>
-
-                      {/* Center logo */}
-                      <img 
-                        src="/logo.png" 
-                        alt="Loading..." 
-                        className="w-12 h-12 object-contain"
-                      />
+                      <img src="/logo.png" alt="Loading..." className="w-12 h-12 object-contain" />
                     </div>
                   </div>
-
                 ) : upcomingEvents.length === 0 ? (
                   <div className="text-center py-12">
                     <p className="text-gray-600">No upcoming events at the moment.</p>
@@ -113,17 +126,18 @@ const Events = () => {
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {upcomingEvents.map((event) => (
-                      <div 
-                        key={event.id}
+                      <div
+                        key={event.slug}
                         className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow"
                       >
                         <div className="relative h-48">
-                          <img 
+                          <img
                             src={`https://macvane.pythonanywhere.com${event.image}`}
-                            alt={event.title} 
+                            alt={event.title}
                             className="w-full h-full object-cover"
                             onError={(e) => {
-                              e.currentTarget.src = 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=500&auto=format&fit=crop&q=60';
+                              e.currentTarget.src =
+                                'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=500&auto=format&fit=crop&q=60';
                             }}
                           />
                         </div>
@@ -133,7 +147,7 @@ const Events = () => {
                           <div className="space-y-2 text-sm text-gray-600">
                             <div className="flex items-center">
                               <Calendar className="w-4 h-4 mr-2 text-church-600" />
-                              <span>{format(new Date(event.date), 'MMM d, yyyy')}</span>
+                              <span>{getEventDateDisplay(event)}</span>
                             </div>
                             <div className="flex items-center">
                               <Clock className="w-4 h-4 mr-2 text-church-600" />
@@ -151,6 +165,7 @@ const Events = () => {
                 )}
               </TabsContent>
 
+              {/* PAST EVENTS */}
               <TabsContent value="past">
                 {loading ? (
                   <div className="text-center py-12">
@@ -163,17 +178,18 @@ const Events = () => {
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {pastEvents.map((event) => (
-                      <div 
-                        key={event.id}
+                      <div
+                        key={event.slug}
                         className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden opacity-75"
                       >
                         <div className="relative h-48">
-                          <img 
+                          <img
                             src={`https://macvane.pythonanywhere.com${event.image}`}
-                            alt={event.title} 
+                            alt={event.title}
                             className="w-full h-full object-cover"
                             onError={(e) => {
-                              e.currentTarget.src = 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=500&auto=format&fit=crop&q=60';
+                              e.currentTarget.src =
+                                'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=500&auto=format&fit=crop&q=60';
                             }}
                           />
                         </div>
@@ -183,7 +199,7 @@ const Events = () => {
                           <div className="space-y-2 text-sm text-gray-600">
                             <div className="flex items-center">
                               <Calendar className="w-4 h-4 mr-2 text-church-600" />
-                              <span>{format(new Date(event.date), 'MMM d, yyyy')}</span>
+                              <span>{getEventDateDisplay(event)}</span>
                             </div>
                             <div className="flex items-center">
                               <Clock className="w-4 h-4 mr-2 text-church-600" />
@@ -204,7 +220,7 @@ const Events = () => {
           </div>
         </section>
       </main>
-      
+
       <Footer />
     </>
   );

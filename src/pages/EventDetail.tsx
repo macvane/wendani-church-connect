@@ -25,13 +25,13 @@ export default function EventDetail() {
 
   useEffect(() => {
     if (slug) {
-      fetchEvent(parseInt(slug));
+      fetchEvent(slug);
     }
   }, [slug]);
 
-  const fetchEvent = async (id: number) => {
+  const fetchEvent = async (slug: string) => {
     try {
-      const response = await eventAPI.detail(id);
+      const response = await eventAPI.detail(slug);
       if (response.ok) {
         const data = await response.json();
         setEvent(data);

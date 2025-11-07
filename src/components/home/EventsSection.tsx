@@ -6,6 +6,7 @@ import { format } from 'date-fns';
 
 interface Event {
   id: number;
+  slug: string;
   title: string;
   description: string;
   venue: string;
@@ -116,7 +117,7 @@ const EventsSection = () => {
                   </p>
                   <div className="mt-auto">
                     <Link 
-                      to={`/events/${event.id}`}
+                      to={`/events/${event.slug}`}
                       className="text-church-600 font-medium hover:text-church-700"
                     >
                       View Details →

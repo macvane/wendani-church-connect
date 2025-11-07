@@ -167,8 +167,8 @@ export const eventAPI = {
     return apiRequest('/form/events/list/');
   },
 
-  detail: async (id: number) => {
-    return apiRequest(`/form/events/${id}/`);
+  detail: async (slug: string) => {
+    return apiRequest(`/form/events/detail/${slug}/`);
   },
 
   create: async (formData: FormData) => {
@@ -178,15 +178,15 @@ export const eventAPI = {
     });
   },
 
-  update: async (id: number, formData: FormData) => {
-    return apiRequest(`/form/events/${id}/`, {
+  update: async (slug: string, formData: FormData) => {
+    return apiRequest(`/form/events/update/${slug}/`, {
       method: 'PUT',
       body: formData,
     });
   },
 
-  delete: async (id: number) => {
-    return apiRequest(`/form/events/${id}/`, { method: 'DELETE' });
+  delete: async (slug: string) => {
+    return apiRequest(`/form/events/update/${slug}/`, { method: 'DELETE' });
   },
 };
 
