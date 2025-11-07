@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -60,8 +60,17 @@ const AdminLogin = () => {
     <div className="min-h-screen bg-gradient-to-br from-primary/10 to-secondary/20 flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary">
-            <Shield className="h-6 w-6 text-primary-foreground" />
+          <div className="mx-auto mb-4 flex  items-center justify-center rounded-full ">
+            <Link 
+              to="/" 
+              className="flex items-center space-x-2"
+            >
+              <img 
+                src="/new-logo.png" 
+                alt="Kahawa Wendani SDA Church Logo" 
+                className="h-[3rem] md:h-[4rem] object-contain"
+              />
+            </Link>
           </div>
           <CardTitle className="text-2xl font-serif">Admin Login</CardTitle>
           <CardDescription>
@@ -110,6 +119,11 @@ const AdminLogin = () => {
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? 'Signing in...' : 'Sign In'}
             </Button>
+            <p className='text-sm text-center text-gray-700 hover:text-primary transition-colors duration-300 ease-out'>
+              <Link to='/'>
+                Back Home
+              </Link>
+            </p>
           </form>
         </CardContent>
       </Card>

@@ -43,6 +43,7 @@ const MedicalConsentForm = () => {
   "Ramah Agutu",
   "Tamara Ann",
   "Lesnah Thomas",
+  "Klaire Konana",
   "Bravinn Enock"
 ];
 
