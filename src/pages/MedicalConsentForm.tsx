@@ -91,37 +91,37 @@ const MedicalConsentForm = () => {
     setIsSubmitting(true);
 
     const plainTextMessage = `
-UPPER NAIROBI EAST STATION ADVENTURERS
-PERMISSION & MEDICAL CONSENT FORM
-==================================================
+                     UPPER NAIROBI EAST STATION ADVENTURERS
+                   PERMISSION & MEDICAL CONSENT FORM
+======================================================================
 
 CHILD'S DETAILS
---------------------------------------------------
-Name:                   ${formData.name}
-Age:                    ${formData.age}
-Birth Date:             ${formData.birthDate}
-Gender:                 ${formData.gender}
-Station:                ${formData.station}
-Phone No.:              ${formData.phoneNo}
-Church:                 ${formData.church}
-District:               ${formData.district}
-Club Class:             ${formData.clubClass}
-Parent/Guardian:        ${formData.parentGuardian}
+----------------------------------------------------------------------
+Name:                        ${formData.name}
+Age:                         ${formData.age}
+Birth Date:                  ${formData.birthDate}
+Gender:                      ${formData.gender}
+Station:                     ${formData.station}
+Phone No.:                   ${formData.phoneNo}
+Church:                      ${formData.church}
+District:                    ${formData.district}
+Club Class:                  ${formData.clubClass}
+Parent/Guardian(s):          ${formData.parentGuardian}
 
-==================================================
+======================================================================
 
 EVENT DETAILS
---------------------------------------------------
-Event:                  Upper Nairobi East Station Adventurers Family Campout
-Event Date:             November 11 – 16 2025
-Event Location:         Kamiti Hostels
+----------------------------------------------------------------------
+Event:                       Upper Nairobi East Station Adventurers Family Campout
+Event Date:                  November 11 – 16, 2025
+Event Location:              Kamiti Hostels
 
-==================================================
+======================================================================
 
 MEDICAL INFORMATION
---------------------------------------------------
-Family Insurance Co.:   ${formData.familyInsuranceCompany || 'N/A'}
-Insurance Policy #:     ${formData.familyInsurancePolicyNumber || 'N/A'}
+----------------------------------------------------------------------
+Family Insurance Company:     ${formData.familyInsuranceCompany || 'N/A'}
+Policy Number:                ${formData.familyInsurancePolicyNumber || 'N/A'}
 
 Allergies:
 ${formData.allergies || 'None specified'}
@@ -135,14 +135,40 @@ ${formData.physicalConditions || 'None specified'}
 Dietary Requirements / Allergies:
 ${formData.dietaryRequirements || 'None specified'}
 
-==================================================
+======================================================================
 
 AUTHORIZATION
---------------------------------------------------
-Parent/Guardian Signature:  ${formData.parentGuardianSignature}
-Date of Signature:          ${formData.date}
-Daytime Cellphone:          ${formData.daytimeCellphone}
-    `;
+----------------------------------------------------------------------
+Event Participation:
+I understand that I am required to give my consent before my child can 
+participate in this event. By signing this form, I represent that I am the 
+custodial parent or legal guardian of the child listed above and consent to 
+their participation, including transportation to and from the event.
+
+Medical Permission:
+I also give permission for adult leaders/volunteers to administer emergency 
+treatment, contact emergency personnel, and act in my stead in approving 
+necessary medical care until I can be reasonably contacted. I understand that 
+our family’s insurance will be primary and the East Nairobi Field liability 
+insurance will be secondary.
+
+Liability Release:
+I, on behalf of myself, my spouse, next of kin, executors, heirs, assigns, or 
+anyone else who might claim or sue on my or my child’s behalf, fully release 
+and agree not to sue the East Nairobi Field and any of its agents, employees, 
+and/or volunteers from any and all liability, including but not limited to 
+claims, losses, or damages arising from or relating to my child’s participation 
+in the event, including transportation and any provision of medical care.
+
+======================================================================
+
+Parent/Guardian Signature:   ${formData.parentGuardianSignature}
+Date of Signature:           ${formData.date}
+Daytime Cellphone:           ${formData.daytimeCellphone}
+
+======================================================================
+`;
+
 
     const dataToSend = new FormData();
     dataToSend.append("access_key", "a57bc367-cd90-4dec-8655-22574d4df359");
