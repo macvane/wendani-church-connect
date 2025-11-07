@@ -40,7 +40,6 @@ const MedicalConsentForm = () => {
   "Lyte Gladden",
   "James Mich",
   "Zoey Maya",
-  "Ramah Agutu",
   "Tamara Ann",
   "Lesnah Thomas",
   "Klaire Konana",
