@@ -40,10 +40,12 @@ const MedicalConsentForm = () => {
   "Lyte Gladden",
   "James Mich",
   "Zoey Maya",
+  "Elsa Bisieri",
   "Tamara Ann",
   "Lesnah Thomas",
   "Klaire Konana",
-  "Bravinn Enock"
+  "Bravinn Enock",
+  "Brenda Joy"
 ];
 
 
