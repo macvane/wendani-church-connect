@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 const Countdown = () => {
   const calculateTimeLeft = () => {
-    const difference = +new Date('2025-08-10T08:00:00') - +new Date();
+    const difference = +new Date('2025-12-06T08:00:00') - +new Date();
     let timeLeft = {};
 
     if (difference > 0) {
@@ -49,8 +49,8 @@ const Countdown = () => {
       <div className="w-[90%] mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-0">
         <div className="flex flex-col justify-center items-center">
           <div className="space-y-2 text-center">
-            <h4 className="text-2xl md:text-3xl font-bold underline ">CAMP MEETING 2025</h4>
-            <p className="text-white/70 text-lg">AUGUST 10, 2025 8:00AM</p>
+            <h4 className="text-2xl md:text-3xl font-bold underline ">CHURCH CONSTRUCTION FUNDRAISER</h4>
+            <p className="text-white/70 text-lg">DECEMBER 06, 2025 8:00AM</p>
           </div>
         </div>
 
