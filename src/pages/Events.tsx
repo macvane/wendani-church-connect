@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import { Calendar, MapPin, Clock } from 'lucide-react';
+import { Calendar, MapPin, Clock, SortAsc, SortDesc } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Helmet } from 'react-helmet-async';
 import { eventAPI } from '@/utils/api';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface Event {
   slug: string;
@@ -24,6 +25,7 @@ interface Event {
 const Events = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
   useEffect(() => {
     fetchEvents();
@@ -34,7 +36,14 @@ const Events = () => {
       const response = await eventAPI.list();
       if (response.ok) {
         const data = await response.json();
-        setEvents(data);
+
+        // Default sort (nearest → furthest)
+        const sortedEvents = data.sort((a: Event, b: Event) => {
+          const aDate = new Date(a.from_date || a.date);
+          const bDate = new Date(b.from_date || b.date);
+          return aDate.getTime() - bDate.getTime();
+        });
+        setEvents(sortedEvents);
       }
     } catch (error) {
       console.error('Error fetching events:', error);
@@ -43,23 +52,19 @@ const Events = () => {
     }
   };
 
-  // Determines if event has already ended (based on to_date if available)
   const isDatePassed = (event: Event) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // If to_date exists, check it first
     if (event.to_date) {
       const endDate = new Date(event.to_date);
       return endDate < today;
     }
 
-    // Otherwise, fall back to single date
     const eventDate = new Date(event.date);
     return eventDate < today;
   };
 
-  // Display logic
   const getEventDateDisplay = (event: Event) => {
     if (event.from_date && event.to_date) {
       return `${format(new Date(event.from_date), 'MMM d')} – ${format(new Date(event.to_date), 'MMM d, yyyy')}`;
@@ -67,8 +72,24 @@ const Events = () => {
     return format(new Date(event.date), 'MMM d, yyyy');
   };
 
-  const upcomingEvents = events.filter((event) => !isDatePassed(event));
-  const pastEvents = events.filter((event) => isDatePassed(event));
+  // Apply sorting order (controlled by dropdown)
+  const sortEvents = (eventsArray: Event[], order: 'asc' | 'desc') => {
+    return [...eventsArray].sort((a, b) => {
+      const aDate = new Date(a.from_date || a.date).getTime();
+      const bDate = new Date(b.from_date || b.date).getTime();
+      return order === 'asc' ? aDate - bDate : bDate - aDate;
+    });
+  };
+
+  const upcomingEvents = sortEvents(
+    events.filter((event) => !isDatePassed(event)),
+    sortOrder
+  );
+
+  const pastEvents = sortEvents(
+    events.filter((event) => isDatePassed(event)),
+    sortOrder === 'asc' ? 'desc' : 'asc' // Past events default to most recent first
+  );
 
   return (
     <>
@@ -110,6 +131,27 @@ const Events = () => {
                 <TabsTrigger value="upcoming">Upcoming Events</TabsTrigger>
                 <TabsTrigger value="past">Past Events</TabsTrigger>
               </TabsList>
+
+              {/* Sort Dropdown */}
+              <div className="flex justify-end mb-6">
+                <Select value={sortOrder} onValueChange={(v: 'asc' | 'desc') => setSortOrder(v)}>
+                  <SelectTrigger className="w-40">
+                    <SelectValue placeholder="Sort by date" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="asc">
+                      <div className="flex items-center">
+                        <SortAsc className="w-4 h-4 mr-2" /> Nearest First
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="desc">
+                      <div className="flex items-center">
+                        <SortDesc className="w-4 h-4 mr-2" /> Furthest First
+                      </div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
               {/* UPCOMING EVENTS */}
               <TabsContent value="upcoming">
