@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Helmet } from 'react-helmet-async';
 import { eventAPI } from '@/utils/api';
 import { format } from 'date-fns';
+import { Link } from 'react-router-dom';
 
 interface Event {
   slug: string;
@@ -157,6 +158,14 @@ const Events = () => {
                               <MapPin className="w-4 h-4 mr-2 text-church-600" />
                               <span>{event.venue}</span>
                             </div>
+                          </div>
+                          <div className="mt-8">
+                            <Link 
+                              to={`/events/${event.slug}`}
+                              className="text-church-600 font-medium hover:text-church-700"
+                            >
+                              View Details →
+                            </Link>
                           </div>
                         </div>
                       </div>

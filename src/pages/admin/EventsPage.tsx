@@ -13,7 +13,7 @@ import {
   DialogTitle, DialogTrigger, DialogFooter
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
-import { Search, Eye, Edit, Trash2, Plus, ImagePlus } from 'lucide-react';
+import { Search, Eye, Edit, Trash2, Plus, ImagePlus, Loader2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { eventAPI } from '@/utils/api';
 import { useToast } from '@/hooks/use-toast';
@@ -40,6 +40,7 @@ const EventsPage = () => {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [isCreating, setIsCreating] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -93,6 +94,7 @@ const EventsPage = () => {
     });
 
     try {
+      setIsCreating(true);
       const response = await eventAPI.create(data);
       if (response.ok) {
         toast({ title: 'Success', description: 'Event created successfully' });
@@ -102,6 +104,8 @@ const EventsPage = () => {
       }
     } catch {
       toast({ title: 'Error', description: 'Failed to create event', variant: 'destructive' });
+    } finally {
+      setIsCreating(false);
     }
   };
 
@@ -231,13 +235,13 @@ const EventsPage = () => {
 
                 <div className="grid gap-4 py-4">
                   <Label>Event Title</Label>
-                  <Input value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} />
+                  <Input value={formData.title} placeholder='Title' onChange={(e) => setFormData({ ...formData, title: e.target.value })} />
 
                   <Label>Description</Label>
-                  <Textarea rows={3} value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} />
+                  <Textarea rows={3} value={formData.description} placeholder='Event Details' onChange={(e) => setFormData({ ...formData, description: e.target.value })} />
 
                   <Label>Venue</Label>
-                  <Input value={formData.venue} onChange={(e) => setFormData({ ...formData, venue: e.target.value })} />
+                  <Input value={formData.venue} placeholder='Venue of the event' onChange={(e) => setFormData({ ...formData, venue: e.target.value })} />
 
                   <Label>Date (Single-day)</Label>
                   <Input type="date" value={formData.date} onChange={(e) => setFormData({ ...formData, date: e.target.value })} />
@@ -275,9 +279,20 @@ const EventsPage = () => {
 
                 <DialogFooter>
                   <Button variant="outline" onClick={() => setIsCreateOpen(false)}>Cancel</Button>
-                  <Button onClick={handleCreateEvent}>
-                    <ImagePlus className="w-4 h-4 mr-2" /> Create Event
+                  <Button onClick={handleCreateEvent} disabled={isCreating}>
+                    {isCreating ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        <ImagePlus className="w-4 h-4 mr-2" />
+                        Create Event
+                      </>
+                    )}
                   </Button>
+
                 </DialogFooter>
               </DialogContent>
             </Dialog>
