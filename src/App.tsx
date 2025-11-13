@@ -70,7 +70,7 @@ const App = () => {
             <Route path="/benevolence" element={<Benevolence />} />
             <Route path="/library" element={<Library />} />
             <Route path="/baptism" element={<Baptism />} />
-            <Route path="/donate" element={<Donate />} />
+            <Route path="/mpesa" element={<Donate />} />
             <Route path="/membership-transfer" element={<MembershipTransfer />} />
           <Route path="/thank-you" element={<ThankYou />} />
           <Route path="/mpesa-success" element={<MpesaSuccess />} />

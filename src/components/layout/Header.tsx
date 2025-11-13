@@ -126,7 +126,7 @@ const Header = () => {
           ))}
           
           {/* Distinct Donate Button */}
-          <Link to="/donate">
+          {/* <Link to="/donate">
             <Button 
               variant="default"
               className={cn(
@@ -136,7 +136,7 @@ const Header = () => {
             >
               Donate
             </Button>
-          </Link>
+          </Link> */}
         </nav>
         
         {/* Mobile Menu Toggle */}
@@ -204,14 +204,14 @@ const Header = () => {
           ))}
           
           {/* Mobile Donate Button */}
-          <Link to="/donate" className="px-4">
+          {/* <Link to="/donate" className="px-4">
             <Button 
               variant="default"
               className="w-full bg-church-600 hover:bg-church-700 text-white"
             >
               Donate
             </Button>
-          </Link>
+          </Link> */}
         </nav>
       </div>
     </header>

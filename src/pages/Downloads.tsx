@@ -21,16 +21,6 @@ interface Announcement {
 const staticDownloads = [
   {
     id: 1,
-    title: "Family Togetherness Week Of Prayer",
-    description: "Access the official booklet for Family Togetherness Week of Prayer, featuring daily readings, messages, and spiritual resources to guide families in worship and growth.",
-    date: "Sep 06, 2025",
-    type: "PDF",
-    fileSize: "235 MB",
-    url: "https://kahawawendanisda.org/resources/AFM_2025FTWOP-Gods_Great_Gifts-ENGLISH.pdf", 
-    viewUrl: "https://kahawawendanisda.org/resources/AFM_2025FTWOP-Gods_Great_Gifts-ENGLISH.pdf",
-  },
-  {
-    id: 2,
     title: "Church Website Guide",
     description: "This manual walks you through every feature, ensuring you stay connected, supported, and spiritually nourished.",
     date: "Sep 05, 2025",
@@ -40,7 +30,7 @@ const staticDownloads = [
     viewUrl: "https://kahawawendanisda.org/guide/ChurchWebsiteGuide.pdf",
   },
   {
-    id: 3,
+    id: 2,
     title: "Church Manual",
     description: "The official church constitution and bylaws that govern our church operations.",
     date: "January 15, 2024",
