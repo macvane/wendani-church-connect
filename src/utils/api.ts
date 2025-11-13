@@ -394,3 +394,30 @@ export const contactAPI = {
     return apiRequest(`/form/contact/${id}/`, { method: 'DELETE' });
   },
 };
+
+// M-Pesa Payment APIs
+export const mpesaAPI = {
+  initiatePayment: async (data: {
+    name: string;
+    phone_number: string;
+    email?: string;
+    purpose: string;
+    other_purpose_details?: string;
+    amount: number;
+  }) => {
+    const response = await fetch(`${API_BASE_URL}/api/v1/mpesa/initiate-payment/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    return response;
+  },
+
+  listTransactions: async () => {
+    return apiRequest('/api/v1/mpesa/transactions/');
+  },
+
+  transactionDetail: async (id: number) => {
+    return apiRequest(`/api/v1/mpesa/transactions/${id}/`);
+  },
+};

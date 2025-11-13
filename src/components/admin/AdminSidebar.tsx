@@ -24,6 +24,7 @@ import {
   Calendar,
   BookOpen,
   UserCheck,
+  CreditCard,
 } from 'lucide-react';
 
 const adminMenuItems = [
@@ -71,6 +72,11 @@ const adminMenuItems = [
     title: 'Events',
     url: '/admin/dashboard/events',
     icon: Calendar,
+  },
+  {
+    title: 'Transactions',
+    url: '/admin/dashboard/transactions',
+    icon: CreditCard,
   }
 ];
 
