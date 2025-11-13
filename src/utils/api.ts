@@ -417,6 +417,10 @@ export const mpesaAPI = {
     return apiRequest('/api/v1/mpesa/transactions/');
   },
 
+  getTransactionStatus: async (checkoutRequestId: string) => {
+    return apiRequest(`/api/v1/mpesa/transaction-status/${checkoutRequestId}/`);
+  },
+
   transactionDetail: async (id: number) => {
     return apiRequest(`/api/v1/mpesa/transactions/${id}/`);
   },

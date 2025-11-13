@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "@/components/layout/Header";
 import { PiggyBank, Loader2 } from "lucide-react";
@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { mpesaAPI } from "@/utils/api";
 import Footer from "@/components/layout/Footer";
@@ -32,6 +33,8 @@ const Donate = () => {
     amount: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [checkoutRequestId, setCheckoutRequestId] = useState<string | null>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
   
@@ -44,6 +47,53 @@ const Donate = () => {
     setFormData(prev => ({ ...prev, purpose: value, other_purpose_details: '' }));
   };
   
+  // Poll for transaction status
+  useEffect(() => {
+    if (!checkoutRequestId) return;
+
+    const pollInterval = setInterval(async () => {
+      try {
+        const response = await mpesaAPI.getTransactionStatus(checkoutRequestId);
+        if (response.ok) {
+          const data = await response.json();
+          
+          if (data.status === 'completed' || data.status === 'success') {
+            setIsProcessing(false);
+            setCheckoutRequestId(null);
+            navigate('/mpesa-success', { state: { transactionData: data } });
+          } else if (data.status === 'failed' || data.status === 'cancelled') {
+            setIsProcessing(false);
+            setCheckoutRequestId(null);
+            toast({
+              title: "Payment Failed",
+              description: data.message || "The payment was not completed. Please try again.",
+              variant: "destructive",
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Error checking status:", error);
+      }
+    }, 3000); // Poll every 3 seconds
+
+    // Cleanup after 5 minutes
+    const timeout = setTimeout(() => {
+      clearInterval(pollInterval);
+      setIsProcessing(false);
+      setCheckoutRequestId(null);
+      toast({
+        title: "Payment Timeout",
+        description: "Payment verification timed out. Please check your transaction history.",
+        variant: "destructive",
+      });
+    }, 300000);
+
+    return () => {
+      clearInterval(pollInterval);
+      clearTimeout(timeout);
+    };
+  }, [checkoutRequestId, navigate, toast]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -88,12 +138,14 @@ const Donate = () => {
       });
       
       if (response.ok) {
+        const data = await response.json();
         toast({
           title: "Payment Initiated",
           description: "Please enter your M-Pesa PIN on your phone to complete the payment.",
         });
         
-        navigate('/thank-you');
+        setCheckoutRequestId(data.checkout_request_id || data.CheckoutRequestID);
+        setIsProcessing(true);
       } else {
         const errorData = await response.json();
         toast({
@@ -284,6 +336,27 @@ const Donate = () => {
             </div>
           </div>
         </section>
+
+        {/* Processing Dialog */}
+        <Dialog open={isProcessing} onOpenChange={() => {}}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle className="text-center">Processing Payment</DialogTitle>
+              <DialogDescription className="text-center">
+                Please complete the payment on your phone
+              </DialogDescription>
+            </DialogHeader>
+            <div className="flex flex-col items-center justify-center py-8 space-y-4">
+              <Loader2 className="h-16 w-16 animate-spin text-primary" />
+              <p className="text-sm text-muted-foreground text-center">
+                Waiting for payment confirmation from M-Pesa...
+              </p>
+              <p className="text-xs text-muted-foreground text-center">
+                This may take up to 2 minutes. Please don't close this window.
+              </p>
+            </div>
+          </DialogContent>
+        </Dialog>
       </main>
       <Footer />
     </>
