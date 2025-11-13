@@ -324,10 +324,10 @@ const Donate = () => {
               <h3 className="text-xl font-semibold mb-4">Alternative: Manual M-Pesa</h3>
               <div className="space-y-2">
                 <p className="text-sm">
-                  <strong>Paybill Number:</strong> 247247
+                  <strong>Paybill Number:</strong> 400222
                 </p>
                 <p className="text-sm">
-                  <strong>Account Number:</strong> 0110251033500
+                  <strong>Account Number:</strong> 441211# TITHE or OFFERING specify purpose after #
                 </p>
                 <p className="text-sm text-muted-foreground">
                   After making a manual payment, you can use the form above to record your donation for our records.
