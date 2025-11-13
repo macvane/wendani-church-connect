@@ -37,6 +37,7 @@ import DedicationsPage from "./pages/admin/DedicationsPage";
 import MembershipTransfersPage from "./pages/admin/MembershipTransfersPage";
 import BenevolencePage from "./pages/admin/BenevolencePage";
 import UsersPage from "./pages/admin/UsersPage";
+import TransactionsPage from "./pages/admin/TransactionsPage";
 
 import MedicalConsentForm from "./pages/MedicalConsentForm";
 
@@ -83,6 +84,7 @@ const App = () => {
               <Route path="announcements" element={<AnnouncementsPage />} />
               <Route path="events" element={<EventsPage />} />
               <Route path="contacts" element={<ContactsPage />} />
+              <Route path="transactions" element={<TransactionsPage />} />
               <Route path="users" element={<UsersPage />} />
             </Route>
             <Route path="*" element={<NotFound />} />

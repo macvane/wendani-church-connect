@@ -1,57 +1,112 @@
-
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "@/components/layout/Header";
-import { PiggyBank } from "lucide-react";
+import { PiggyBank, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { sendToGoogleSheet } from "@/utils/googleSheets";
+import { mpesaAPI } from "@/utils/api";
 import Footer from "@/components/layout/Footer";
 import { Helmet } from "react-helmet-async";
 
+const PURPOSE_OPTIONS = [
+  { value: 'Tithe', label: 'Tithe' },
+  { value: 'Offering', label: 'Offering' },
+  { value: 'Local Church Budget (LCB)', label: 'Local Church Budget (LCB)' },
+  { value: 'Camp Offering', label: 'Camp Offering' },
+  { value: 'Camp Expenses', label: 'Camp Expenses' },
+  { value: 'Evangelism', label: 'Evangelism' },
+  { value: 'Station Dev', label: 'Station Development' },
+  { value: 'Other', label: 'Other' },
+];
+
 const Donate = () => {
-  const [donationData, setDonationData] = useState({
+  const [formData, setFormData] = useState({
     name: '',
+    phone_number: '',
     email: '',
+    purpose: '',
+    other_purpose_details: '',
     amount: '',
-    purpose: 'tithe',
-    phoneNumber: '',
-    message: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
   
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setDonationData(prev => ({ ...prev, [name]: value }));
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handlePurposeChange = (value: string) => {
+    setFormData(prev => ({ ...prev, purpose: value, other_purpose_details: '' }));
   };
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!formData.name || !formData.phone_number || !formData.purpose || !formData.amount) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in all required fields.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (formData.purpose === 'Other' && !formData.other_purpose_details) {
+      toast({
+        title: "Missing Information",
+        description: "Please specify your purpose when selecting 'Other'.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const amount = parseFloat(formData.amount);
+    if (isNaN(amount) || amount <= 0) {
+      toast({
+        title: "Invalid Amount",
+        description: "Please enter a valid amount.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     setIsSubmitting(true);
     
     try {
-      await sendToGoogleSheet({
-        ...donationData,
-      }, 'donation');
-      
-      toast({
-        title: "Donation Information Recorded",
-        description: "Thank you for your generosity. Your donation information has been recorded.",
+      const response = await mpesaAPI.initiatePayment({
+        name: formData.name,
+        phone_number: formData.phone_number,
+        email: formData.email || undefined,
+        purpose: formData.purpose,
+        other_purpose_details: formData.purpose === 'Other' ? formData.other_purpose_details : undefined,
+        amount: amount,
       });
       
-      setDonationData({
-        name: '',
-        email: '',
-        amount: '',
-        purpose: 'tithe',
-        phoneNumber: '',
-        message: '',
-      });
+      if (response.ok) {
+        toast({
+          title: "Payment Initiated",
+          description: "Please enter your M-Pesa PIN on your phone to complete the payment.",
+        });
+        
+        navigate('/thank-you');
+      } else {
+        const errorData = await response.json();
+        toast({
+          title: "Payment Failed",
+          description: errorData.message || "There was a problem initiating the payment. Please try again.",
+          variant: "destructive",
+        });
+      }
     } catch (error) {
-      console.error("Error recording donation:", error);
+      console.error("Error initiating payment:", error);
       toast({
-        title: "Submission Failed",
-        description: "There was a problem recording your donation information. Please try again.",
+        title: "Payment Failed",
+        description: "There was a problem initiating the payment. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -86,157 +141,147 @@ const Donate = () => {
           </div>
         </section>
 
-        {/* Donation Section */}
+        {/* Donation Form Section */}
         <section className="py-16 px-4">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <PiggyBank className="mx-auto h-16 w-16 text-church-600 mb-4" />
+              <PiggyBank className="mx-auto h-16 w-16 text-primary mb-4" />
               <h2 className="text-3xl font-bold mb-4">Worship Through Giving</h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
+              <p className="text-muted-foreground max-w-2xl mx-auto">
                 Your support enables us to continue God's mission and serve our community. 
                 All donations are securely processed through M-Pesa.
               </p>
             </div>
 
-            <div className="bg-white rounded-lg shadow-lg p-6 md:p-8">
-              <div className="text-center mb-8">
-                <h3 className="text-xl font-semibold mb-2">Give via M-Pesa</h3>
-                <p className="text-gray-600">Coming soon: Direct M-Pesa integration</p>
-              </div>
+            <div className="bg-card rounded-lg shadow-lg p-6 md:p-8 border">
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="name">Full Name *</Label>
+                    <Input
+                      id="name"
+                      name="name"
+                      type="text"
+                      placeholder="John Doe"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
 
-              <Button 
-                disabled
-                className="w-full bg-church-600 hover:bg-church-700 text-white py-4 rounded-lg text-lg font-medium"
-              >
-                Donate Now (Coming Soon)
-              </Button>
+                  <div className="space-y-2">
+                    <Label htmlFor="phone_number">Phone Number *</Label>
+                    <Input
+                      id="phone_number"
+                      name="phone_number"
+                      type="tel"
+                      placeholder="254712345678"
+                      value={formData.phone_number}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                </div>
 
-              <div className="mt-6 text-center text-gray-600">
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email (Optional)</Label>
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="john.doe@example.com"
+                    value={formData.email}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="purpose">Purpose *</Label>
+                    <Select value={formData.purpose} onValueChange={handlePurposeChange} required>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select purpose" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {PURPOSE_OPTIONS.map(option => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="amount">Amount (KES) *</Label>
+                    <Input
+                      id="amount"
+                      name="amount"
+                      type="number"
+                      placeholder="1000"
+                      min="1"
+                      step="1"
+                      value={formData.amount}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                </div>
+
+                {formData.purpose === 'Other' && (
+                  <div className="space-y-2">
+                    <Label htmlFor="other_purpose_details">Please specify purpose *</Label>
+                    <Input
+                      id="other_purpose_details"
+                      name="other_purpose_details"
+                      type="text"
+                      placeholder="Specify your purpose"
+                      value={formData.other_purpose_details}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                )}
+
+                <div className="pt-4">
+                  <Button 
+                    type="submit" 
+                    className="w-full" 
+                    size="lg"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Processing...
+                      </>
+                    ) : (
+                      'Proceed to M-Pesa Payment'
+                    )}
+                  </Button>
+                </div>
+
+                <p className="text-sm text-muted-foreground text-center">
+                  You will receive an M-Pesa prompt on your phone to complete the payment.
+                </p>
+              </form>
+            </div>
+
+            {/* Manual M-Pesa Info */}
+            <div className="mt-8 bg-muted rounded-lg p-6">
+              <h3 className="text-xl font-semibold mb-4">Alternative: Manual M-Pesa</h3>
+              <div className="space-y-2">
                 <p className="text-sm">
-                  For manual M-Pesa donations, use our Paybill:
-                  <br />
-                  <span className="font-semibold">Paybill Number: 400222</span>
-                  <br />
-                  <span className="font-semibold">Account Number: 441211# (TITHE or OFFERING or LCB)</span>
+                  <strong>Paybill Number:</strong> 247247
+                </p>
+                <p className="text-sm">
+                  <strong>Account Number:</strong> 0110251033500
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  After making a manual payment, you can use the form above to record your donation for our records.
                 </p>
               </div>
             </div>
-            
-            {/* Donation Records Form */}
-            {/* <div className="bg-white rounded-lg shadow-lg p-6 md:p-8 mt-8">
-              <h3 className="text-xl font-semibold mb-4 text-center">Record Your Donation</h3>
-              <p className="text-gray-600 mb-6 text-center">
-                After making your donation via M-Pesa, please fill out this form to help us record your contribution correctly.
-              </p>
-              
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                      Full Name
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      value={donationData.name}
-                      onChange={handleChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                      required
-                    />
-                  </div>
-                  
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={donationData.email}
-                      onChange={handleChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                      required
-                    />
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-1">
-                      Phone Number
-                    </label>
-                    <input
-                      type="tel"
-                      id="phoneNumber"
-                      name="phoneNumber"
-                      value={donationData.phoneNumber}
-                      onChange={handleChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                      required
-                    />
-                  </div>
-                  
-                  <div>
-                    <label htmlFor="amount" className="block text-sm font-medium text-gray-700 mb-1">
-                      Amount (KES)
-                    </label>
-                    <input
-                      type="number"
-                      id="amount"
-                      name="amount"
-                      value={donationData.amount}
-                      onChange={handleChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                      required
-                    />
-                  </div>
-                </div>
-                
-                <div>
-                  <label htmlFor="purpose" className="block text-sm font-medium text-gray-700 mb-1">
-                    Purpose of Donation
-                  </label>
-                  <select
-                    id="purpose"
-                    name="purpose"
-                    value={donationData.purpose}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                    required
-                  >
-                    <option value="tithe">Tithe</option>
-                    <option value="offering">Offering</option>
-                    <option value="lcb">Local Church Budget</option>
-                    <option value="construction">Church Construction</option>
-                    <option value="other">Other Purpose</option>
-                  </select>
-                </div>
-                
-                <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
-                    Additional Information (Optional)
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={donationData.message}
-                    onChange={handleChange}
-                    rows={3}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                  />
-                </div>
-                
-                <Button 
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full bg-church-600 hover:bg-church-700 text-white py-4 rounded-lg text-lg font-medium"
-                >
-                  {isSubmitting ? 'Submitting...' : 'Record Donation'}
-                </Button>
-              </form>
-            </div> */}
           </div>
         </section>
       </main>
