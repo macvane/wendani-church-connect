@@ -40,7 +40,7 @@ const TransactionsPage = () => {
       const response = await mpesaAPI.listTransactions();
       if (response.ok) {
         const data = await response.json();
-        setTransactions(data);
+        setTransactions(data.results);
       } else {
         toast({
           title: 'Error',
