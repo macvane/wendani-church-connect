@@ -20,7 +20,7 @@ const AdminLogin = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('https://macvane.pythonanywhere.com/api/token/', {
+      const response = await fetch('https://churchmedia.kahawawendanisda.org/api/token/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),

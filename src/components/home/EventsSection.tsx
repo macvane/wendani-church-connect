@@ -92,7 +92,7 @@ const EventsSection = () => {
               >
                 <div className="w-full h-[12rem] md:h-[17rem] relative">
                   <img 
-                    src={`https://macvane.pythonanywhere.com${event.image}`}
+                    src={`https://churchmedia.kahawawendanisda.org${event.image}`}
                     alt={event.title} 
                     loading="lazy"
                     className="w-full h-full object-cover object-top"

@@ -77,7 +77,7 @@ export default function EventDetail() {
           <div className="absolute inset-0">
             <div className="absolute inset-0 bg-black bg-opacity-60 z-10"></div>
             <img 
-              src={`https://macvane.pythonanywhere.com${event.image}`}
+              src={`https://churchmedia.kahawawendanisda.org${event.image}`}
               alt={event.title}
               className="w-full h-full object-cover"
               onError={(e) => {

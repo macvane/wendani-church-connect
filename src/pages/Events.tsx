@@ -175,7 +175,7 @@ const Events = () => {
                       >
                         <div className="relative h-48">
                           <img
-                            src={`https://macvane.pythonanywhere.com${event.image}`}
+                            src={`https://churchmedia.kahawawendanisda.org${event.image}`}
                             alt={event.title}
                             className="w-full h-full object-cover"
                             onError={(e) => {
@@ -235,7 +235,7 @@ const Events = () => {
                       >
                         <div className="relative h-48">
                           <img
-                            src={`https://macvane.pythonanywhere.com${event.image}`}
+                            src={`https://churchmedia.kahawawendanisda.org${event.image}`}
                             alt={event.title}
                             className="w-full h-full object-cover"
                             onError={(e) => {

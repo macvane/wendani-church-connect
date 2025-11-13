@@ -303,7 +303,7 @@ const AnnouncementsPage = () => {
                           <Button 
                             variant="outline" 
                             size="sm" 
-                            onClick={() => window.open(`https://macvane.pythonanywhere.com${announcement.file}`, '_blank')}
+                            onClick={() => window.open(`https://churchmedia.kahawawendanisda.org${announcement.file}`, '_blank')}
                           >
                             <Eye className="w-4 h-4 mr-1" />
                             View
@@ -311,7 +311,7 @@ const AnnouncementsPage = () => {
                           <Button 
                             variant="outline" 
                             size="sm" 
-                            onClick={() => window.open(`https://macvane.pythonanywhere.com${announcement.file}`, '_blank')}
+                            onClick={() => window.open(`https://churchmedia.kahawawendanisda.org${announcement.file}`, '_blank')}
                           >
                             <Download className="w-4 h-4 mr-1" />
                             Download

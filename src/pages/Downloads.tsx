@@ -250,14 +250,14 @@ const Downloads = () => {
                         </div>
                         <div className="mt-auto pt-4 border-t border-gray-100 flex gap-2">
                           <button
-                            onClick={() => window.open(`https://macvane.pythonanywhere.com${item.file}`, '_blank')}
+                            onClick={() => window.open(`https://churchmedia.kahawawendanisda.org${item.file}`, '_blank')}
                             className="flex items-center justify-center w-1/2 py-2 bg-church-500 text-white rounded-md hover:bg-church-600 transition-colors"
                           >
                             <Eye size={18} className="mr-2" />
                             View Document
                           </button>
                           <button 
-                            onClick={() => window.open(`https://macvane.pythonanywhere.com${item.file}`, '_blank')} 
+                            onClick={() => window.open(`https://churchmedia.kahawawendanisda.org${item.file}`, '_blank')} 
                             className="flex items-center justify-center w-1/2 py-2 bg-church-600 text-white rounded-md hover:bg-church-700 transition-colors"
                           >
                             <Download size={18} className="mr-2" />

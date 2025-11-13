@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://macvane.pythonanywhere.com';
+const API_BASE_URL = 'https://churchmedia.kahawawendanisda.org';
 
 // Token management
 export const getAccessToken = () => localStorage.getItem('access_token');
