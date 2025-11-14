@@ -40,6 +40,7 @@ import BenevolencePage from "./pages/admin/BenevolencePage";
 import UsersPage from "./pages/admin/UsersPage";
 import TreasurerDashboard from "./pages/treasurer/TreasurerDashboard";
 import TransactionsPage from "./pages/treasurer/TransactionsPage";
+import ReportsPage from "./pages/treasurer/ReportsPage";
 
 import MedicalConsentForm from "./pages/MedicalConsentForm";
 
@@ -89,9 +90,10 @@ const App = () => {
               <Route path="contacts" element={<ContactsPage />} />
               <Route path="users" element={<UsersPage />} />
             </Route>
-            <Route path="/treasurer/dashboard" element={<TreasurerDashboard />}>
-              <Route index element={<TransactionsPage />} />
-            </Route>
+          <Route path="/treasurer/dashboard" element={<TreasurerDashboard />}>
+            <Route index element={<TransactionsPage />} />
+            <Route path="reports" element={<ReportsPage />} />
+          </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

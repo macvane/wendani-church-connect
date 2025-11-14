@@ -14,6 +14,7 @@ import {
 import {
   LayoutDashboard,
   CreditCard,
+  FileText,
 } from 'lucide-react';
 
 const treasurerMenuItems = [
@@ -21,6 +22,11 @@ const treasurerMenuItems = [
     title: 'Transactions',
     url: '/treasurer/dashboard',
     icon: CreditCard,
+  },
+  {
+    title: 'Reports',
+    url: '/treasurer/dashboard/reports',
+    icon: FileText,
   }
 ];
 
