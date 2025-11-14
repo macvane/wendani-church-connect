@@ -33,7 +33,7 @@ const AdminLogin = () => {
         
         // Fetch user role
         try {
-          const roleResponse = await fetch('https://churchmedia.kahawawendanisda.org/api/user/role/', {
+          const roleResponse = await fetch('https://churchmedia.kahawawendanisda.org/api/me/', {
             headers: { 'Authorization': `Bearer ${data.access}` },
           });
           

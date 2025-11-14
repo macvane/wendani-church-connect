@@ -60,7 +60,7 @@ const TransactionsPage = () => {
   const [pageSize] = useState(20);
   
   // Filters
-  const [statusFilter, setStatusFilter] = useState<string>('');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
   const [purposeFilter, setPurposeFilter] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [startDate, setStartDate] = useState<string>('');
@@ -314,8 +314,8 @@ const TransactionsPage = () => {
                   <SelectValue placeholder="All statuses" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Statuses</SelectItem>
-                  <SelectItem value="completed">Completed</SelectItem>
+                  <SelectItem value="all">All Statuses</SelectItem>
+                  <SelectItem value="success">Success</SelectItem>
                   <SelectItem value="pending">Pending</SelectItem>
                   <SelectItem value="failed">Failed</SelectItem>
                 </SelectContent>
@@ -329,7 +329,7 @@ const TransactionsPage = () => {
                   <SelectValue placeholder="All purposes" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Purposes</SelectItem>
+                  <SelectItem value="all">All Purposes</SelectItem>
                   <SelectItem value="Tithe">Tithe</SelectItem>
                   <SelectItem value="Offering">Offering</SelectItem>
                   <SelectItem value="Local Church Budget (LCB)">LCB</SelectItem>
