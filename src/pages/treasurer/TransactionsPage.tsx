@@ -154,12 +154,14 @@ const TransactionsPage = () => {
     const completedTransactions = transactions.filter(
       t => t.status.toLowerCase() === 'completed' || t.status.toLowerCase() === 'success'
     );
-    
-    const totalAmount = completedTransactions.reduce((sum, t) => sum + t.amount, 0);
-    
+
+    const totalAmount = completedTransactions.reduce(
+      (sum, t) => sum + Number(t.amount), 0
+    );
+
     const purposeBreakdown = completedTransactions.reduce((acc, t) => {
       const purpose = t.purpose;
-      acc[purpose] = (acc[purpose] || 0) + t.amount;
+      acc[purpose] = (acc[purpose] || 0) + Number(t.amount);
       return acc;
     }, {} as Record<string, number>);
 
@@ -170,6 +172,7 @@ const TransactionsPage = () => {
       purposeBreakdown,
     };
   };
+
 
   const stats = calculateStats();
 

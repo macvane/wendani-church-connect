@@ -11,6 +11,14 @@ import { Download, FileText, TrendingUp, DollarSign, CreditCard, PieChart } from
 import { BarChart, Bar, LineChart, Line, PieChart as RechartsPie, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { calculateStats, getPurposeChartData, getMonthlyTrendData } from '@/components/treasurer/utils';
+
+// Components
+import StatsOverview from '@/components/treasurer/StatsOverview';
+import PurposeChart from '@/components/treasurer/PurposeChart';
+import TrendChart from '@/components/treasurer/TrendChart';
+import DistributionChart from '@/components/treasurer/DistributionChart';
+import StatusChart from '@/components/treasurer/StatusChart';
 
 interface Transaction {
   id: number;
@@ -80,204 +88,133 @@ const ReportsPage = () => {
     try {
       setLoading(true);
       const response = await mpesaAPI.listTransactions({ page_size: 10000 });
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch transactions');
-      }
+      if (!response.ok) throw new Error('Failed to fetch transactions');
 
       const data = await response.json();
       const allTransactions = data.results || [];
       setTransactions(allTransactions);
-      calculateStats(allTransactions);
+
+      // Use utils function for stats
+      setStats(calculateStats(allTransactions));
     } catch (error) {
-      console.error('Error fetching transactions:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to fetch transactions',
-        variant: 'destructive',
-      });
+      console.error(error);
+      toast({ title: 'Error', description: 'Failed to fetch transactions', variant: 'destructive' });
     } finally {
       setLoading(false);
     }
   };
 
-  const calculateStats = (transactionList: Transaction[]) => {
-    const now = new Date();
-    const currentMonth = now.getMonth();
-    const currentYear = now.getFullYear();
+  // Export helpers
+const exportToCSV = (data: Transaction[], filename: string) => {
+  // Calculate stats for this dataset
+  const tempStats = calculateStats(data);
+  const headers = ['ID', 'Name', 'Phone', 'Email', 'Amount', 'Purpose', 'Status', 'Receipt', 'Date'];
+  const rows = data.map(t => [
+    t.id,
+    t.name,
+    t.phone_number,
+    t.email || '',
+    t.amount,
+    t.purpose,
+    t.status,
+    t.mpesa_receipt_number || '',
+    new Date(t.transaction_date).toLocaleDateString(),
+  ]);
 
-    const completed = transactionList.filter(t => t.status === 'success' || t.status === 'completed');
-    const pending = transactionList.filter(t => t.status === 'pending');
-    
-    const totalAmount = completed.reduce((sum, t) => sum + parseFloat(t.amount || '0'), 0);
-    const thisMonthTransactions = completed.filter(t => {
-      const date = new Date(t.transaction_date);
-      return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
-    });
-    const thisYearTransactions = completed.filter(t => {
-      const date = new Date(t.transaction_date);
-      return date.getFullYear() === currentYear;
-    });
+  const csvContent = [
+    headers.join(','),
+    ...rows.map(row => row.map(cell => `"${cell}"`).join(',')),
+  ].join('\n');
 
-    const thisMonthAmount = thisMonthTransactions.reduce((sum, t) => sum + parseFloat(t.amount || '0'), 0);
-    const thisYearAmount = thisYearTransactions.reduce((sum, t) => sum + parseFloat(t.amount || '0'), 0);
+  const blob = new Blob([csvContent], { type: 'text/csv' });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  window.URL.revokeObjectURL(url);
+};
 
-    const purposeBreakdown: { [key: string]: number } = {};
-    completed.forEach(t => {
-      const purpose = t.purpose || 'Unknown';
-      purposeBreakdown[purpose] = (purposeBreakdown[purpose] || 0) + parseFloat(t.amount || '0');
-    });
+const exportToPDF = (data: Transaction[], filename: string, includeSummary = false) => {
+  const doc = new jsPDF();
+  
+  // Calculate stats for this dataset
+  const tempStats = calculateStats(data);
 
-    setStats({
-      totalAmount,
-      totalTransactions: transactionList.length,
-      avgTransaction: completed.length > 0 ? totalAmount / completed.length : 0,
-      completedTransactions: completed.length,
-      pendingTransactions: pending.length,
-      thisMonthAmount,
-      thisYearAmount,
-      purposeBreakdown,
-    });
-  };
+  doc.setFontSize(18);
+  doc.text('Transaction Report', 14, 20);
+  doc.setFontSize(11);
+  doc.text(`Generated: ${new Date().toLocaleString()}`, 14, 28);
 
-  const getPurposeChartData = () => {
-    return Object.entries(stats.purposeBreakdown).map(([name, value]) => ({
-      name,
-      value,
-      percentage: ((value / stats.totalAmount) * 100).toFixed(1),
-    }));
-  };
-
-  const getMonthlyTrendData = () => {
-    const monthlyData: { [key: string]: number } = {};
-    const completed = transactions.filter(t => t.status === 'success' || t.status === 'completed');
-    
-    completed.forEach(t => {
-      const date = new Date(t.transaction_date);
-      const monthYear = `${date.toLocaleString('default', { month: 'short' })} ${date.getFullYear()}`;
-      monthlyData[monthYear] = (monthlyData[monthYear] || 0) + parseFloat(t.amount || '0');
-    });
-
-    return Object.entries(monthlyData)
-      .sort((a, b) => new Date(a[0]).getTime() - new Date(b[0]).getTime())
-      .slice(-12)
-      .map(([month, amount]) => ({ month, amount }));
-  };
-
-  const exportToCSV = (data: Transaction[], filename: string) => {
-    const headers = ['ID', 'Name', 'Phone', 'Email', 'Amount', 'Purpose', 'Status', 'Receipt', 'Date'];
-    const rows = data.map(t => [
-      t.id,
-      t.name,
-      t.phone_number,
-      t.email || '',
-      t.amount,
-      t.purpose,
-      t.status,
-      t.mpesa_receipt_number || '',
-      new Date(t.transaction_date).toLocaleDateString(),
-    ]);
-
-    const csvContent = [
-      headers.join(','),
-      ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
-    ].join('\n');
-
-    const blob = new Blob([csvContent], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    a.click();
-    window.URL.revokeObjectURL(url);
-  };
-
-  const exportToPDF = (data: Transaction[], filename: string, includeSummary = false) => {
-    const doc = new jsPDF();
-    
-    // Add title
-    doc.setFontSize(18);
-    doc.text('Transaction Report', 14, 20);
-    doc.setFontSize(11);
-    doc.text(`Generated: ${new Date().toLocaleString()}`, 14, 28);
-
-    if (includeSummary) {
-      // Add summary section
-      doc.setFontSize(14);
-      doc.text('Summary', 14, 40);
-      doc.setFontSize(10);
-      
-      const summaryData = [
-        ['Total Transactions', stats.totalTransactions.toString()],
-        ['Completed Transactions', stats.completedTransactions.toString()],
-        ['Total Amount', `KSH ${stats.totalAmount.toLocaleString()}`],
-        ['Average Transaction', `KSH ${stats.avgTransaction.toLocaleString()}`],
-        ['This Month', `KSH ${stats.thisMonthAmount.toLocaleString()}`],
-        ['This Year', `KSH ${stats.thisYearAmount.toLocaleString()}`],
-      ];
-
-      autoTable(doc, {
-        startY: 45,
-        head: [['Metric', 'Value']],
-        body: summaryData,
-        theme: 'grid',
-        headStyles: { fillColor: [139, 92, 246] },
-      });
-
-      // Add purpose breakdown
-      doc.setFontSize(14);
-      const finalY = (doc as any).lastAutoTable.finalY || 45;
-      doc.text('Purpose Breakdown', 14, finalY + 15);
-      
-      const purposeData = Object.entries(stats.purposeBreakdown).map(([purpose, amount]) => [
-        purpose,
-        `KSH ${amount.toLocaleString()}`,
-        `${((amount / stats.totalAmount) * 100).toFixed(1)}%`
-      ]);
-
-      autoTable(doc, {
-        startY: finalY + 20,
-        head: [['Purpose', 'Amount', 'Percentage']],
-        body: purposeData,
-        theme: 'grid',
-        headStyles: { fillColor: [139, 92, 246] },
-      });
-    }
-
-    // Add transactions table
-    const startY = includeSummary ? (doc as any).lastAutoTable.finalY + 15 : 35;
+  if (includeSummary) {
     doc.setFontSize(14);
-    doc.text('Transactions', 14, startY);
+    doc.text('Summary', 14, 40);
+    doc.setFontSize(10);
 
-    const tableData = data.map(t => [
-      t.id.toString(),
-      t.name,
-      t.phone_number,
-      t.amount,
-      t.purpose,
-      t.status,
-      new Date(t.transaction_date).toLocaleDateString(),
+    const summaryData = [
+      ['Total Transactions', tempStats.totalTransactions.toString()],
+      ['Completed Transactions', tempStats.completedTransactions.toString()],
+      ['Total Amount', `KSH ${tempStats.totalAmount.toLocaleString()}`],
+      ['Average Transaction', `KSH ${tempStats.avgTransaction.toLocaleString()}`],
+      ['This Month', `KSH ${tempStats.thisMonthAmount.toLocaleString()}`],
+      ['This Year', `KSH ${tempStats.thisYearAmount.toLocaleString()}`],
+    ];
+
+    autoTable(doc, {
+      startY: 45,
+      head: [['Metric', 'Value']],
+      body: summaryData,
+      theme: 'grid',
+      headStyles: { fillColor: [139, 92, 246] },
+    });
+
+    const finalY = (doc as any).lastAutoTable.finalY || 45;
+    doc.text('Purpose Breakdown', 14, finalY + 15);
+
+    const purposeData = getPurposeChartData(tempStats.purposeBreakdown, tempStats.totalAmount).map(entry => [
+      entry.name,
+      `KSH ${entry.value.toLocaleString()}`,
+      `${entry.percentage}%`,
     ]);
 
     autoTable(doc, {
-      startY: startY + 5,
-      head: [['ID', 'Name', 'Phone', 'Amount', 'Purpose', 'Status', 'Date']],
-      body: tableData,
-      theme: 'striped',
+      startY: finalY + 20,
+      head: [['Purpose', 'Amount', 'Percentage']],
+      body: purposeData,
+      theme: 'grid',
       headStyles: { fillColor: [139, 92, 246] },
-      styles: { fontSize: 8 },
     });
+  }
 
-    doc.save(filename);
-  };
+  const startY = includeSummary ? (doc as any).lastAutoTable.finalY + 15 : 35;
+  doc.setFontSize(14);
+  doc.text('Transactions', 14, startY);
+
+  const tableData = data.map(t => [
+    t.id.toString(),
+    t.name,
+    t.phone_number,
+    t.amount,
+    t.purpose,
+    t.status,
+    new Date(t.transaction_date).toLocaleDateString(),
+  ]);
+
+  autoTable(doc, {
+    startY: startY + 5,
+    head: [['ID', 'Name', 'Phone', 'Amount', 'Purpose', 'Status', 'Date']],
+    body: tableData,
+    theme: 'striped',
+    headStyles: { fillColor: [139, 92, 246] },
+    styles: { fontSize: 8 },
+  });
+
+  doc.save(filename);
+};
 
   const handleCustomRangeExport = (format: 'csv' | 'pdf') => {
     if (!exportStartDate || !exportEndDate) {
-      toast({
-        title: 'Error',
-        description: 'Please select both start and end dates',
-        variant: 'destructive',
-      });
+      toast({ title: 'Error', description: 'Please select both start and end dates', variant: 'destructive' });
       return;
     }
 
@@ -289,68 +226,41 @@ const ReportsPage = () => {
     });
 
     if (filtered.length === 0) {
-      toast({
-        title: 'No Data',
-        description: 'No transactions found in the selected date range',
-      });
+      toast({ title: 'No Data', description: 'No transactions found in the selected date range' });
       return;
     }
 
     const filename = `transactions_${exportStartDate}_to_${exportEndDate}.${format}`;
-    if (format === 'csv') {
-      exportToCSV(filtered, filename);
-    } else {
-      exportToPDF(filtered, filename);
-    }
+    format === 'csv' ? exportToCSV(filtered, filename) : exportToPDF(filtered, filename);
 
-    toast({
-      title: 'Success',
-      description: `Exported ${filtered.length} transactions to ${format.toUpperCase()}`,
-    });
+    toast({ title: 'Success', description: `Exported ${filtered.length} transactions to ${format.toUpperCase()}` });
   };
 
   const handlePurposeExport = (purpose: string, format: 'csv' | 'pdf') => {
     const filtered = transactions.filter(t => t.purpose === purpose);
-    
     if (filtered.length === 0) {
-      toast({
-        title: 'No Data',
-        description: `No transactions found for ${purpose}`,
-      });
+      toast({ title: 'No Data', description: `No transactions found for ${purpose}` });
       return;
     }
 
     const filename = `${purpose.replace(/\s+/g, '_')}_transactions.${format}`;
-    if (format === 'csv') {
-      exportToCSV(filtered, filename);
-    } else {
-      exportToPDF(filtered, filename);
-    }
+    format === 'csv' ? exportToCSV(filtered, filename) : exportToPDF(filtered, filename);
 
-    toast({
-      title: 'Success',
-      description: `Exported ${filtered.length} ${purpose} transactions`,
-    });
+    toast({ title: 'Success', description: `Exported ${filtered.length} ${purpose} transactions` });
   };
 
   const handleSummaryExport = () => {
     const completed = transactions.filter(t => t.status === 'success' || t.status === 'completed');
     exportToPDF(completed, 'financial_summary_report.pdf', true);
-    
-    toast({
-      title: 'Success',
-      description: 'Summary report exported successfully',
-    });
+    toast({ title: 'Success', description: 'Summary report exported successfully' });
   };
 
   const handlePeriodReport = () => {
     let filtered = transactions.filter(t => t.status === 'success' || t.status === 'completed');
-    
     if (reportType === 'monthly') {
       filtered = filtered.filter(t => {
         const date = new Date(t.transaction_date);
-        return date.getMonth() + 1 === parseInt(reportMonth) && 
-               date.getFullYear() === parseInt(reportYear);
+        return date.getMonth() + 1 === parseInt(reportMonth) && date.getFullYear() === parseInt(reportYear);
       });
     } else {
       filtered = filtered.filter(t => {
@@ -360,23 +270,16 @@ const ReportsPage = () => {
     }
 
     if (filtered.length === 0) {
-      toast({
-        title: 'No Data',
-        description: 'No transactions found for the selected period',
-      });
+      toast({ title: 'No Data', description: 'No transactions found for the selected period' });
       return;
     }
 
-    const period = reportType === 'monthly' 
+    const period = reportType === 'monthly'
       ? `${new Date(2000, parseInt(reportMonth) - 1).toLocaleString('default', { month: 'long' })}_${reportYear}`
       : reportYear;
-    
+
     exportToPDF(filtered, `${reportType}_report_${period}.pdf`, true);
-    
-    toast({
-      title: 'Success',
-      description: `${reportType.charAt(0).toUpperCase() + reportType.slice(1)} report generated`,
-    });
+    toast({ title: 'Success', description: `${reportType.charAt(0).toUpperCase() + reportType.slice(1)} report generated` });
   };
 
   if (loading) {
@@ -398,55 +301,7 @@ const ReportsPage = () => {
       </div>
 
       {/* Stats Overview */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Amount (All Time)</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">KSH {stats.totalAmount.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">
-              {stats.completedTransactions} completed transactions
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">This Month</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">KSH {stats.thisMonthAmount.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">Current month contributions</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">This Year</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">KSH {stats.thisYearAmount.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">Year to date contributions</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Average Transaction</CardTitle>
-            <CreditCard className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">KSH {stats.avgTransaction.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">
-              {stats.pendingTransactions} pending transactions
-            </p>
-          </CardContent>
-        </Card>
-      </div>
+      <StatsOverview stats={stats} />
 
       {/* Charts */}
       <Tabs defaultValue="purpose" className="space-y-4">
@@ -458,45 +313,11 @@ const ReportsPage = () => {
         </TabsList>
 
         <TabsContent value="purpose" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Amount by Purpose</CardTitle>
-              <CardDescription>Total contributions per category</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={350}>
-                <BarChart data={getPurposeChartData()}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} />
-                  <YAxis />
-                  <Tooltip formatter={(value: number) => `KSH ${value.toLocaleString()}`} />
-                  <Legend />
-                  <Bar dataKey="value" fill="#8b5cf6" name="Amount (KSH)" />
-                </BarChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
+          <PurposeChart data={getPurposeChartData(stats.purposeBreakdown, stats.totalAmount)} />
         </TabsContent>
 
         <TabsContent value="trend" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Monthly Giving Trend</CardTitle>
-              <CardDescription>Contribution trends over the last 12 months</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={350}>
-                <LineChart data={getMonthlyTrendData()}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip formatter={(value: number) => `KSH ${value.toLocaleString()}`} />
-                  <Legend />
-                  <Line type="monotone" dataKey="amount" stroke="#8b5cf6" strokeWidth={2} name="Amount (KSH)" />
-                </LineChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
+          <TrendChart data={getMonthlyTrendData(transactions)} />
         </TabsContent>
 
         <TabsContent value="distribution" className="space-y-4">
@@ -509,7 +330,7 @@ const ReportsPage = () => {
               <ResponsiveContainer width="100%" height={350}>
                 <RechartsPie>
                   <Pie
-                    data={getPurposeChartData()}
+                    data={getPurposeChartData(stats.purposeBreakdown, stats.totalAmount)}
                     cx="50%"
                     cy="50%"
                     labelLine={false}
@@ -518,7 +339,7 @@ const ReportsPage = () => {
                     fill="#8884d8"
                     dataKey="value"
                   >
-                    {getPurposeChartData().map((entry, index) => (
+                    {getPurposeChartData(stats.purposeBreakdown, stats.totalAmount).map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Pie>
