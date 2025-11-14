@@ -87,6 +87,10 @@ export const authAPI = {
     return apiRequest('/api/me/');
   },
 
+  getUserRole: async () => {
+    return apiRequest('/api/user/role/');
+  },
+
   changePassword: async (oldPassword: string, newPassword: string) => {
     return apiRequest('/api/change-password/', {
       method: 'POST',
@@ -413,8 +417,26 @@ export const mpesaAPI = {
     return response;
   },
 
-  listTransactions: async () => {
-    return apiRequest('/api/v1/mpesa/transactions/');
+  listTransactions: async (params?: {
+    page?: number;
+    page_size?: number;
+    status?: string;
+    purpose?: string;
+    start_date?: string;
+    end_date?: string;
+    search?: string;
+  }) => {
+    const queryParams = new URLSearchParams();
+    if (params?.page) queryParams.append('page', params.page.toString());
+    if (params?.page_size) queryParams.append('page_size', params.page_size.toString());
+    if (params?.status) queryParams.append('status', params.status);
+    if (params?.purpose) queryParams.append('purpose', params.purpose);
+    if (params?.start_date) queryParams.append('start_date', params.start_date);
+    if (params?.end_date) queryParams.append('end_date', params.end_date);
+    if (params?.search) queryParams.append('search', params.search);
+    
+    const url = `/api/v1/mpesa/transactions/${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+    return apiRequest(url);
   },
 
   getTransactionStatus: async (checkoutRequestId: string) => {
