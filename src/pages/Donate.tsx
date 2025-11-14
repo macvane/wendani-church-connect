@@ -312,6 +312,17 @@ const Donate = () => {
                 </p>
               </form>
             </div>
+            <div className="mt-8 bg-muted rounded-lg p-6">
+              <h3 className="text-xl font-semibold mb-4">Alternative: Manual M-Pesa</h3>
+              <div className="space-y-2">
+                <p className="text-sm">
+                  <strong>Paybill Number:</strong> 400222
+                </p>
+                <p className="text-sm">
+                  <strong>Account Number:</strong> 441211# TITHE or OFFERING specify purpose after #
+                </p>
+              </div>
+            </div>
           </div>
         </section>
 
