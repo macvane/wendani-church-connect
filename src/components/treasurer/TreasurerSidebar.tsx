@@ -13,74 +13,23 @@ import {
 } from '@/components/ui/sidebar';
 import {
   LayoutDashboard,
-  Users,
-  Heart,
-  Droplets,
-  Baby,
-  UserPlus,
-  HandHeart,
-  MessageSquare,
-  Megaphone,
-  Calendar,
-  BookOpen,
-  UserCheck,
   CreditCard,
 } from 'lucide-react';
 
-const adminMenuItems = [
+const treasurerMenuItems = [
   {
-    title: 'Overview',
-    url: '/admin/dashboard',
-    icon: LayoutDashboard,
-  },
-  {
-    title: 'Prayer Requests',
-    url: '/admin/dashboard/prayers',
-    icon: Heart,
-  },
-  {
-    title: 'Baptism Requests',
-    url: '/admin/dashboard/baptisms',
-    icon: Droplets,
-  },
-  {
-    title: 'Child Dedications',
-    url: '/admin/dashboard/dedications',
-    icon: Baby,
-  },
-  {
-    title: 'Membership Transfers',
-    url: '/admin/dashboard/memberships',
-    icon: UserPlus,
-  },
-  {
-    title: 'Benevolence Requests',
-    url: '/admin/dashboard/benevolence',
-    icon: HandHeart,
-  },
-  {
-    title: 'Contact Messages',
-    url: '/admin/dashboard/contacts',
-    icon: MessageSquare,
-  },
-  {
-    title: 'Announcements',
-    url: '/admin/dashboard/announcements',
-    icon: Megaphone,
-  },
-  {
-    title: 'Events',
-    url: '/admin/dashboard/events',
-    icon: Calendar,
+    title: 'Transactions',
+    url: '/treasurer/dashboard',
+    icon: CreditCard,
   }
 ];
 
-export function AdminSidebar() {
+export function TreasurerSidebar() {
   const { state } = useSidebar();
   const location = useLocation();
 
   const isActive = (path: string) => {
-    if (path === '/admin/dashboard') {
+    if (path === '/treasurer/dashboard') {
       return location.pathname === path;
     }
     return location.pathname.startsWith(path);
@@ -92,11 +41,11 @@ export function AdminSidebar() {
         <div className="p-4">
           <div className="flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded bg-primary">
-              <LayoutDashboard className="h-4 w-4 text-primary-foreground" />
+              <CreditCard className="h-4 w-4 text-primary-foreground" />
             </div>
             {state !== 'collapsed' && (
               <div>
-                <h2 className="text-lg font-serif font-bold">Church Admin</h2>
+                <h2 className="text-lg font-serif font-bold">Treasurer</h2>
                 <p className="text-xs text-muted-foreground">Dashboard</p>
               </div>
             )}
@@ -104,10 +53,10 @@ export function AdminSidebar() {
         </div>
 
         <SidebarGroup>
-          <SidebarGroupLabel>Administration</SidebarGroupLabel>
+          <SidebarGroupLabel>Financial Management</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {adminMenuItems.map((item) => (
+              {treasurerMenuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <NavLink

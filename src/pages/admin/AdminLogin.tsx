@@ -30,13 +30,51 @@ const AdminLogin = () => {
         const data = await response.json();
         localStorage.setItem('access_token', data.access);
         localStorage.setItem('refresh_token', data.refresh);
-        localStorage.setItem('isAdminLoggedIn', 'true');
         
-        toast({
-          title: "Login Successful",
-          description: "Welcome to the admin dashboard!",
-        });
-        navigate('/admin/dashboard');
+        // Fetch user role
+        try {
+          const roleResponse = await fetch('https://churchmedia.kahawawendanisda.org/api/user/role/', {
+            headers: { 'Authorization': `Bearer ${data.access}` },
+          });
+          
+          if (roleResponse.ok) {
+            const roleData = await roleResponse.json();
+            const userRole = roleData.role || 'admin';
+            localStorage.setItem('user_role', userRole);
+            
+            // Redirect based on role
+            if (userRole === 'treasurer') {
+              toast({
+                title: "Login Successful",
+                description: "Welcome to the treasurer dashboard!",
+              });
+              navigate('/treasurer/dashboard');
+            } else {
+              localStorage.setItem('isAdminLoggedIn', 'true');
+              toast({
+                title: "Login Successful",
+                description: "Welcome to the admin dashboard!",
+              });
+              navigate('/admin/dashboard');
+            }
+          } else {
+            // Default to admin if role fetch fails
+            localStorage.setItem('isAdminLoggedIn', 'true');
+            toast({
+              title: "Login Successful",
+              description: "Welcome to the admin dashboard!",
+            });
+            navigate('/admin/dashboard');
+          }
+        } catch (error) {
+          // Default to admin if role fetch fails
+          localStorage.setItem('isAdminLoggedIn', 'true');
+          toast({
+            title: "Login Successful",
+            description: "Welcome to the admin dashboard!",
+          });
+          navigate('/admin/dashboard');
+        }
       } else {
         const error = await response.json();
         toast({
