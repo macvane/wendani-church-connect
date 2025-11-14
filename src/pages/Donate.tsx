@@ -219,7 +219,7 @@ const Donate = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="phone_number">Phone Number *</Label>
+                    <Label htmlFor="phone_number">Mpesa Phone Number *</Label>
                     <Input
                       id="phone_number"
                       name="phone_number"
@@ -336,11 +336,6 @@ const Donate = () => {
                   {paymentStatus === "success" && "Payment Successful"}
                   {paymentStatus === "failed" && "Payment Failed"}
                 </span>
-                <DialogClose asChild>
-                  <Button variant="ghost" size="icon">
-                    <X />
-                  </Button>
-                </DialogClose>
               </DialogTitle>
               <DialogDescription className="text-center mt-2">
                 {paymentStatus === "processing" && "Please complete the payment on your phone"}
