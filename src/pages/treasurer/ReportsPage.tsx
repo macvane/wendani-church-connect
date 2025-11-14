@@ -362,7 +362,7 @@ const exportToPDF = (data: Transaction[], filename: string, includeSummary = fal
                   <Pie
                     data={[
                       { name: 'Completed', value: stats.completedTransactions },
-                      { name: 'Pending', value: stats.pendingTransactions },
+                      { name: 'Pending', value: stats.pendingTransactions }
                     ]}
                     cx="50%"
                     cy="50%"

@@ -439,9 +439,11 @@ export const mpesaAPI = {
     return apiRequest(url);
   },
 
-  getTransactionStatus: async (checkoutRequestId: string) => {
-    return apiRequest(`/api/v1/mpesa/transaction-status/${checkoutRequestId}/`);
+  checkTransactionStatus: async (checkoutRequestId: string) => {
+    return fetch(`${API_BASE_URL}/api/v1/mpesa/status-check/?checkout_request_id=${checkoutRequestId}`);
   },
+
+
 
   transactionDetail: async (id: number) => {
     return apiRequest(`/api/v1/mpesa/transactions/${id}/`);
