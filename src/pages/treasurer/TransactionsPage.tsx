@@ -393,47 +393,47 @@ const TransactionsPage = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-  {isLoading ? (
-    <TableRow>
-      <TableCell colSpan={8} className="text-center py-8">
-        <Loader2 className="h-6 w-6 animate-spin mx-auto" />
-      </TableCell>
-    </TableRow>
-  ) : transactions.length === 0 ? (
-    <TableRow>
-      <TableCell colSpan={8} className="text-center text-muted-foreground">
-        No transactions found
-      </TableCell>
-    </TableRow>
-  ) : (
-    transactions.map((transaction, index) => (
-      <TableRow key={transaction.id}>
-        {/* Continuous numbering with newest first */}
-        <TableCell className="font-medium">
-          {((currentPage - 1) * pageSize + index + 1)}
-        </TableCell>
-        <TableCell>{transaction.name}</TableCell>
-        <TableCell>{transaction.phone_number}</TableCell>
-        <TableCell className="font-medium">{formatAmount(transaction.amount)}</TableCell>
-        <TableCell>
-          {transaction.purpose}
-          {transaction.other_purpose_details && (
-            <div className="text-xs text-muted-foreground">{transaction.other_purpose_details}</div>
-          )}
-        </TableCell>
-        <TableCell>{getStatusBadge(transaction.status)}</TableCell>
-        <TableCell>
-          {transaction.mpesa_receipt_number || (
-            <div className='bg-[#44444E] rounded-full text-white flex justify-center items-center w-auto'>
-              Failed Txn.
-            </div>
-          )}
-        </TableCell>
-        <TableCell className="text-sm">{formatDate(transaction.transaction_date)}</TableCell>
-      </TableRow>
-    ))
-  )}
-</TableBody>
+                {isLoading ? (
+                  <TableRow>
+                    <TableCell colSpan={8} className="text-center py-8">
+                      <Loader2 className="h-6 w-6 animate-spin mx-auto" />
+                    </TableCell>
+                  </TableRow>
+                ) : transactions.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={8} className="text-center text-muted-foreground">
+                      No transactions found
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  transactions.map((transaction, index) => (
+                    <TableRow key={transaction.id}>
+                      {/* Continuous numbering with newest first */}
+                      <TableCell className="font-medium">
+                        {((currentPage - 1) * pageSize + index + 1)}
+                      </TableCell>
+                      <TableCell>{transaction.name}</TableCell>
+                      <TableCell>{transaction.phone_number}</TableCell>
+                      <TableCell className="font-medium">{formatAmount(transaction.amount)}</TableCell>
+                      <TableCell>
+                        {transaction.purpose}
+                        {transaction.other_purpose_details && (
+                          <div className="text-xs text-muted-foreground">{transaction.other_purpose_details}</div>
+                        )}
+                      </TableCell>
+                      <TableCell>{getStatusBadge(transaction.status)}</TableCell>
+                      <TableCell>
+                        {transaction.mpesa_receipt_number || (
+                          <div className='bg-[#44444E] rounded-full text-white flex justify-center items-center w-auto'>
+                            Failed Txn.
+                          </div>
+                        )}
+                      </TableCell>
+                      <TableCell className="text-sm">{formatDate(transaction.transaction_date)}</TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
 
             </Table>
           </div>

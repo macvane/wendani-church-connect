@@ -328,7 +328,7 @@ const Donate = () => {
 
         {/* Payment Modal */}
         <Dialog open={paymentStatus !== "idle"} onOpenChange={handleCloseModal}>
-          <DialogContent className="sm:max-w-md">
+          <DialogContent className="W-[90%] ">
             <DialogHeader>
               <DialogTitle className="text-center flex justify-between items-center">
                 <span>
