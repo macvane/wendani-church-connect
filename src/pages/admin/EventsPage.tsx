@@ -1,10 +1,10 @@
+// Full redesigned EventsPage using Card layout
+// Note: Replace placeholder image path if needed
+
 import React, { useState, useEffect } from 'react';
 import {
   Card, CardContent, CardDescription, CardHeader, CardTitle
 } from '@/components/ui/card';
-import {
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow
-} from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -42,21 +42,12 @@ const EventsPage = () => {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    venue: '',
-    date: '',
-    from_date: '',
-    to_date: '',
-    time: '',
-    department: 'SSPM',
-    image: null as File | null,
+    title: '', description: '', venue: '', date: '', from_date: '', to_date: '',
+    time: '', department: 'SSPM', image: null as File | null,
   });
   const { toast } = useToast();
 
-  useEffect(() => {
-    fetchEvents();
-  }, []);
+  useEffect(() => { fetchEvents(); }, []);
 
   const fetchEvents = async () => {
     try {
@@ -66,14 +57,8 @@ const EventsPage = () => {
         setEvents(data);
       }
     } catch {
-      toast({
-        title: 'Error',
-        description: 'Failed to fetch events',
-        variant: 'destructive',
-      });
-    } finally {
-      setLoading(false);
-    }
+      toast({ title: 'Error', description: 'Failed to fetch events', variant: 'destructive' });
+    } finally { setLoading(false); }
   };
 
   const filteredEvents = events.filter((event) =>
@@ -89,9 +74,7 @@ const EventsPage = () => {
     }
 
     const data = new FormData();
-    Object.entries(formData).forEach(([k, v]) => {
-      if (v) data.append(k, v as any);
-    });
+    Object.entries(formData).forEach(([k, v]) => { if (v) data.append(k, v as any); });
 
     try {
       setIsCreating(true);
@@ -104,18 +87,14 @@ const EventsPage = () => {
       }
     } catch {
       toast({ title: 'Error', description: 'Failed to create event', variant: 'destructive' });
-    } finally {
-      setIsCreating(false);
-    }
+    } finally { setIsCreating(false); }
   };
 
   const handleEditEvent = async () => {
     if (!selectedEvent) return;
 
     const data = new FormData();
-    Object.entries(formData).forEach(([k, v]) => {
-      if (v !== null) data.append(k, v as any);
-    });
+    Object.entries(formData).forEach(([k, v]) => { if (v !== null) data.append(k, v as any); });
 
     try {
       const response = await eventAPI.update(selectedEvent.slug, data);
@@ -162,43 +141,18 @@ const EventsPage = () => {
   };
 
   const resetForm = () => {
-    setFormData({
-      title: '',
-      description: '',
-      venue: '',
-      date: '',
-      from_date: '',
-      to_date: '',
-      time: '',
-      department: 'SSPM',
-      image: null,
-    });
+    setFormData({ title: '', description: '', venue: '', date: '', from_date: '', to_date: '', time: '', department: 'SSPM', image: null });
   };
 
   const departmentOptions = [
-    ['SSPM', 'Sabbath School'],
-    ['PM', 'Personal Ministries'],
-    ['YM', 'Youth Ministries'],
-    ['CM', 'Children’s Ministries'],
-    ['FM', 'Family Ministries'],
-    ['AWM', 'Women’s Ministries'],
-    ['AMM', 'Men’s Ministries'],
-    ['HM', 'Health Ministries'],
-    ['EDU', 'Education Department'],
-    ['STW', 'Stewardship Ministries'],
-    ['PARL', 'Public Affairs & Religious Liberty'],
-    ['PUB', 'Publishing Ministries'],
-    ['COM', 'Communication Department'],
-    ['MIN', 'Ministerial Association'],
-    ['CHAP', 'Adventist Chaplaincy Ministries'],
-    ['MIS', 'Adventist Mission'],
-    ['PCM', 'Public Campus Ministries'],
-    ['MUS', 'Music Ministry'],
-    ['ADV', 'Adventurers Club'],
-    ['PATH', 'Pathfinder Club'],
-    ['DEA', 'Deacons / Deaconesses'],
-    ['ADRA', 'Adventist Development & Relief Agency (ADRA)'],
-    ['POS', 'Possibility Ministries'],
+    ['SSPM', 'Sabbath School'], ['PM', 'Personal Ministries'], ['YM', 'Youth Ministries'],
+    ['CM', 'Children’s Ministries'], ['FM', 'Family Ministries'], ['AWM', 'Women’s Ministries'],
+    ['AMM', 'Men’s Ministries'], ['HM', 'Health Ministries'], ['EDU', 'Education Department'],
+    ['STW', 'Stewardship Ministries'], ['PARL', 'Public Affairs & Religious Liberty'],
+    ['PUB', 'Publishing Ministries'], ['COM', 'Communication Department'], ['MIN', 'Ministerial Association'],
+    ['CHAP', 'Adventist Chaplaincy Ministries'], ['MIS', 'Adventist Mission'], ['PCM', 'Public Campus Ministries'],
+    ['MUS', 'Music Ministry'], ['ADV', 'Adventurers Club'], ['PATH', 'Pathfinder Club'], ['DEA', 'Deacons / Deaconesses'],
+    ['ADRA', 'ADRA'], ['POS', 'Possibility Ministries'],
   ];
 
   return (
@@ -217,8 +171,15 @@ const EventsPage = () => {
           <div className="flex flex-col sm:flex-row gap-4 mb-6">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-              <Input placeholder="Search events..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-10" />
+              <Input
+                placeholder="Search events..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
             </div>
+
+            {/* CREATE DIALOG */}
             <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
               <DialogTrigger asChild>
                 <Button>
@@ -226,7 +187,6 @@ const EventsPage = () => {
                 </Button>
               </DialogTrigger>
 
-              {/* CREATE MODAL */}
               <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                   <DialogTitle>Create New Event</DialogTitle>
@@ -235,13 +195,13 @@ const EventsPage = () => {
 
                 <div className="grid gap-4 py-4">
                   <Label>Event Title</Label>
-                  <Input value={formData.title} placeholder='Title' onChange={(e) => setFormData({ ...formData, title: e.target.value })} />
+                  <Input value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} />
 
                   <Label>Description</Label>
-                  <Textarea rows={3} value={formData.description} placeholder='Event Details' onChange={(e) => setFormData({ ...formData, description: e.target.value })} />
+                  <Textarea rows={3} value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} />
 
                   <Label>Venue</Label>
-                  <Input value={formData.venue} placeholder='Venue of the event' onChange={(e) => setFormData({ ...formData, venue: e.target.value })} />
+                  <Input value={formData.venue} onChange={(e) => setFormData({ ...formData, venue: e.target.value })} />
 
                   <Label>Date (Single-day)</Label>
                   <Input type="date" value={formData.date} onChange={(e) => setFormData({ ...formData, date: e.target.value })} />
@@ -267,9 +227,7 @@ const EventsPage = () => {
                     className="px-3 py-2 border rounded-md bg-background"
                   >
                     {departmentOptions.map(([code, name]) => (
-                      <option key={code} value={code}>
-                        {name}
-                      </option>
+                      <option key={code} value={code}>{name}</option>
                     ))}
                   </select>
 
@@ -280,73 +238,59 @@ const EventsPage = () => {
                 <DialogFooter>
                   <Button variant="outline" onClick={() => setIsCreateOpen(false)}>Cancel</Button>
                   <Button onClick={handleCreateEvent} disabled={isCreating}>
-                    {isCreating ? (
-                      <>
-                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                        Processing...
-                      </>
-                    ) : (
-                      <>
-                        <ImagePlus className="w-4 h-4 mr-2" />
-                        Create Event
-                      </>
-                    )}
+                    {isCreating ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Processing...</> : <><ImagePlus className="w-4 h-4 mr-2" /> Create Event</>}
                   </Button>
-
                 </DialogFooter>
               </DialogContent>
             </Dialog>
           </div>
 
-          {/* Events Table */}
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Title</TableHead>
-                  <TableHead>Dates</TableHead>
-                  <TableHead>Venue</TableHead>
-                  <TableHead>Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {loading ? (
-                  <TableRow>
-                    <TableCell colSpan={4} className="text-center py-10">Loading...</TableCell>
-                  </TableRow>
-                ) : filteredEvents.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={4} className="text-center py-10 text-muted-foreground">No events found.</TableCell>
-                  </TableRow>
-                ) : (
-                  filteredEvents.map((event) => (
-                    <TableRow key={event.slug}>
-                      <TableCell>{event.title}</TableCell>
-                      <TableCell>
-                        {event.date
-                          ? format(new Date(event.date), 'MMM d, yyyy')
-                          : `${format(new Date(event.from_date || ''), 'MMM d')} - ${format(new Date(event.to_date || ''), 'MMM d, yyyy')}`}
-                      </TableCell>
-                      <TableCell>{event.venue}</TableCell>
-                      <TableCell>
-                        <div className="flex gap-2">
-                          <Button size="sm" variant="outline" onClick={() => window.open(`https://kahawawendanisda.org/events/${event.slug}`, '_blank')}>
-                            <Eye className="w-4 h-4 mr-1" /> View
-                          </Button>
-                          <Button size="sm" variant="outline" onClick={() => openEditDialog(event)}>
-                            <Edit className="w-4 h-4 mr-1" /> Edit
-                          </Button>
-                          <Button size="sm" variant="destructive" onClick={() => handleDelete(event.slug)}>
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
+          {/* CARD GRID */}
+          {loading ? (
+            <p className="text-center py-10">Loading...</p>
+          ) : filteredEvents.length === 0 ? (
+            <p className="text-center py-10 text-muted-foreground">No events found.</p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredEvents.map((event) => (
+                <Card key={event.slug} className="overflow-hidden border rounded-xl shadow-sm">
+                  <div className="h-48 bg-muted overflow-hidden">
+                    <img
+                      src={`https://churchmedia.kahawawendanisda.org${event.image}`}
+                      alt={event.title}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+
+                  <CardContent className="p-4 space-y-3">
+                    <h3 className="text-xl font-semibold">{event.title}</h3>
+
+                    <p className="text-sm text-muted-foreground">
+                      {event.date
+                        ? format(new Date(event.date), 'MMM d, yyyy')
+                        : `${format(new Date(event.from_date || ''), 'MMM d')} - ${format(new Date(event.to_date || ''), 'MMM d, yyyy')}`}
+                    </p>
+
+                    <p className="text-sm font-medium text-muted-foreground">📍 {event.venue}</p>
+
+                    <div className="flex justify-between pt-2">
+                      <Button size="sm" variant="outline" onClick={() => window.open(`https://kahawawendanisda.org/events/${event.slug}`, '_blank')}>
+                        <Eye className="w-4 h-4 mr-1" /> View
+                      </Button>
+
+                      <Button size="sm" variant="outline" onClick={() => openEditDialog(event)}>
+                        <Edit className="w-4 h-4 mr-1" /> Edit
+                      </Button>
+
+                      <Button size="sm" variant="destructive" onClick={() => handleDelete(event.slug)}>
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
         </CardContent>
       </Card>
 
@@ -391,9 +335,7 @@ const EventsPage = () => {
               className="px-3 py-2 border rounded-md bg-background"
             >
               {departmentOptions.map(([code, name]) => (
-                <option key={code} value={code}>
-                  {name}
-                </option>
+                <option key={code} value={code}>{name}</option>
               ))}
             </select>
 

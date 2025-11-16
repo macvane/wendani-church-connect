@@ -27,6 +27,28 @@ const Events = () => {
   const [loading, setLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
+  const isEventOngoing = (event: Event) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Multi-day event
+    if (event.from_date && event.to_date) {
+      const start = new Date(event.from_date);
+      const end = new Date(event.to_date);
+      start.setHours(0, 0, 0, 0);
+      end.setHours(0, 0, 0, 0);
+
+      return today >= start && today <= end;
+    }
+
+    // Single-day event
+    const singleDate = new Date(event.date);
+    singleDate.setHours(0, 0, 0, 0);
+
+    return today.getTime() === singleDate.getTime();
+  };
+
+
   useEffect(() => {
     fetchEvents();
   }, []);
@@ -173,7 +195,7 @@ const Events = () => {
                         key={event.slug}
                         className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow"
                       >
-                        <div className="relative h-48">
+                        <div className="relative h-52">
                           <img
                             src={`https://churchmedia.kahawawendanisda.org${event.image}`}
                             alt={event.title}
@@ -183,8 +205,14 @@ const Events = () => {
                                 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=500&auto=format&fit=crop&q=60';
                             }}
                           />
+                          {isEventOngoing(event) && (
+                            <span className="inline-block absolute top-3 right-3 bg-primary text-white text-xs font-semibold px-2 py-1 rounded-full mb-3">
+                              Ongoing
+                            </span>
+                          )}
                         </div>
                         <div className="p-6">
+                          
                           <h3 className="text-xl font-bold mb-3">{event.title}</h3>
                           <p className="text-gray-600 mb-4 line-clamp-3">{event.description}</p>
                           <div className="space-y-2 text-sm text-gray-600">

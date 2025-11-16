@@ -57,11 +57,11 @@ const TransactionsPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
-  const [pageSize] = useState(20);
+  const [pageSize] = useState(150); // 150 items per page
   
   // Filters
   const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [purposeFilter, setPurposeFilter] = useState<string>('');
+  const [purposeFilter, setPurposeFilter] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
@@ -110,8 +110,8 @@ const TransactionsPage = () => {
   };
 
   const handleResetFilters = () => {
-    setStatusFilter('');
-    setPurposeFilter('');
+    setStatusFilter('all');
+    setPurposeFilter('all');
     setSearchQuery('');
     setStartDate('');
     setEndDate('');
@@ -133,7 +133,11 @@ const TransactionsPage = () => {
     );
   };
 
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString: string | null) => {
+    if (!dateString || dateString === "null" || dateString === "" || isNaN(Date.parse(dateString))) {
+      return "No Date (Failed Txn)";
+    }
+
     return new Date(dateString).toLocaleString('en-US', {
       year: 'numeric',
       month: 'short',
@@ -173,11 +177,9 @@ const TransactionsPage = () => {
     };
   };
 
-
   const stats = calculateStats();
 
   const handleExport = () => {
-    // Convert transactions to CSV
     const headers = ['ID', 'Name', 'Phone', 'Email', 'Amount', 'Purpose', 'Status', 'Receipt #', 'Date'];
     const csvData = transactions.map(t => [
       t.id,
@@ -214,6 +216,7 @@ const TransactionsPage = () => {
 
   return (
     <div className="space-y-6">
+      {/* Header */}
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">M-Pesa Transactions</h1>
         <Button onClick={handleExport} variant="outline" className="gap-2">
@@ -222,7 +225,7 @@ const TransactionsPage = () => {
         </Button>
       </div>
 
-      {/* Statistics Cards */}
+      {/* Stats Cards */}
       <div className="grid gap-4 md:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -250,9 +253,7 @@ const TransactionsPage = () => {
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {formatAmount(stats.totalAmount)}
-            </div>
+            <div className="text-2xl font-bold">{formatAmount(stats.totalAmount)}</div>
           </CardContent>
         </Card>
 
@@ -381,53 +382,59 @@ const TransactionsPage = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>ID</TableHead>
+                  <TableHead>No</TableHead>
                   <TableHead>Name</TableHead>
                   <TableHead>Phone</TableHead>
-                  <TableHead>Email</TableHead>
                   <TableHead>Amount</TableHead>
                   <TableHead>Purpose</TableHead>
                   <TableHead>Status</TableHead>
-                  <TableHead>Receipt #</TableHead>
+                  <TableHead>Transaction Code</TableHead>
                   <TableHead>Date</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {isLoading ? (
-                  <TableRow>
-                    <TableCell colSpan={9} className="text-center py-8">
-                      <Loader2 className="h-6 w-6 animate-spin mx-auto" />
-                    </TableCell>
-                  </TableRow>
-                ) : transactions.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={9} className="text-center text-muted-foreground">
-                      No transactions found
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  transactions.map((transaction) => (
-                    <TableRow key={transaction.id}>
-                      <TableCell className="font-medium">{transaction.id}</TableCell>
-                      <TableCell>{transaction.name}</TableCell>
-                      <TableCell>{transaction.phone_number}</TableCell>
-                      <TableCell>{transaction.email || '-'}</TableCell>
-                      <TableCell className="font-medium">{formatAmount(transaction.amount)}</TableCell>
-                      <TableCell>
-                        {transaction.purpose}
-                        {transaction.other_purpose_details && (
-                          <div className="text-xs text-muted-foreground">
-                            {transaction.other_purpose_details}
-                          </div>
-                        )}
-                      </TableCell>
-                      <TableCell>{getStatusBadge(transaction.status)}</TableCell>
-                      <TableCell>{transaction.mpesa_receipt_number || '-'}</TableCell>
-                      <TableCell className="text-sm">{formatDate(transaction.transaction_date)}</TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
+  {isLoading ? (
+    <TableRow>
+      <TableCell colSpan={8} className="text-center py-8">
+        <Loader2 className="h-6 w-6 animate-spin mx-auto" />
+      </TableCell>
+    </TableRow>
+  ) : transactions.length === 0 ? (
+    <TableRow>
+      <TableCell colSpan={8} className="text-center text-muted-foreground">
+        No transactions found
+      </TableCell>
+    </TableRow>
+  ) : (
+    transactions.map((transaction, index) => (
+      <TableRow key={transaction.id}>
+        {/* Continuous numbering with newest first */}
+        <TableCell className="font-medium">
+          {((currentPage - 1) * pageSize + index + 1)}
+        </TableCell>
+        <TableCell>{transaction.name}</TableCell>
+        <TableCell>{transaction.phone_number}</TableCell>
+        <TableCell className="font-medium">{formatAmount(transaction.amount)}</TableCell>
+        <TableCell>
+          {transaction.purpose}
+          {transaction.other_purpose_details && (
+            <div className="text-xs text-muted-foreground">{transaction.other_purpose_details}</div>
+          )}
+        </TableCell>
+        <TableCell>{getStatusBadge(transaction.status)}</TableCell>
+        <TableCell>
+          {transaction.mpesa_receipt_number || (
+            <div className='bg-[#44444E] rounded-full text-white flex justify-center items-center w-auto'>
+              Failed Txn.
+            </div>
+          )}
+        </TableCell>
+        <TableCell className="text-sm">{formatDate(transaction.transaction_date)}</TableCell>
+      </TableRow>
+    ))
+  )}
+</TableBody>
+
             </Table>
           </div>
 
@@ -442,19 +449,15 @@ const TransactionsPage = () => {
                       className={currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
                     />
                   </PaginationItem>
-                  
+
+                  {/* Show up to 5 page links */}
                   {[...Array(Math.min(5, totalPages))].map((_, i) => {
                     let pageNum;
-                    if (totalPages <= 5) {
-                      pageNum = i + 1;
-                    } else if (currentPage <= 3) {
-                      pageNum = i + 1;
-                    } else if (currentPage >= totalPages - 2) {
-                      pageNum = totalPages - 4 + i;
-                    } else {
-                      pageNum = currentPage - 2 + i;
-                    }
-                    
+                    if (totalPages <= 5) pageNum = i + 1;
+                    else if (currentPage <= 3) pageNum = i + 1;
+                    else if (currentPage >= totalPages - 2) pageNum = totalPages - 4 + i;
+                    else pageNum = currentPage - 2 + i;
+
                     return (
                       <PaginationItem key={pageNum}>
                         <PaginationLink
@@ -467,7 +470,7 @@ const TransactionsPage = () => {
                       </PaginationItem>
                     );
                   })}
-                  
+
                   <PaginationItem>
                     <PaginationNext
                       onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
