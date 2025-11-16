@@ -21,7 +21,7 @@ const TrendChart: React.FC<TrendChartProps> = ({ data }) => (
           <YAxis />
           <Tooltip formatter={(v: number) => `KSH ${v.toLocaleString()}`} />
           <Legend />
-          <Line type="monotone" dataKey="amount" stroke="#8b5cf6" strokeWidth={2} name="Amount (KSH)" />
+          <Line type="monotone" dataKey="amount" stroke="#00c36d" strokeWidth={2} name="Amount (KSH)" />
         </LineChart>
       </ResponsiveContainer>
     </CardContent>

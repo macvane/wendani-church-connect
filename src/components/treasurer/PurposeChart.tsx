@@ -20,7 +20,7 @@ const PurposeChart: React.FC<PurposeChartProps> = ({ data }) => (
           <YAxis />
           <Tooltip formatter={(value: number) => `KSH ${value.toLocaleString()}`} />
           <Legend />
-          <Bar dataKey="value" fill="#8b5cf6" name="Amount (KSH)" />
+          <Bar dataKey="value" fill="#00c36d" name="Amount (KSH)" />
         </BarChart>
       </ResponsiveContainer>
     </CardContent>

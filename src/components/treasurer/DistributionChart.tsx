@@ -2,7 +2,7 @@ import React from "react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { ResponsiveContainer, PieChart, Pie, Tooltip, Cell } from "recharts";
 
-const COLORS = ['#8b5cf6', '#3b82f6', '#10b981', '#f59e0b', '#ef4444'];
+const COLORS = ['#00c36d', '#00a65f', '#008951', '#66dbb1', '#33cf97'];
 
 interface DistributionChartProps {
   data: { name: string; value: number; percentage: number }[];
