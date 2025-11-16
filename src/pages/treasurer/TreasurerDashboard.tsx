@@ -42,7 +42,7 @@ const TreasurerDashboard = () => {
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full">
+      <div className="flex min-h-screen w-full treasurer-theme">
         <TreasurerSidebar />
         <div className="flex-1 flex flex-col">
           <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b bg-background px-6">

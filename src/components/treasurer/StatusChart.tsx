@@ -32,7 +32,7 @@ const StatusChart: React.FC<StatusChartProps> = ({ completed, pending }) => {
               dataKey="value"
               label={({ name, value }) => `${name}: ${value}`}
             >
-              <Cell fill="#10b981" />
+              <Cell fill="#00c36d" />
               <Cell fill="#f59e0b" />
             </Pie>
             <Tooltip />
