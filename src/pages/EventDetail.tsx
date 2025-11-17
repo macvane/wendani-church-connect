@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { eventAPI } from "@/utils/api";
@@ -15,6 +15,8 @@ interface Event {
   description: string;
   venue: string;
   date: string;
+  from_date: string;
+  to_date: string;
   time: string;
   image: string;
   created_at: string;
@@ -25,6 +27,19 @@ export default function EventDetail() {
   const navigate = useNavigate();
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const formatEventDate = () => {
+    const fromDate = (event as any)?.from_date || event?.date;
+    const toDate = (event as any)?.to_date;
+
+
+    if (fromDate && toDate) {
+      return `${format(new Date(fromDate), 'MMMM d, yyyy')} - ${format(new Date(toDate), 'MMMM d, yyyy')}`;
+    }
+
+
+    return format(new Date(fromDate), 'MMMM d, yyyy');
+  };
 
   useEffect(() => {
     if (slug) {
@@ -50,7 +65,12 @@ export default function EventDetail() {
     return (
       <>
         <Header />
-        <div className="text-center py-20">Loading event details...</div>
+        <div className="flex items-center justify-center h-96">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-4 text-muted-foreground">Loading event details...</p>
+        </div>
+      </div>
         <Footer />
       </>
     );
@@ -78,18 +98,18 @@ export default function EventDetail() {
         {/* Generic Hero Section */}
         <section className="relative h-[300px] flex items-center justify-center">
           <div className="absolute inset-0">
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/80 to-primary/60 z-10"></div>
+            <div className="absolute inset-0 bg-fixed bg-gradient-to-r from-primary/80 to-primary/60 z-10"></div>
             <img 
-              src="https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=1200&auto=format&fit=crop&q=80"
+              src={`https://churchmedia.kahawawendanisda.org${event.image}`}
               alt="Church event"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-top object-cover"
             />
           </div>
           <div className="container relative z-20 text-white">
             <Button 
               variant="ghost" 
               onClick={() => navigate(-1)}
-              className="mb-4 text-white hover:bg-white/20"
+              className="mb-4 text-white hover:bg-white/20 border"
             >
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Events
@@ -120,7 +140,7 @@ export default function EventDetail() {
                 <div className="flex flex-wrap gap-4">
                   <div className="flex items-center gap-2 bg-accent px-4 py-2 rounded-lg">
                     <Calendar className="h-5 w-5 text-primary" />
-                    <span className="font-medium">{format(new Date(event.date), 'MMMM d, yyyy')}</span>
+                    <span className="font-medium">{formatEventDate()}</span>
                   </div>
                   <div className="flex items-center gap-2 bg-accent px-4 py-2 rounded-lg">
                     <Clock className="h-5 w-5 text-primary" />
@@ -143,7 +163,7 @@ export default function EventDetail() {
             <div className="lg:col-span-1">
               <div className="sticky top-24 space-y-6">
                 {/* Quick Actions */}
-                <Card>
+                {/* <Card>
                   <CardHeader>
                     <CardTitle>Quick Actions</CardTitle>
                   </CardHeader>
@@ -155,10 +175,10 @@ export default function EventDetail() {
                       Share Event
                     </Button>
                   </CardContent>
-                </Card>
+                </Card> */}
 
                 {/* Downloads Section */}
-                <Card>
+                {/* <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Download className="h-5 w-5" />
@@ -177,10 +197,10 @@ export default function EventDetail() {
                       </a>
                     </Button>
                   </CardContent>
-                </Card>
+                </Card> */}
 
                 {/* Media Section */}
-                <Card>
+                {/* <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Video className="h-5 w-5" />
@@ -199,7 +219,7 @@ export default function EventDetail() {
                       </a>
                     </Button>
                   </CardContent>
-                </Card>
+                </Card> */}
 
                 {/* Contact Info */}
                 <Card>
@@ -228,12 +248,13 @@ export default function EventDetail() {
               Join us for an inspiring time of worship, fellowship, and spiritual growth.
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
-              <Button size="lg" variant="secondary">
-                Register Now
-              </Button>
-              <Button size="lg" variant="outline" className="bg-transparent border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary">
+              <Link
+                to='/events'
+              >
+                  <Button size="lg" variant="outline" className="bg-transparent border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary">
                 View All Events
               </Button>
+              </Link>
             </div>
           </div>
         </div>
