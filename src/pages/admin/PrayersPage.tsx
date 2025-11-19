@@ -3,10 +3,18 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Search, CheckCircle, Clock, Eye, Trash2 } from 'lucide-react';
+import { Search, CheckCircle, Clock, Eye, Trash2, X, Mail, Phone, MapPin } from 'lucide-react';
 import { format } from 'date-fns';
 import { prayerAPI } from '@/utils/api';
 import { useToast } from '@/hooks/use-toast';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Separator } from '@/components/ui/separator';
 
 interface Prayer {
   id: number;
@@ -139,35 +147,62 @@ const PrayersPage = () => {
       </div>
 
       {/* Prayer Request Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid gap-4">
         {loading ? (
-          <div className="col-span-full flex items-center justify-center py-24">
+          <div className="flex items-center justify-center py-24">
             <div className="relative flex items-center justify-center w-24 h-24">
-              <div className="absolute w-24 h-24 border-4 border-[#007780] border-t-light rounded-full animate-spin"></div>
+              <div className="absolute w-24 h-24 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
               <img src="/logo.png" alt="Loading..." className="w-12 h-12 object-contain" />
             </div>
           </div>
         ) : filteredPrayers.length === 0 ? (
-          <p className="col-span-full text-center text-muted-foreground py-12">No prayer requests found.</p>
+          <p className="text-center text-muted-foreground py-12">No prayer requests found.</p>
         ) : filteredPrayers.map(p => (
-          <Card key={p.id} className="border shadow-sm hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <CardTitle>{p.full_name || 'Anonymous'}</CardTitle>
-              <CardDescription className="flex flex-col gap-1">
-                <span className="text-sm text-muted-foreground">{p.email || 'N/A'} | {p.phone_number || 'N/A'}</span>
-                <span className="text-sm truncate">{p.prayer_request}</span>
-                <span className="text-xs text-muted-foreground">{format(new Date(p.created_at), 'MMM d, yyyy')}</span>
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="flex flex-col gap-2">
-              <div className="flex items-center justify-between">
+          <Card key={p.id} className="hover:shadow-md transition-shadow">
+            <CardHeader className="pb-3">
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <CardTitle className="text-lg font-semibold mb-1">{p.full_name || 'Anonymous'}</CardTitle>
+                  <div className="flex flex-wrap gap-2 text-sm text-muted-foreground">
+                    {p.email && (
+                      <span className="flex items-center gap-1">
+                        <Mail className="w-3 h-3" />
+                        {p.email}
+                      </span>
+                    )}
+                    {p.phone_number && (
+                      <span className="flex items-center gap-1">
+                        <Phone className="w-3 h-3" />
+                        {p.phone_number}
+                      </span>
+                    )}
+                  </div>
+                </div>
                 {getStatusBadge(p.status)}
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div>
+                <p className="text-sm font-medium mb-1">Prayer Type: {p.prayer_type}</p>
+                <p className="text-sm text-muted-foreground line-clamp-2">{p.prayer_request}</p>
+              </div>
+              <Separator />
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-muted-foreground">
+                  {format(new Date(p.created_at), 'MMM d, yyyy • h:mm a')}
+                </span>
                 <div className="flex gap-2">
                   {p.status === 'unread' && (
-                    <Button size="sm" onClick={() => handleMarkAsRead(p.id)}>Mark Read</Button>
+                    <Button size="sm" variant="outline" onClick={() => handleMarkAsRead(p.id)}>
+                      <CheckCircle className="w-4 h-4 mr-1" />Mark Read
+                    </Button>
                   )}
-                  <Button size="sm" onClick={() => handleViewDetails(p.id)}><Eye className="w-4 h-4 mr-1" />Details</Button>
-                  <Button size="sm" variant="destructive" onClick={() => handleDelete(p.id)}><Trash2 className="w-4 h-4" /></Button>
+                  <Button size="sm" onClick={() => handleViewDetails(p.id)}>
+                    <Eye className="w-4 h-4 mr-1" />View
+                  </Button>
+                  <Button size="sm" variant="destructive" onClick={() => handleDelete(p.id)}>
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
                 </div>
               </div>
             </CardContent>
@@ -175,37 +210,91 @@ const PrayersPage = () => {
         ))}
       </div>
 
-      {/* Selected Prayer Modal */}
-      {selectedPrayer && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-lg max-w-xl w-full p-6 relative">
-            <h2 className="text-xl font-bold mb-2">{selectedPrayer.full_name || 'Anonymous'}</h2>
-            <p className="text-sm text-muted-foreground mb-4">{selectedPrayer.email || 'N/A'} | {selectedPrayer.phone_number || 'N/A'}</p>
-            <p className="mb-4"><strong>Request Type:</strong> {selectedPrayer.prayer_type}</p>
-            <p className="mb-4"><strong>Prayer Request:</strong> {selectedPrayer.prayer_request}</p>
+      {/* Prayer Details Dialog */}
+      <Dialog open={!!selectedPrayer} onOpenChange={() => setSelectedPrayer(null)}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center justify-between">
+              <span>{selectedPrayer?.full_name || 'Anonymous Prayer Request'}</span>
+              {selectedPrayer && getStatusBadge(selectedPrayer.status)}
+            </DialogTitle>
+            <DialogDescription>
+              Submitted on {selectedPrayer && format(new Date(selectedPrayer.created_at), 'MMMM d, yyyy • h:mm a')}
+            </DialogDescription>
+          </DialogHeader>
 
-            {selectedPrayer.wants_visitation && (
-              <>
-                <h3 className="font-semibold mt-4 mb-2">Visitation Details</h3>
-                <p><strong>Prayer Cell:</strong> {selectedPrayer.prayer_cell || 'N/A'}</p>
-                <p><strong>General Area:</strong> {selectedPrayer.general_area || 'N/A'}</p>
-                <p><strong>Method:</strong> {selectedPrayer.visitation_method === 'call' ? 'Call with Pastor' : 'Visit at Home'}</p>
-              </>
-            )}
+          {selectedPrayer && (
+            <div className="space-y-6 pt-4">
+              {/* Contact Information */}
+              <div className="space-y-3">
+                <h3 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground">Contact Information</h3>
+                <div className="grid gap-3">
+                  {selectedPrayer.email && (
+                    <div className="flex items-center gap-2 text-sm">
+                      <Mail className="w-4 h-4 text-muted-foreground" />
+                      <span>{selectedPrayer.email}</span>
+                    </div>
+                  )}
+                  {selectedPrayer.phone_number && (
+                    <div className="flex items-center gap-2 text-sm">
+                      <Phone className="w-4 h-4 text-muted-foreground" />
+                      <span>{selectedPrayer.phone_number}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
 
-            <p className="mt-4"><strong>Status:</strong> {selectedPrayer.status}</p>
-            <p className="mt-1 text-xs text-muted-foreground">Submitted on {format(new Date(selectedPrayer.created_at), 'MMM d, yyyy HH:mm')}</p>
+              <Separator />
 
-            <Button
-              className="absolute top-2 right-2"
-              variant="ghost"
-              onClick={() => setSelectedPrayer(null)}
-            >
-              Close
-            </Button>
-          </div>
-        </div>
-      )}
+              {/* Prayer Request */}
+              <div className="space-y-3">
+                <h3 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground">Prayer Request</h3>
+                <Badge variant="secondary" className="w-fit">{selectedPrayer.prayer_type}</Badge>
+                <p className="text-sm leading-relaxed bg-muted/50 p-4 rounded-lg">
+                  {selectedPrayer.prayer_request}
+                </p>
+              </div>
+
+              {/* Visitation Details */}
+              {selectedPrayer.wants_visitation && (
+                <>
+                  <Separator />
+                  <div className="space-y-3">
+                    <h3 className="font-semibold text-sm uppercase tracking-wide text-muted-foreground">Visitation Requested</h3>
+                    <div className="grid gap-3 bg-muted/50 p-4 rounded-lg">
+                      <div className="flex items-start gap-2">
+                        <MapPin className="w-4 h-4 text-muted-foreground mt-0.5" />
+                        <div className="flex-1">
+                          <p className="text-sm font-medium">Prayer Cell</p>
+                          <p className="text-sm text-muted-foreground">{selectedPrayer.prayer_cell || 'Not specified'}</p>
+                        </div>
+                      </div>
+                      {selectedPrayer.general_area && (
+                        <div className="flex items-start gap-2">
+                          <MapPin className="w-4 h-4 text-muted-foreground mt-0.5" />
+                          <div className="flex-1">
+                            <p className="text-sm font-medium">General Area</p>
+                            <p className="text-sm text-muted-foreground">{selectedPrayer.general_area}</p>
+                          </div>
+                        </div>
+                      )}
+                      <div className="flex items-start gap-2">
+                        <Phone className="w-4 h-4 text-muted-foreground mt-0.5" />
+                        <div className="flex-1">
+                          <p className="text-sm font-medium">Visitation Method</p>
+                          <p className="text-sm text-muted-foreground">
+                            {selectedPrayer.visitation_method === 'call' ? 'Call with Pastor' : 'Visit at Home'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
 
     </div>
   );

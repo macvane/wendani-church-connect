@@ -107,6 +107,10 @@ export const prayerAPI = {
     phone_number?: string;
     prayer_type: string;
     prayer_request: string;
+    wants_visitation?: boolean;
+    prayer_cell?: string;
+    general_area?: string;
+    visitation_method?: string;
   }) => {
     const response = await fetch(`${API_BASE_URL}/form/prayers/`, {
       method: 'POST',
