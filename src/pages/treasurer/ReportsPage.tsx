@@ -1,3 +1,9 @@
+// ReportsPage.tsx (fixed)
+// - Normalizes status checks (case-insensitive)
+// - Uses safeDate parser to avoid timezone month shifts
+// - Safely reads lastAutoTable when building multi-table PDFs
+// - Completed export handlers (CSV, PDF, date-range, purpose, period, summary)
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -7,8 +13,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { mpesaAPI } from '@/utils/api';
-import { Download, FileText, TrendingUp, DollarSign, CreditCard, PieChart } from 'lucide-react';
-import { BarChart, Bar, LineChart, Line, PieChart as RechartsPie, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { FileText, Download } from 'lucide-react';
+import { PieChart as RechartsPie, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { calculateStats, getPurposeChartData, getMonthlyTrendData } from '@/components/treasurer/utils';
@@ -17,20 +23,18 @@ import { calculateStats, getPurposeChartData, getMonthlyTrendData } from '@/comp
 import StatsOverview from '@/components/treasurer/StatsOverview';
 import PurposeChart from '@/components/treasurer/PurposeChart';
 import TrendChart from '@/components/treasurer/TrendChart';
-import DistributionChart from '@/components/treasurer/DistributionChart';
-import StatusChart from '@/components/treasurer/StatusChart';
 
 interface Transaction {
   id: number;
   name: string;
   phone_number: string;
-  email: string;
-  amount: string;
+  email?: string;
+  amount: string | number;
   purpose: string;
-  other_purpose_details: string;
+  other_purpose_details?: string;
   status: string;
-  mpesa_receipt_number: string;
-  transaction_date: string;
+  mpesa_receipt_number?: string;
+  transaction_date: string; // ISO or date string
 }
 
 interface Stats {
@@ -57,7 +61,43 @@ const PURPOSES = [
   'Other'
 ];
 
-const ReportsPage = () => {
+// ---- Helpers ----
+
+// Status Normalizer (case-insensitive)
+const isCompleted = (t: Transaction) => {
+  return ['success', 'completed', 'succeeded', 'ok'].includes((t.status || '').toLowerCase());
+};
+
+// Safe date parsing to avoid timezone shifts that change month/day
+// Accepts 'YYYY-MM-DD' or ISO datetime strings.
+const safeDate = (input: string) => {
+  if (!input) return new Date(NaN);
+  // If input is YYYY-MM-DD format, Date(...) is treated as UTC in some implementations.
+  // We create using parts so local time is used and month/day won't shift.
+  const isoMatch = input.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (isoMatch) {
+    const [_, y, m, d] = isoMatch;
+    return new Date(Number(y), Number(m) - 1, Number(d));
+  }
+  const d = new Date(input);
+  if (isNaN(d.getTime())) {
+    // fallback: try Date.parse
+    const parsed = Date.parse(input);
+    return isNaN(parsed) ? new Date(NaN) : new Date(parsed);
+  }
+  // normalize to local date (strip time)
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+};
+
+// Format amount to KSH with commas, handle string or number
+const formatKsh = (val: string | number) => {
+  const n = typeof val === 'string' ? parseFloat(val as string || '0') : (val as number || 0);
+  return `KSH ${n.toLocaleString()}`;
+};
+
+// ---- Component ----
+
+const ReportsPage: React.FC = () => {
   const { toast } = useToast();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [stats, setStats] = useState<Stats>({
@@ -75,13 +115,13 @@ const ReportsPage = () => {
   // Export filters
   const [exportStartDate, setExportStartDate] = useState('');
   const [exportEndDate, setExportEndDate] = useState('');
-  const [exportPurpose, setExportPurpose] = useState('all');
   const [reportType, setReportType] = useState<'monthly' | 'yearly'>('monthly');
   const [reportYear, setReportYear] = useState(new Date().getFullYear().toString());
   const [reportMonth, setReportMonth] = useState((new Date().getMonth() + 1).toString());
 
   useEffect(() => {
     fetchAllTransactions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchAllTransactions = async () => {
@@ -94,7 +134,6 @@ const ReportsPage = () => {
       const allTransactions = data.results || [];
       setTransactions(allTransactions);
 
-      // Use utils function for stats
       setStats(calculateStats(allTransactions));
     } catch (error) {
       console.error(error);
@@ -104,125 +143,176 @@ const ReportsPage = () => {
     }
   };
 
-  // Export helpers
-const exportToCSV = (data: Transaction[], filename: string) => {
-  // Calculate stats for this dataset
-  const tempStats = calculateStats(data);
-  const headers = ['ID', 'Name', 'Phone', 'Email', 'Amount', 'Purpose', 'Status', 'Receipt', 'Date'];
-  const rows = data.map(t => [
-    t.id,
-    t.name,
-    t.phone_number,
-    t.email || '',
-    t.amount,
-    t.purpose,
-    t.status,
-    t.mpesa_receipt_number || '',
-    new Date(t.transaction_date).toLocaleDateString(),
-  ]);
+  // ---- Exports ----
 
-  const csvContent = [
-    headers.join(','),
-    ...rows.map(row => row.map(cell => `"${cell}"`).join(',')),
-  ].join('\n');
+  // Export Summary Report as CSV
+const exportSummaryCSV = (data: Transaction[]) => {
+  const s = calculateStats(data);
+
+  const rows = [
+    ['Metric', 'Value'],
+    ['Total Transactions', s.totalTransactions],
+    ['Completed Transactions', s.completedTransactions],
+    ['Total Amount', s.totalAmount],
+    ['Average Transaction', s.avgTransaction],
+    ['This Month Amount', s.thisMonthAmount],
+    ['This Year Amount', s.thisYearAmount],
+    [],
+    ['Purpose Breakdown'],
+    ['Purpose', 'Amount', 'Percentage']
+  ];
+
+  const purposeData = getPurposeChartData(s.purposeBreakdown, s.totalAmount);
+  purposeData.forEach(p => {
+    rows.push([p.name, p.value, `${p.percentage}%`]);
+  });
+
+  // Convert rows → CSV
+  const csvContent = rows
+    .map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(','))
+    .join('\n');
 
   const blob = new Blob([csvContent], { type: 'text/csv' });
   const url = window.URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = filename;
+  a.download = 'financial_summary_report.csv';
   a.click();
   window.URL.revokeObjectURL(url);
 };
 
-const exportToPDF = (data: Transaction[], filename: string, includeSummary = false) => {
-  const doc = new jsPDF();
-  
-  // Calculate stats for this dataset
-  const tempStats = calculateStats(data);
 
-  doc.setFontSize(18);
-  doc.text('Transaction Report', 14, 20);
-  doc.setFontSize(11);
-  doc.text(`Generated: ${new Date().toLocaleString()}`, 14, 28);
-
-  if (includeSummary) {
-    doc.setFontSize(14);
-    doc.text('Summary', 14, 40);
-    doc.setFontSize(10);
-
-    const summaryData = [
-      ['Total Transactions', tempStats.totalTransactions.toString()],
-      ['Completed Transactions', tempStats.completedTransactions.toString()],
-      ['Total Amount', `KSH ${tempStats.totalAmount.toLocaleString()}`],
-      ['Average Transaction', `KSH ${tempStats.avgTransaction.toLocaleString()}`],
-      ['This Month', `KSH ${tempStats.thisMonthAmount.toLocaleString()}`],
-      ['This Year', `KSH ${tempStats.thisYearAmount.toLocaleString()}`],
-    ];
-
-    autoTable(doc, {
-      startY: 45,
-      head: [['Metric', 'Value']],
-      body: summaryData,
-      theme: 'grid',
-      headStyles: { fillColor: [139, 92, 246] },
-    });
-
-    const finalY = (doc as any).lastAutoTable.finalY || 45;
-    doc.text('Purpose Breakdown', 14, finalY + 15);
-
-    const purposeData = getPurposeChartData(tempStats.purposeBreakdown, tempStats.totalAmount).map(entry => [
-      entry.name,
-      `KSH ${entry.value.toLocaleString()}`,
-      `${entry.percentage}%`,
+  const exportToCSV = (data: Transaction[], filename: string) => {
+    const headers = ['ID', 'Name', 'Phone', 'Email', 'Amount', 'Purpose', 'Status', 'Receipt', 'Date'];
+    const rows = data.map(t => [
+      t.id,
+      t.name,
+      t.phone_number,
+      t.email || '',
+      typeof t.amount === 'number' ? t.amount.toString() : t.amount,
+      t.purpose,
+      t.status,
+      t.mpesa_receipt_number || '',
+      safeDate(t.transaction_date).toLocaleDateString(),
     ]);
 
-    autoTable(doc, {
-      startY: finalY + 20,
-      head: [['Purpose', 'Amount', 'Percentage']],
-      body: purposeData,
-      theme: 'grid',
-      headStyles: { fillColor: [139, 92, 246] },
+    const escaped = rows.map(r => r.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','));
+    const csvContent = [headers.join(','), ...escaped].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
+
+  const exportToPDF = (data: Transaction[], filename: string, includeSummary = false) => {
+    const doc = new jsPDF({
+      unit: 'pt',
+      format: 'a4',
     });
-  }
 
-  const startY = includeSummary ? (doc as any).lastAutoTable.finalY + 15 : 35;
-  doc.setFontSize(14);
-  doc.text('Transactions', 14, startY);
+    // Stats for this dataset
+    const tempStats = calculateStats(data);
 
-  const tableData = data.map(t => [
-    t.id.toString(),
-    t.name,
-    t.phone_number,
-    t.amount,
-    t.purpose,
-    t.status,
-    new Date(t.transaction_date).toLocaleDateString(),
-  ]);
+    doc.setFontSize(18);
+    doc.text('Transaction Report', 40, 50);
+    doc.setFontSize(10);
+    doc.text(`Generated: ${new Date().toLocaleString()}`, 40, 70);
 
-  autoTable(doc, {
-    startY: startY + 5,
-    head: [['ID', 'Name', 'Phone', 'Amount', 'Purpose', 'Status', 'Date']],
-    body: tableData,
-    theme: 'striped',
-    headStyles: { fillColor: [139, 92, 246] },
-    styles: { fontSize: 8 },
-  });
+    let yCursor = 90;
 
-  doc.save(filename);
-};
+    // Summary block
+    if (includeSummary) {
+      doc.setFontSize(14);
+      doc.text('Summary', 40, yCursor + 10);
 
+      const summaryData = [
+        ['Total Transactions', String(tempStats.totalTransactions)],
+        ['Completed Transactions', String(tempStats.completedTransactions)],
+        ['Total Amount', formatKsh(tempStats.totalAmount)],
+        ['Average Transaction', formatKsh(tempStats.avgTransaction)],
+        ['This Month', formatKsh(tempStats.thisMonthAmount)],
+        ['This Year', formatKsh(tempStats.thisYearAmount)],
+      ];
+
+      autoTable(doc, {
+        startY: yCursor + 20,
+        head: [['Metric', 'Value']],
+        body: summaryData,
+        theme: 'grid',
+        headStyles: { fillColor: [139, 92, 246] },
+        styles: { cellPadding: 6, fontSize: 10 },
+      });
+
+      const last = (doc as any).lastAutoTable;
+      const afterSummaryY = last ? last.finalY + 10 : yCursor + 100;
+
+      // Purpose breakdown table
+      const purposeRows = getPurposeChartData(tempStats.purposeBreakdown, tempStats.totalAmount).map(p => [
+        p.name,
+        formatKsh(p.value),
+        `${p.percentage}%`,
+      ]);
+
+      doc.setFontSize(12);
+      doc.text('Purpose Breakdown', 40, afterSummaryY + 14);
+
+      autoTable(doc, {
+        startY: afterSummaryY + 20,
+        head: [['Purpose', 'Amount', 'Percentage']],
+        body: purposeRows,
+        theme: 'grid',
+        headStyles: { fillColor: [139, 92, 246] },
+        styles: { cellPadding: 6, fontSize: 10 },
+      });
+
+      const last2 = (doc as any).lastAutoTable;
+      yCursor = last2 ? last2.finalY + 10 : afterSummaryY + 100;
+    }
+
+    // Transactions table
+    doc.setFontSize(12);
+    doc.text('Transactions', 40, yCursor + 14);
+
+    const txRows = data.map(t => ([
+      String(t.id),
+      t.name,
+      t.phone_number,
+      typeof t.amount === 'number' ? t.amount.toString() : t.amount,
+      t.purpose,
+      t.status,
+      safeDate(t.transaction_date).toLocaleDateString(),
+    ]));
+
+    autoTable(doc, {
+      startY: yCursor + 24,
+      head: [['ID', 'Name', 'Phone', 'Amount', 'Purpose', 'Status', 'Date']],
+      body: txRows,
+      theme: 'striped',
+      headStyles: { fillColor: [139, 92, 246] },
+      styles: { fontSize: 8, cellPadding: 4 },
+      margin: { left: 40, right: 40 },
+    });
+
+    doc.save(filename);
+  };
+
+  // Custom Date Range Export
   const handleCustomRangeExport = (format: 'csv' | 'pdf') => {
     if (!exportStartDate || !exportEndDate) {
       toast({ title: 'Error', description: 'Please select both start and end dates', variant: 'destructive' });
       return;
     }
 
+    const start = safeDate(exportStartDate);
+    const end = safeDate(exportEndDate);
+    // make end inclusive by adding one day to end's time check or compare <= end
     const filtered = transactions.filter(t => {
-      const tDate = new Date(t.transaction_date);
-      const start = new Date(exportStartDate);
-      const end = new Date(exportEndDate);
-      return tDate >= start && tDate <= end;
+      const d = safeDate(t.transaction_date);
+      return !isNaN(d.getTime()) && d >= start && d <= end;
     });
 
     if (filtered.length === 0) {
@@ -231,41 +321,64 @@ const exportToPDF = (data: Transaction[], filename: string, includeSummary = fal
     }
 
     const filename = `transactions_${exportStartDate}_to_${exportEndDate}.${format}`;
-    format === 'csv' ? exportToCSV(filtered, filename) : exportToPDF(filtered, filename);
+    format === 'csv' ? exportToCSV(filtered, filename) : exportToPDF(filtered, filename, true);
 
     toast({ title: 'Success', description: `Exported ${filtered.length} transactions to ${format.toUpperCase()}` });
   };
 
+  // Export by Purpose
   const handlePurposeExport = (purpose: string, format: 'csv' | 'pdf') => {
-    const filtered = transactions.filter(t => t.purpose === purpose);
+    if (!purpose) {
+      toast({ title: 'Error', description: 'Purpose not specified', variant: 'destructive' });
+      return;
+    }
+
+    // Some entries may have slight differences in purpose casing/trimming, so normalize
+    const filtered = transactions.filter(t => (t.purpose || '').trim().toLowerCase() === purpose.trim().toLowerCase());
+
     if (filtered.length === 0) {
       toast({ title: 'No Data', description: `No transactions found for ${purpose}` });
       return;
     }
 
     const filename = `${purpose.replace(/\s+/g, '_')}_transactions.${format}`;
-    format === 'csv' ? exportToCSV(filtered, filename) : exportToPDF(filtered, filename);
+    format === 'csv' ? exportToCSV(filtered, filename) : exportToPDF(filtered, filename, true);
 
     toast({ title: 'Success', description: `Exported ${filtered.length} ${purpose} transactions` });
   };
 
-  const handleSummaryExport = () => {
-    const completed = transactions.filter(t => t.status === 'success' || t.status === 'completed');
-    exportToPDF(completed, 'financial_summary_report.pdf', true);
-    toast({ title: 'Success', description: 'Summary report exported successfully' });
-  };
+  // Summary report for all completed transactions
+  const handleSummaryExport = (format: 'csv' | 'pdf') => {
+  const completed = transactions.filter(isCompleted);
 
+  if (completed.length === 0) {
+    toast({ title: 'No Data', description: 'No completed transactions found' });
+    return;
+  }
+
+  if (format === 'csv') {
+    exportSummaryCSV(completed);
+  } else {
+    exportToPDF(completed, 'financial_summary_report.pdf', true);
+  }
+
+  toast({ title: 'Success', description: `Summary ${format.toUpperCase()} exported successfully` });
+};
+
+
+  // Period report (monthly/yearly)
   const handlePeriodReport = () => {
-    let filtered = transactions.filter(t => t.status === 'success' || t.status === 'completed');
+    let filtered = transactions.filter(isCompleted);
+
     if (reportType === 'monthly') {
       filtered = filtered.filter(t => {
-        const date = new Date(t.transaction_date);
-        return date.getMonth() + 1 === parseInt(reportMonth) && date.getFullYear() === parseInt(reportYear);
+        const d = safeDate(t.transaction_date);
+        return !isNaN(d.getTime()) && d.getMonth() + 1 === parseInt(reportMonth, 10) && d.getFullYear() === parseInt(reportYear, 10);
       });
     } else {
       filtered = filtered.filter(t => {
-        const date = new Date(t.transaction_date);
-        return date.getFullYear() === parseInt(reportYear);
+        const d = safeDate(t.transaction_date);
+        return !isNaN(d.getTime()) && d.getFullYear() === parseInt(reportYear, 10);
       });
     }
 
@@ -275,13 +388,14 @@ const exportToPDF = (data: Transaction[], filename: string, includeSummary = fal
     }
 
     const period = reportType === 'monthly'
-      ? `${new Date(2000, parseInt(reportMonth) - 1).toLocaleString('default', { month: 'long' })}_${reportYear}`
+      ? `${new Date(2000, parseInt(reportMonth, 10) - 1).toLocaleString('default', { month: 'long' })}_${reportYear}`
       : reportYear;
 
     exportToPDF(filtered, `${reportType}_report_${period}.pdf`, true);
     toast({ title: 'Success', description: `${reportType.charAt(0).toUpperCase() + reportType.slice(1)} report generated` });
   };
 
+  // Loading state
   if (loading) {
     return (
       <div className="flex items-center justify-center h-96">
@@ -293,6 +407,7 @@ const exportToPDF = (data: Transaction[], filename: string, includeSummary = fal
     );
   }
 
+  // UI
   return (
     <div className="space-y-6">
       <div>
@@ -300,10 +415,8 @@ const exportToPDF = (data: Transaction[], filename: string, includeSummary = fal
         <p className="text-muted-foreground">Comprehensive financial analysis and reporting</p>
       </div>
 
-      {/* Stats Overview */}
       <StatsOverview stats={stats} />
 
-      {/* Charts */}
       <Tabs defaultValue="purpose" className="space-y-4">
         <TabsList>
           <TabsTrigger value="purpose">By Purpose</TabsTrigger>
@@ -334,7 +447,7 @@ const exportToPDF = (data: Transaction[], filename: string, includeSummary = fal
                     cx="50%"
                     cy="50%"
                     labelLine={false}
-                    label={({ name, percentage }) => `${name}: ${percentage}%`}
+                    label={({ name, percentage }: any) => `${name}: ${percentage}%`}
                     outerRadius={120}
                     fill="#8884d8"
                     dataKey="value"
@@ -367,7 +480,7 @@ const exportToPDF = (data: Transaction[], filename: string, includeSummary = fal
                     cx="50%"
                     cy="50%"
                     labelLine={false}
-                    label={({ name, value }) => `${name}: ${value}`}
+                    label={({ name, value }: any) => `${name}: ${value}`}
                     outerRadius={120}
                     fill="#8884d8"
                     dataKey="value"
@@ -384,7 +497,6 @@ const exportToPDF = (data: Transaction[], filename: string, includeSummary = fal
         </TabsContent>
       </Tabs>
 
-      {/* Export Section */}
       <Card>
         <CardHeader>
           <CardTitle>Export Options</CardTitle>
@@ -500,7 +612,7 @@ const exportToPDF = (data: Transaction[], filename: string, includeSummary = fal
                   </CardHeader>
                   <CardContent className="space-y-2">
                     <p className="text-2xl font-bold">
-                      KSH {(stats.purposeBreakdown[purpose] || 0).toLocaleString()}
+                      {formatKsh(stats.purposeBreakdown[purpose] || 0)}
                     </p>
                     <div className="flex gap-2">
                       <Button
@@ -535,10 +647,15 @@ const exportToPDF = (data: Transaction[], filename: string, includeSummary = fal
                   Includes totals, averages, purpose breakdown, and all completed transactions
                 </p>
               </div>
-              <Button onClick={handleSummaryExport}>
-                <FileText className="mr-2 h-4 w-4" />
-                Export Summary PDF
-              </Button>
+              <div className="flex gap-2">
+                <Button variant="outline" onClick={() => handleSummaryExport('csv')}>
+                  <Download className="mr-2 h-4 w-4" /> CSV
+                </Button>
+
+                <Button onClick={() => handleSummaryExport('pdf')}>
+                  <FileText className="mr-2 h-4 w-4" /> PDF
+                </Button>
+              </div>
             </div>
           </div>
         </CardContent>

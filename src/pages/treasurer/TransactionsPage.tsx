@@ -134,16 +134,26 @@ const TransactionsPage = () => {
   };
 
   const formatDate = (dateString: string | null) => {
-    if (!dateString || dateString === "null" || dateString === "" || isNaN(Date.parse(dateString))) {
+    if (
+      !dateString ||
+      dateString === "null" ||
+      dateString === "" ||
+      isNaN(Date.parse(dateString))
+    ) {
       return "No Date (Failed Txn)";
     }
 
-    return new Date(dateString).toLocaleString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
+    // Remove timezone offset (-06:00) before parsing
+    const cleaned = dateString.replace(/[-+]\d{2}:\d{2}$/, "");
+
+    const date = new Date(cleaned);
+
+    return date.toLocaleString("en-KE", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
