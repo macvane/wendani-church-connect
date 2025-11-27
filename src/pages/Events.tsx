@@ -178,11 +178,11 @@ const Events = () => {
               {/* UPCOMING EVENTS */}
               <TabsContent value="upcoming">
                 {loading ? (
-                  <div className="flex items-center justify-center py-24">
-                    <div className="relative flex items-center justify-center w-24 h-24">
-                      <div className="absolute w-24 h-24 border-4 border-[#007780] border-t-light rounded-full animate-spin"></div>
-                      <img src="/logo.png" alt="Loading..." className="w-12 h-12 object-contain" />
-                    </div>
+                  <div className="flex items-center justify-center h-96">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+            <p className="mt-4 text-muted-foreground">Loading events...</p>
+          </div>
                   </div>
                 ) : upcomingEvents.length === 0 ? (
                   <div className="text-center py-12">
