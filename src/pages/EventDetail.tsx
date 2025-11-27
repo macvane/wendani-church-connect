@@ -150,11 +150,11 @@ const fetchLatestAnnouncement = async () => {
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-8">
               {/* Event Image */}
-              <div className="rounded-lg overflow-hidden border">
+              <div className="rounded-lg overflow-hidden border aspect-video">
                 <img 
                   src={`https://churchmedia.kahawawendanisda.org${event.image}`}
                   alt={event.title}
-                  className="w-full md:h-[28rem] object-cover"
+                  className="w-full h-full object-cover"
                   onError={(e) => {
                     e.currentTarget.src = 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800&auto=format&fit=crop&q=80';
                   }}
