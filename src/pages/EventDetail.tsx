@@ -154,7 +154,7 @@ const fetchLatestAnnouncement = async () => {
                 <img 
                   src={`https://churchmedia.kahawawendanisda.org${event.image}`}
                   alt={event.title}
-                  className="w-full h-[28rem] object-cover"
+                  className="w-full md:h-[28rem] object-cover"
                   onError={(e) => {
                     e.currentTarget.src = 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800&auto=format&fit=crop&q=80';
                   }}
@@ -162,7 +162,7 @@ const fetchLatestAnnouncement = async () => {
               </div>
 
               {/* Event Details */}
-              <div className="space-y-6">
+              <div className="space-y-6 text-xs md:text-base">
                 <div className="flex flex-wrap gap-4">
                   <div className="flex items-center gap-2 bg-accent px-4 py-2 rounded-lg">
                     <Calendar className="h-5 w-5 text-primary" />
