@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import { eventAPI } from "@/utils/api";
+import { announcementAPI, eventAPI } from "@/utils/api";
 import { Calendar, MapPin, Clock, ArrowLeft, Download, Video } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { format } from "date-fns";
@@ -27,6 +27,32 @@ export default function EventDetail() {
   const navigate = useNavigate();
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const [latestAnnouncement, setLatestAnnouncement] = useState<any | null>(null);
+
+useEffect(() => {
+  fetchLatestAnnouncement();
+}, []);
+
+const fetchLatestAnnouncement = async () => {
+  try {
+    const response = await announcementAPI.list();
+    if (response.ok) {
+      const data = await response.json();
+
+      // assuming API returns newest first, otherwise sort
+      const sorted = data.sort(
+        (a: any, b: any) =>
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      );
+
+      setLatestAnnouncement(sorted[0] || null);
+    }
+  } catch (error) {
+    console.error("Error fetching announcement:", error);
+  }
+};
+
 
   const formatEventDate = () => {
     const fromDate = (event as any)?.from_date || event?.date;
@@ -124,11 +150,11 @@ export default function EventDetail() {
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-8">
               {/* Event Image */}
-              <div className="rounded-lg overflow-hidden shadow-lg">
+              <div className="rounded-lg overflow-hidden border">
                 <img 
                   src={`https://churchmedia.kahawawendanisda.org${event.image}`}
                   alt={event.title}
-                  className="w-full h-[400px] object-cover"
+                  className="w-full h-[28rem] object-cover"
                   onError={(e) => {
                     e.currentTarget.src = 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800&auto=format&fit=crop&q=80';
                   }}
@@ -178,26 +204,36 @@ export default function EventDetail() {
                 </Card> */}
 
                 {/* Downloads Section */}
-                {/* <Card>
+                <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Download className="h-5 w-5" />
-                      Downloads
+                      Church Resources
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-2">
+                    {latestAnnouncement ? (
+                      <Button variant="ghost" className="w-full justify-start" asChild>
+                        <a 
+                          href={`https://churchmedia.kahawawendanisda.org${latestAnnouncement.file}`} 
+                          target="_blank"
+                        >
+                          Weekly Announcements (PDF)
+                        </a>
+                      </Button>
+                    ) : (
+                      <Button variant="ghost" className="w-full justify-start" disabled>
+                        Loading Announcements...
+                      </Button>
+                    )}
+
                     <Button variant="ghost" className="w-full justify-start" asChild>
-                      <a href="/campmeeting2025booklet.pdf" target="_blank">
-                        Event Booklet (PDF)
-                      </a>
-                    </Button>
-                    <Button variant="ghost" className="w-full justify-start" asChild>
-                      <a href="/q3exodus.pdf" target="_blank">
-                        Study Guide (PDF)
+                      <a href="https://www.fustero.es/en_2025t4.pdf" target="_blank">
+                        Bible Study Guide (PDF)
                       </a>
                     </Button>
                   </CardContent>
-                </Card> */}
+                </Card>
 
                 {/* Media Section */}
                 {/* <Card>

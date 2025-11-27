@@ -64,7 +64,7 @@ const sabbathSchoolMaterials = [
     fileSize: "1.68 MB",
     icon: BookOpen,
     color: "text-green-500",
-    url: "https://kahawawendanisda.org/q3exodus.pdf",
+    url: "https://www.fustero.es/en_2025t4.pdf",
     viewUrl: "https://www.adultbiblestudyguide.org/pdf.php?file=2025:2Q:SE:PDFs:EAQ225_11.pdf",
   },
   {

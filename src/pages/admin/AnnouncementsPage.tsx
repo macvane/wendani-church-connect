@@ -28,6 +28,9 @@ const AnnouncementsPage = () => {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState<Announcement | null>(null);
+  const [isCreating, setIsCreating] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -63,76 +66,95 @@ const AnnouncementsPage = () => {
   });
 
   const handleCreateAnnouncement = async () => {
-    if (!formData.title || !formData.description || !formData.file) {
-      toast({
-        title: "Error",
-        description: "Please fill in all fields",
-        variant: "destructive",
-      });
-      return;
+  if (!formData.title || !formData.description || !formData.file) {
+    toast({
+      title: "Error",
+      description: "Please fill in all fields",
+      variant: "destructive",
+    });
+    return;
+  }
+
+  setIsCreating(true); // Start loading
+
+  const data = new FormData();
+  data.append('title', formData.title);
+  data.append('description', formData.description);
+  data.append('file', formData.file);
+
+  try {
+    const response = await announcementAPI.create(data);
+    const resData = await response.json();
+
+    if (!response.ok) {
+      // Display server validation errors
+      const errorMsg = resData.file?.[0] || resData.title?.[0] || resData.description?.[0] || resData.detail || "Failed to create announcement";
+      throw new Error(errorMsg);
     }
 
-    const data = new FormData();
-    data.append('title', formData.title);
-    data.append('description', formData.description);
-    data.append('file', formData.file);
+    toast({
+      title: "Success",
+      description: "Announcement created successfully",
+    });
+    fetchAnnouncements();
+    setIsCreateOpen(false);
+    setFormData({ title: '', description: '', file: null });
+  } catch (error: any) {
+    toast({
+      title: "Error",
+      description: error.message || "Failed to create announcement",
+      variant: "destructive",
+    });
+  } finally {
+    setIsCreating(false);
+  }
+};
 
-    try {
-      const response = await announcementAPI.create(data);
-      if (response.ok) {
-        toast({
-          title: "Success",
-          description: "Announcement created successfully",
-        });
-        fetchAnnouncements();
-        setIsCreateOpen(false);
-        setFormData({ title: '', description: '', file: null });
-      }
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to create announcement",
-        variant: "destructive",
-      });
-    }
-  };
 
   const handleEditAnnouncement = async () => {
-    if (!selectedAnnouncement || !formData.title || !formData.description) {
-      toast({
-        title: "Error",
-        description: "Please fill in all required fields",
-        variant: "destructive",
-      });
-      return;
+  if (!selectedAnnouncement || !formData.title || !formData.description) {
+    toast({
+      title: "Error",
+      description: "Please fill in all required fields",
+      variant: "destructive",
+    });
+    return;
+  }
+
+  setIsUpdating(true); // Start loading
+
+  const data = new FormData();
+  data.append('title', formData.title);
+  data.append('description', formData.description);
+  if (formData.file) data.append('file', formData.file);
+
+  try {
+    const response = await announcementAPI.update(selectedAnnouncement.id, data);
+    const resData = await response.json();
+
+    if (!response.ok) {
+      const errorMsg = resData.file?.[0] || resData.title?.[0] || resData.description?.[0] || resData.detail || "Failed to update announcement";
+      throw new Error(errorMsg);
     }
 
-    const data = new FormData();
-    data.append('title', formData.title);
-    data.append('description', formData.description);
-    if (formData.file) {
-      data.append('file', formData.file);
-    }
+    toast({
+      title: "Success",
+      description: "Announcement updated successfully",
+    });
+    fetchAnnouncements();
+    setIsEditOpen(false);
+    setFormData({ title: '', description: '', file: null });
+  } catch (error: any) {
+    toast({
+      title: "Error",
+      description: error.message || "Failed to update announcement",
+      variant: "destructive",
+    });
+  } finally {
+    setIsUpdating(false);
+  }
+};
 
-    try {
-      const response = await announcementAPI.update(selectedAnnouncement.id, data);
-      if (response.ok) {
-        toast({
-          title: "Success",
-          description: "Announcement updated successfully",
-        });
-        fetchAnnouncements();
-        setIsEditOpen(false);
-        setFormData({ title: '', description: '', file: null });
-      }
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to update announcement",
-        variant: "destructive",
-      });
-    }
-  };
 
   const handleDelete = async (id: number) => {
     if (!confirm('Are you sure you want to delete this announcement?')) return;
@@ -240,9 +262,13 @@ const AnnouncementsPage = () => {
                   <Button variant="outline" onClick={() => setIsCreateOpen(false)}>
                     Cancel
                   </Button>
-                  <Button onClick={handleCreateAnnouncement}>
-                    <Upload className="w-4 h-4 mr-2" />
-                    Upload Announcement
+                  <Button onClick={handleCreateAnnouncement} disabled={isCreating}>
+                    {isCreating ? "Uploading..." : (
+                      <>
+                        <Upload className="w-4 h-4 mr-2" />
+                        Upload Announcement
+                      </>
+                    )}
                   </Button>
                 </DialogFooter>
               </DialogContent>
@@ -378,9 +404,13 @@ const AnnouncementsPage = () => {
             <Button variant="outline" onClick={() => setIsEditOpen(false)}>
               Cancel
             </Button>
-            <Button onClick={handleEditAnnouncement}>
-              <Edit className="w-4 h-4 mr-2" />
-              Update Announcement
+            <Button onClick={handleEditAnnouncement} disabled={isUpdating}>
+              {isUpdating ? "Updating..." : (
+                <>
+                  <Edit className="w-4 h-4 mr-2" />
+                  Update Announcement
+                </>
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>
