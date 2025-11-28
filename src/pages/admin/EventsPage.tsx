@@ -41,6 +41,7 @@ const EventsPage = () => {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [isCreating, setIsCreating] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     title: '', description: '', venue: '', date: '', from_date: '', to_date: '',
     time: '', department: 'SSPM', image: null as File | null,
@@ -137,6 +138,10 @@ const EventsPage = () => {
       department: event.department,
       image: null,
     });
+    setImagePreview(event.image 
+    ? `https://churchmedia.kahawawendanisda.org${event.image}` 
+    : null
+    );
     setIsEditOpen(true);
   };
 
@@ -195,13 +200,13 @@ const EventsPage = () => {
 
                 <div className="grid gap-4 py-4">
                   <Label>Event Title</Label>
-                  <Input value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} />
+                  <Input value={formData.title} placeholder='Event Title' onChange={(e) => setFormData({ ...formData, title: e.target.value })} />
 
                   <Label>Description</Label>
-                  <Textarea rows={3} value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} />
+                  <Textarea rows={3} value={formData.description} placeholder='Details of the event' onChange={(e) => setFormData({ ...formData, description: e.target.value })} />
 
                   <Label>Venue</Label>
-                  <Input value={formData.venue} onChange={(e) => setFormData({ ...formData, venue: e.target.value })} />
+                  <Input value={formData.venue} placeholder='Location of the event' onChange={(e) => setFormData({ ...formData, venue: e.target.value })} />
 
                   <Label>Date (Single-day)</Label>
                   <Input type="date" value={formData.date} onChange={(e) => setFormData({ ...formData, date: e.target.value })} />
@@ -232,7 +237,25 @@ const EventsPage = () => {
                   </select>
 
                   <Label>Event Image</Label>
-                  <Input type="file" accept="image/*" onChange={(e) => setFormData({ ...formData, image: e.target.files?.[0] || null })} />
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0] || null;
+                      setFormData({ ...formData, image: file });
+                      setImagePreview(file ? URL.createObjectURL(file) : null);
+                    }}
+                  />
+                  {imagePreview && (
+                    <div className='aspect-video border border-dashed border-primary rounded-md p-2'>
+                      <img
+                      src={imagePreview}
+                      alt="Preview"
+                      className="h-full w-full object-cover rounded-md border"
+                    />
+                    </div>
+                  )}
+
                 </div>
 
                 <DialogFooter>
@@ -340,7 +363,26 @@ const EventsPage = () => {
             </select>
 
             <Label>Event Image (optional)</Label>
-            <Input type="file" accept="image/*" onChange={(e) => setFormData({ ...formData, image: e.target.files?.[0] || null })} />
+            <Input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files?.[0] || null;
+                setFormData({ ...formData, image: file });
+                setImagePreview(
+                  file ? URL.createObjectURL(file) : imagePreview
+                );
+              }}
+            />
+            {imagePreview && (
+                    <div className='aspect-video border border-dashed border-primary rounded-md p-2'>
+                      <img
+                      src={imagePreview}
+                      alt="Preview"
+                      className="h-full w-full object-cover rounded-md border"
+                    />
+                    </div>
+                  )}
           </div>
 
           <DialogFooter>
