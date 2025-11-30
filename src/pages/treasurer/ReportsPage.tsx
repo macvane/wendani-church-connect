@@ -29,8 +29,9 @@ interface Transaction {
   name: string;
   phone_number: string;
   email?: string;
-  amount: string | number;
-  purpose: string;
+  amount?: string | number; // For backward compatibility
+  purposes?: Array<{ purpose: string; amount: number }>; // New structure
+  purpose?: string; // For backward compatibility
   other_purpose_details?: string;
   status: string;
   mpesa_receipt_number?: string;
@@ -183,18 +184,28 @@ const exportSummaryCSV = (data: Transaction[]) => {
 
 
   const exportToCSV = (data: Transaction[], filename: string) => {
-    const headers = ['ID', 'Name', 'Phone', 'Email', 'Amount', 'Purpose', 'Status', 'Receipt', 'Date'];
-    const rows = data.map(t => [
-      t.id,
-      t.name,
-      t.phone_number,
-      t.email || '',
-      typeof t.amount === 'number' ? t.amount.toString() : t.amount,
-      t.purpose,
-      t.status,
-      t.mpesa_receipt_number || '',
-      safeDate(t.transaction_date).toLocaleDateString(),
-    ]);
+    const headers = ['ID', 'Name', 'Phone', 'Email', 'Total Amount', 'Purposes', 'Status', 'Receipt', 'Date'];
+    const rows = data.map(t => {
+      const totalAmount = t.purposes 
+        ? t.purposes.reduce((sum, p) => sum + Number(p.amount || 0), 0)
+        : (typeof t.amount === 'number' ? t.amount : parseFloat(t.amount as string || '0'));
+      
+      const purposesStr = t.purposes 
+        ? t.purposes.map(p => `${p.purpose}: ${p.amount}`).join('; ')
+        : t.purpose || '';
+      
+      return [
+        t.id,
+        t.name,
+        t.phone_number,
+        t.email || '',
+        totalAmount.toString(),
+        purposesStr,
+        t.status,
+        t.mpesa_receipt_number || '',
+        safeDate(t.transaction_date).toLocaleDateString(),
+      ];
+    });
 
     const escaped = rows.map(r => r.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','));
     const csvContent = [headers.join(','), ...escaped].join('\n');
@@ -277,19 +288,29 @@ const exportSummaryCSV = (data: Transaction[]) => {
     doc.setFontSize(12);
     doc.text('Transactions', 40, yCursor + 14);
 
-    const txRows = data.map(t => ([
-      String(t.id),
-      t.name,
-      t.phone_number,
-      typeof t.amount === 'number' ? t.amount.toString() : t.amount,
-      t.purpose,
-      t.status,
-      safeDate(t.transaction_date).toLocaleDateString(),
-    ]));
+    const txRows = data.map(t => {
+      const totalAmount = t.purposes 
+        ? t.purposes.reduce((sum, p) => sum + Number(p.amount || 0), 0)
+        : (typeof t.amount === 'number' ? t.amount : parseFloat(t.amount as string || '0'));
+      
+      const purposesStr = t.purposes 
+        ? t.purposes.map(p => `${p.purpose}: KSH ${p.amount}`).join(', ')
+        : t.purpose || '';
+      
+      return [
+        String(t.id),
+        t.name,
+        t.phone_number,
+        totalAmount.toString(),
+        purposesStr,
+        t.status,
+        safeDate(t.transaction_date).toLocaleDateString(),
+      ];
+    });
 
     autoTable(doc, {
       startY: yCursor + 24,
-      head: [['ID', 'Name', 'Phone', 'Amount', 'Purpose', 'Status', 'Date']],
+      head: [['ID', 'Name', 'Phone', 'Amount', 'Purposes', 'Status', 'Date']],
       body: txRows,
       theme: 'striped',
       headStyles: { fillColor: [139, 92, 246] },
@@ -333,8 +354,14 @@ const exportSummaryCSV = (data: Transaction[]) => {
       return;
     }
 
-    // Some entries may have slight differences in purpose casing/trimming, so normalize
-    const filtered = transactions.filter(t => (t.purpose || '').trim().toLowerCase() === purpose.trim().toLowerCase());
+    // Filter transactions that have this purpose in their purposes array
+    const filtered = transactions.filter(t => {
+      if (t.purposes && Array.isArray(t.purposes)) {
+        return t.purposes.some(p => (p.purpose || '').trim().toLowerCase() === purpose.trim().toLowerCase());
+      }
+      // Fallback for old structure
+      return (t.purpose || '').trim().toLowerCase() === purpose.trim().toLowerCase();
+    });
 
     if (filtered.length === 0) {
       toast({ title: 'No Data', description: `No transactions found for ${purpose}` });

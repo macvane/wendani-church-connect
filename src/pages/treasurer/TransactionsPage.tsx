@@ -36,8 +36,9 @@ interface Transaction {
   name: string;
   phone_number: string;
   email?: string;
-  total_amount: number;
-  purpose: string;
+  total_amount?: number; // For backward compatibility
+  purposes?: Array<{ purpose: string; amount: number }>; // New structure
+  purpose?: string; // For backward compatibility
   other_purpose_details?: string;
   status: string;
   mpesa_receipt_number?: string;
@@ -169,13 +170,23 @@ const TransactionsPage = () => {
       t => t.status.toLowerCase() === 'completed' || t.status.toLowerCase() === 'success'
     );
 
-    const totalAmount = completedTransactions.reduce(
-      (sum, t) => sum + Number(t.total_amount), 0
-    );
+    const totalAmount = completedTransactions.reduce((sum, t) => {
+      if (t.purposes && Array.isArray(t.purposes)) {
+        return sum + t.purposes.reduce((pSum, p) => pSum + Number(p.amount || 0), 0);
+      }
+      return sum + Number(t.total_amount || 0);
+    }, 0);
 
     const purposeBreakdown = completedTransactions.reduce((acc, t) => {
-      const purpose = t.purpose;
-      acc[purpose] = (acc[purpose] || 0) + Number(t.total_amount);
+      if (t.purposes && Array.isArray(t.purposes)) {
+        t.purposes.forEach(p => {
+          const purpose = p.purpose;
+          acc[purpose] = (acc[purpose] || 0) + Number(p.amount || 0);
+        });
+      } else if (t.purpose) {
+        // Fallback for old structure
+        acc[t.purpose] = (acc[t.purpose] || 0) + Number(t.total_amount || 0);
+      }
       return acc;
     }, {} as Record<string, number>);
 
@@ -190,18 +201,28 @@ const TransactionsPage = () => {
   const stats = calculateStats();
 
   const handleExport = () => {
-    const headers = ['ID', 'Name', 'Phone', 'Email', 'Amount', 'Purpose', 'Status', 'Receipt #', 'Date'];
-    const csvData = transactions.map(t => [
-      t.id,
-      t.name,
-      t.phone_number,
-      t.email || '',
-      t.total_amount,
-      t.purpose,
-      t.status,
-      t.mpesa_receipt_number || '',
-      t.transaction_date,
-    ]);
+    const headers = ['ID', 'Name', 'Phone', 'Email', 'Total Amount', 'Purposes', 'Status', 'Receipt #', 'Date'];
+    const csvData = transactions.map(t => {
+      const totalAmount = t.purposes 
+        ? t.purposes.reduce((sum, p) => sum + Number(p.amount || 0), 0)
+        : t.total_amount || 0;
+      
+      const purposesStr = t.purposes 
+        ? t.purposes.map(p => `${p.purpose}: ${p.amount}`).join('; ')
+        : t.purpose || '';
+      
+      return [
+        t.id,
+        t.name,
+        t.phone_number,
+        t.email || '',
+        totalAmount,
+        `"${purposesStr}"`,
+        t.status,
+        t.mpesa_receipt_number || '',
+        t.transaction_date,
+      ];
+    });
     
     const csv = [
       headers.join(','),
@@ -399,7 +420,7 @@ const TransactionsPage = () => {
                   <TableHead>Name</TableHead>
                   <TableHead>Phone</TableHead>
                   <TableHead>Amount</TableHead>
-                  <TableHead>Purpose</TableHead>
+                  <TableHead>Purposes</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Transaction Code</TableHead>
                   <TableHead>Date</TableHead>
@@ -419,32 +440,53 @@ const TransactionsPage = () => {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  transactions.map((transaction, index) => (
-                    <TableRow key={transaction.id}>
-                      {/* Continuous numbering with newest first */}
-                      <TableCell className="font-medium">
-                        {((currentPage - 1) * pageSize + index + 1)}
-                      </TableCell>
-                      <TableCell>{transaction.name}</TableCell>
-                      <TableCell>{transaction.phone_number}</TableCell>
-                      <TableCell className="font-medium">{formatAmount(transaction.total_amount)}</TableCell>
-                      <TableCell>
-                        {transaction.purpose}
-                        {transaction.other_purpose_details && (
-                          <div className="text-xs text-muted-foreground">{transaction.other_purpose_details}</div>
-                        )}
-                      </TableCell>
-                      <TableCell>{getStatusBadge(transaction.status)}</TableCell>
-                      <TableCell>
-                        {transaction.mpesa_receipt_number || (
-                          <div className='bg-[#44444E] rounded-full text-white flex justify-center items-center w-auto'>
-                            Failed Txn.
-                          </div>
-                        )}
-                      </TableCell>
-                      <TableCell className="text-sm">{formatDate(transaction.transaction_date)}</TableCell>
-                    </TableRow>
-                  ))
+                  transactions.map((transaction, index) => {
+                    const totalAmount = transaction.purposes 
+                      ? transaction.purposes.reduce((sum, p) => sum + Number(p.amount || 0), 0)
+                      : transaction.total_amount || 0;
+                    
+                    return (
+                      <TableRow key={transaction.id}>
+                        {/* Continuous numbering with newest first */}
+                        <TableCell className="font-medium">
+                          {((currentPage - 1) * pageSize + index + 1)}
+                        </TableCell>
+                        <TableCell>{transaction.name}</TableCell>
+                        <TableCell>{transaction.phone_number}</TableCell>
+                        <TableCell className="font-medium">{formatAmount(totalAmount)}</TableCell>
+                        <TableCell>
+                          {transaction.purposes && transaction.purposes.length > 0 ? (
+                            <div className="space-y-1">
+                              {transaction.purposes.map((p, idx) => (
+                                <div key={idx} className="flex justify-between items-center gap-2">
+                                  <span className="text-sm">{p.purpose}</span>
+                                  <Badge variant="outline" className="text-xs">
+                                    {formatAmount(p.amount)}
+                                  </Badge>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <div>
+                              {transaction.purpose}
+                              {transaction.other_purpose_details && (
+                                <div className="text-xs text-muted-foreground">{transaction.other_purpose_details}</div>
+                              )}
+                            </div>
+                          )}
+                        </TableCell>
+                        <TableCell>{getStatusBadge(transaction.status)}</TableCell>
+                        <TableCell>
+                          {transaction.mpesa_receipt_number || (
+                            <div className='bg-[#44444E] rounded-full text-white flex justify-center items-center w-auto'>
+                              Failed Txn.
+                            </div>
+                          )}
+                        </TableCell>
+                        <TableCell className="text-sm">{formatDate(transaction.transaction_date)}</TableCell>
+                      </TableRow>
+                    );
+                  })
                 )}
               </TableBody>
 
