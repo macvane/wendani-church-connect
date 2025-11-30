@@ -10,6 +10,22 @@ import { mpesaAPI } from "@/utils/api";
 import { Helmet } from "react-helmet-async";
 import { PiggyBank, Loader2 } from "lucide-react";
 
+interface PurposeInfo {
+  label: string;
+  description?: string;
+}
+
+const PURPOSES_MAP: Record<string, PurposeInfo> = {
+  Tithe: { label: "God's Tithe 10%", description: "" },
+  Offering: { label: "Combined Offering 10%+", description: "50% retained at local church level for local activities. 50% remitted to conference for support of conference development and world mission activities." },
+  "Local Church Budget (LCB)": { label: "Local Church Budget (LCB)", description: "Supports the local church congregation and its ministries, outreach programs, utilities, repairs and maintenance." },
+  "Camp Offering": { label: "Camp Meeting Offering", description: "" },
+  "Camp Expenses": { label: "Camp Meeting Expenses", description: "Meets the cost of camp meeting event." },
+  Evangelism: { label: "Evangelism (Outreach)", description: "Support missionary work" },
+  "Station Dev": { label: "Station Development", description: "Station improvement projects" },
+  Other: { label: "Other", description: "Specify your custom purpose eg DEV" },
+};
+
 const PURPOSE_OPTIONS = [
   "Tithe",
   "Offering",
@@ -169,13 +185,13 @@ const Donate = () => {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Payer Info */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="flex flex-col">
+            <div className="flex flex-col space-y-3">
               <Label htmlFor="name">Full Name *</Label>
-              <Input id="name" name="name" value={payerInfo.name} onChange={handlePayerChange} />
+              <Input id="name" placeholder="Full Name"  name="name" value={payerInfo.name} onChange={handlePayerChange} />
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col space-y-3">
               <Label htmlFor="phone_number">Phone Number *</Label>
-              <Input id="phone_number" name="phone_number" value={payerInfo.phone_number} onChange={handlePayerChange} />
+              <Input id="phone_number" placeholder="Mpesa Number" name="phone_number" value={payerInfo.phone_number} onChange={handlePayerChange} />
             </div>
             {/* <div className="flex flex-col">
               <Label htmlFor="email">Email (Optional)</Label>
@@ -184,36 +200,43 @@ const Donate = () => {
           </div>
 
           {/* Purposes */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {PURPOSE_OPTIONS.map((purpose) => (
-              <div key={purpose} className="flex flex-col bg-gray-50 p-3 rounded-lg shadow-sm border border-gray-200">
-                <Label className="mb-1 font-medium">{purpose}</Label>
-                <div className="flex gap-2 items-center">
-                  <Input
-                    type="number"
-                    min="0"
-                    placeholder="0"
-                    value={amounts[purpose] || ""}
-                    onChange={e => handleAmountChange(purpose, e.target.value)}
-                    className={`flex-1 ${amounts[purpose] ? "border-green-400 bg-green-50" : ""}`}
-                  />
-                  {purpose === "Other" && (
-                    <Input
-                      type="text"
-                      placeholder="Specify purpose"
-                      value={amounts["Other_details"] || ""}
-                      onChange={e => setAmounts({ ...amounts, Other_details: e.target.value })}
-                      className="flex-1"
-                    />
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
+  {PURPOSE_OPTIONS.map((purpose) => {
+    const info = PURPOSES_MAP[purpose];
+    return (
+      <div key={purpose} className="flex flex-col bg-gray-50 p-3 rounded-lg shadow-sm border border-gray-200">
+        <Label className="my-3 font-medium">{info.label}</Label>
+        {info.description && (
+          <p className="text-sm text-muted-foreground mb-1">{info.description}</p>
+        )}
+        <div className="flex gap-2 items-center">
+          {purpose === "Other" && (
+            <Input
+              type="text"
+              placeholder="Specify purpose"
+              value={amounts["Other_details"] || ""}
+              onChange={e => setAmounts({ ...amounts, Other_details: e.target.value })}
+              className="flex-1"
+            />
+          )}
+          <Input
+            type="number"
+            min="0"
+            placeholder="0"
+            value={amounts[purpose] || ""}
+            onChange={e => handleAmountChange(purpose, e.target.value)}
+            className={`flex-1 ${amounts[purpose] ? "border-green-400 bg-green-50" : ""}`}
+          />
+        </div>
+      </div>
+    );
+  })}
+</div>
+
 
           {/* Total */}
           <div className="text-right font-semibold text-lg">
-            Total Amount: KES {totalAmount}
+            Total Giving: KES {totalAmount}
           </div>
 
           {/* Submit */}

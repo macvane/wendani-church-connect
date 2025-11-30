@@ -457,14 +457,20 @@ const TransactionsPage = () => {
                         <TableCell>
                           {transaction.purposes && transaction.purposes.length > 0 ? (
                             <div className="space-y-1">
-                              {transaction.purposes.map((p, idx) => (
-                                <div key={idx} className="flex justify-between items-center gap-2">
-                                  <span className="text-sm">{p.purpose}</span>
-                                  <Badge variant="outline" className="text-xs">
-                                    {formatAmount(p.amount)}
-                                  </Badge>
-                                </div>
-                              ))}
+                              {transaction.purposes.map((p, idx) => {
+  const displayPurpose = p.purpose.toLowerCase() === "other" && p.other_purpose_details
+    ? p.other_purpose_details
+    : p.purpose;
+  return (
+    <div key={idx} className="flex justify-between items-center gap-2">
+      <span className="text-sm">{displayPurpose}</span>
+      <Badge variant="outline" className="text-xs">
+        {formatAmount(p.amount)}
+      </Badge>
+    </div>
+  );
+})}
+
                             </div>
                           ) : (
                             <div>
