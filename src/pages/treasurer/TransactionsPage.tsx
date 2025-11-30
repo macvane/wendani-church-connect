@@ -59,6 +59,8 @@ const TransactionsPage = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [pageSize] = useState(150); // 150 items per page
+  const [expanded, setExpanded] = useState<{ [key: string]: boolean }>({});
+
   
   // Filters
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -455,32 +457,72 @@ const TransactionsPage = () => {
                         <TableCell>{transaction.phone_number}</TableCell>
                         <TableCell className="font-medium">{formatAmount(totalAmount)}</TableCell>
                         <TableCell>
-                          {transaction.purposes && transaction.purposes.length > 0 ? (
-                            <div className="space-y-1">
-                              {transaction.purposes.map((p, idx) => {
-  const displayPurpose = p.purpose.toLowerCase() === "other" && p.other_purpose_details
-    ? p.other_purpose_details
-    : p.purpose;
-  return (
-    <div key={idx} className="flex justify-between items-center gap-2">
-      <span className="text-sm">{displayPurpose}</span>
-      <Badge variant="outline" className="text-xs">
-        {formatAmount(p.amount)}
-      </Badge>
-    </div>
-  );
-})}
+  {transaction.purposes && transaction.purposes.length > 0 ? (
+    <div className="flex flex-col gap-1">
+      {/* Summary Line */}
+      <div className="text-sm">
+        {transaction.purposes
+          .map((p) => {
+            const label =
+              p.purpose.toLowerCase() === "other" && p.other_purpose_details
+                ? p.other_purpose_details
+                : p.purpose;
+            return `${label} (KES ${p.amount})`;
+          })
+          .join(", ")
+        }
+      </div>
 
-                            </div>
-                          ) : (
-                            <div>
-                              {transaction.purpose}
-                              {transaction.other_purpose_details && (
-                                <div className="text-xs text-muted-foreground">{transaction.other_purpose_details}</div>
-                              )}
-                            </div>
-                          )}
-                        </TableCell>
+      {/* Toggle Button */}
+      <button
+        onClick={() =>
+          setExpanded((prev) => ({
+            ...prev,
+            [transaction.id]: !prev[transaction.id],
+          }))
+        }
+        className="text-xs text-primary underline hover:opacity-80 mt-1 w-fit"
+      >
+        {expanded[transaction.id] ? "Hide Details" : "Show Details"}
+      </button>
+
+      {/* Collapsible Section */}
+      {expanded[transaction.id] && (
+        <div className="mt-2 space-y-1 border rounded-md p-2 bg-muted/30">
+          {transaction.purposes.map((p, idx) => {
+            const label =
+              p.purpose.toLowerCase() === "other" && p.other_purpose_details
+                ? p.other_purpose_details
+                : p.purpose;
+
+            return (
+              <div
+                key={idx}
+                className="flex justify-between text-sm border-b last:border-b-0 pb-1"
+              >
+                <span className="font-medium">{label}</span>
+                <span className="text-muted-foreground">
+                  KES {p.amount}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  ) : (
+    // Fallback for legacy single-purpose records
+    <div>
+      {transaction.purpose}
+      {transaction.other_purpose_details && (
+        <div className="text-xs text-muted-foreground">
+          {transaction.other_purpose_details}
+        </div>
+      )}
+    </div>
+  )}
+</TableCell>
+
                         <TableCell>{getStatusBadge(transaction.status)}</TableCell>
                         <TableCell>
                           {transaction.mpesa_receipt_number || (
