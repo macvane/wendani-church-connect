@@ -13,23 +13,49 @@ export const calculateStats = (transactions: any[]) => {
   const completed = transactions.filter(t => t.status.toLowerCase() === 'success' || t.status.toLowerCase() === 'completed');
   const pending = transactions.filter(t => t.status.toLowerCase() === 'pending');
 
-  const totalAmount = completed.reduce((sum, t) => sum + parseAmount(t.amount), 0);
+  // Calculate total amount by summing all purposes in all transactions
+  const totalAmount = completed.reduce((sum, t) => {
+    if (t.purposes && Array.isArray(t.purposes)) {
+      return sum + t.purposes.reduce((pSum: number, p: any) => pSum + parseAmount(p.amount), 0);
+    }
+    // Fallback for old structure
+    return sum + parseAmount(t.amount || t.total_amount);
+  }, 0);
 
   const thisMonthAmount = completed
     .filter(t => {
       const date = new Date(t.transaction_date);
       return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
     })
-    .reduce((sum, t) => sum + parseAmount(t.amount), 0);
+    .reduce((sum, t) => {
+      if (t.purposes && Array.isArray(t.purposes)) {
+        return sum + t.purposes.reduce((pSum: number, p: any) => pSum + parseAmount(p.amount), 0);
+      }
+      return sum + parseAmount(t.amount || t.total_amount);
+    }, 0);
 
   const thisYearAmount = completed
     .filter(t => new Date(t.transaction_date).getFullYear() === currentYear)
-    .reduce((sum, t) => sum + parseAmount(t.amount), 0);
+    .reduce((sum, t) => {
+      if (t.purposes && Array.isArray(t.purposes)) {
+        return sum + t.purposes.reduce((pSum: number, p: any) => pSum + parseAmount(p.amount), 0);
+      }
+      return sum + parseAmount(t.amount || t.total_amount);
+    }, 0);
 
+  // Build purpose breakdown by aggregating all purposes across transactions
   const purposeBreakdown: { [key: string]: number } = {};
   completed.forEach(t => {
-    const purpose = t.purpose || 'Unknown';
-    purposeBreakdown[purpose] = (purposeBreakdown[purpose] || 0) + parseAmount(t.amount);
+    if (t.purposes && Array.isArray(t.purposes)) {
+      t.purposes.forEach((p: any) => {
+        const purpose = p.purpose || 'Unknown';
+        purposeBreakdown[purpose] = (purposeBreakdown[purpose] || 0) + parseAmount(p.amount);
+      });
+    } else {
+      // Fallback for old structure
+      const purpose = t.purpose || 'Unknown';
+      purposeBreakdown[purpose] = (purposeBreakdown[purpose] || 0) + parseAmount(t.amount || t.total_amount);
+    }
   });
 
   return {
@@ -58,7 +84,14 @@ export const getMonthlyTrendData = (transactions: any[]) => {
   completed.forEach(t => {
     const date = new Date(t.transaction_date);
     const monthYear = `${date.toLocaleString('default', { month: 'short' })} ${date.getFullYear()}`;
-    monthlyData[monthYear] = (monthlyData[monthYear] || 0) + parseAmount(t.amount);
+    
+    if (t.purposes && Array.isArray(t.purposes)) {
+      const txTotal = t.purposes.reduce((sum: number, p: any) => sum + parseAmount(p.amount), 0);
+      monthlyData[monthYear] = (monthlyData[monthYear] || 0) + txTotal;
+    } else {
+      // Fallback for old structure
+      monthlyData[monthYear] = (monthlyData[monthYear] || 0) + parseAmount(t.amount || t.total_amount);
+    }
   });
 
   return Object.entries(monthlyData)
