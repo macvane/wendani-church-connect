@@ -36,7 +36,7 @@ interface Transaction {
   name: string;
   phone_number: string;
   email?: string;
-  amount: number;
+  total_amount: number;
   purpose: string;
   other_purpose_details?: string;
   status: string;
@@ -170,12 +170,12 @@ const TransactionsPage = () => {
     );
 
     const totalAmount = completedTransactions.reduce(
-      (sum, t) => sum + Number(t.amount), 0
+      (sum, t) => sum + Number(t.total_amount), 0
     );
 
     const purposeBreakdown = completedTransactions.reduce((acc, t) => {
       const purpose = t.purpose;
-      acc[purpose] = (acc[purpose] || 0) + Number(t.amount);
+      acc[purpose] = (acc[purpose] || 0) + Number(t.total_amount);
       return acc;
     }, {} as Record<string, number>);
 
@@ -196,7 +196,7 @@ const TransactionsPage = () => {
       t.name,
       t.phone_number,
       t.email || '',
-      t.amount,
+      t.total_amount,
       t.purpose,
       t.status,
       t.mpesa_receipt_number || '',
@@ -427,7 +427,7 @@ const TransactionsPage = () => {
                       </TableCell>
                       <TableCell>{transaction.name}</TableCell>
                       <TableCell>{transaction.phone_number}</TableCell>
-                      <TableCell className="font-medium">{formatAmount(transaction.amount)}</TableCell>
+                      <TableCell className="font-medium">{formatAmount(transaction.total_amount)}</TableCell>
                       <TableCell>
                         {transaction.purpose}
                         {transaction.other_purpose_details && (

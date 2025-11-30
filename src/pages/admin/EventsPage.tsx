@@ -375,14 +375,14 @@ const EventsPage = () => {
               }}
             />
             {imagePreview && (
-                    <div className='aspect-video border border-dashed border-primary rounded-md p-2'>
-                      <img
-                      src={imagePreview}
-                      alt="Preview"
-                      className="h-full w-full object-cover rounded-md border"
-                    />
-                    </div>
-                  )}
+              <div className='aspect-video border border-dashed border-primary rounded-md p-2'>
+                <img
+                src={imagePreview}
+                alt="Preview"
+                className="h-full w-full object-cover rounded-md border"
+              />
+              </div>
+            )}
           </div>
 
           <DialogFooter>

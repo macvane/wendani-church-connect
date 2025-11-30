@@ -405,22 +405,26 @@ export const contactAPI = {
 
 // M-Pesa Payment APIs
 export const mpesaAPI = {
+  /**
+   * Initiate an M-Pesa payment
+   * Multi-purpose transactions: send an array of purposes with amount and optional details.
+   */
   initiatePayment: async (data: {
     name: string;
     phone_number: string;
     email?: string;
-    purpose: string;
-    other_purpose_details?: string;
-    amount: number;
+    purposes: { purpose: string; amount: number; other_purpose_details?: string }[];
   }) => {
-    const response = await fetch(`${API_BASE_URL}/api/v1/mpesa/initiate-payment/`, {
+    return fetch(`${API_BASE_URL}/api/v1/mpesa/initiate-payment/`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
-    return response;
   },
 
+  /**
+   * List all transactions
+   */
   listTransactions: async (params?: {
     page?: number;
     page_size?: number;
@@ -431,24 +435,30 @@ export const mpesaAPI = {
     search?: string;
   }) => {
     const queryParams = new URLSearchParams();
-    if (params?.page) queryParams.append('page', params.page.toString());
-    if (params?.page_size) queryParams.append('page_size', params.page_size.toString());
+    if (params?.page) queryParams.append('page', String(params.page));
+    if (params?.page_size) queryParams.append('page_size', String(params.page_size));
     if (params?.status) queryParams.append('status', params.status);
     if (params?.purpose) queryParams.append('purpose', params.purpose);
     if (params?.start_date) queryParams.append('start_date', params.start_date);
     if (params?.end_date) queryParams.append('end_date', params.end_date);
     if (params?.search) queryParams.append('search', params.search);
-    
+
     const url = `/api/v1/mpesa/transactions/${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
     return apiRequest(url);
   },
 
+  /**
+   * Check the status of a single transaction by CheckoutRequestID
+   */
   checkTransactionStatus: async (checkoutRequestId: string) => {
-    return fetch(`${API_BASE_URL}/api/v1/mpesa/status-check/?checkout_request_id=${checkoutRequestId}`);
+    return fetch(
+      `${API_BASE_URL}/api/v1/mpesa/status-check/?checkout_request_id=${checkoutRequestId}`
+    ).then(res => res.json());
   },
 
-
-
+  /**
+   * Get detailed info for a single transaction by ID
+   */
   transactionDetail: async (id: number) => {
     return apiRequest(`/api/v1/mpesa/transactions/${id}/`);
   },
