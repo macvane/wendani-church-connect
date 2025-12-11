@@ -24,7 +24,6 @@ import NotFound from "./pages/NotFound";
 import Donate from "./pages/Donate";
 import MembershipTransfer from "./pages/MembershipTransfer";
 import ThankYou from "./pages/ThankYou";
-import MpesaSuccess from "./pages/MpesaSuccess";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import DashboardOverview from "./pages/admin/DashboardOverview";
@@ -72,10 +71,9 @@ const App = () => {
             <Route path="/benevolence" element={<Benevolence />} />
             <Route path="/library" element={<Library />} />
             <Route path="/baptism" element={<Baptism />} />
-            <Route path="/mpesa" element={<Donate />} />
+            <Route path="/giving" element={<Donate />} />
             <Route path="/membership-transfer" element={<MembershipTransfer />} />
-          <Route path="/thank-you" element={<ThankYou />} />
-          <Route path="/mpesa-success" element={<MpesaSuccess />} />
+            <Route path="/thank-you" element={<ThankYou />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />}>
               <Route index element={<DashboardOverview />} />

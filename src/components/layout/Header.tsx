@@ -126,7 +126,7 @@ const Header = () => {
           ))}
           
           {/* Distinct Donate Button */}
-          {/* <Link to="/donate">
+          <Link to="/giving">
             <Button 
               variant="default"
               className={cn(
@@ -134,9 +134,9 @@ const Header = () => {
                 !isScrolled && "border-2 border-white hover:border-church-600"
               )}
             >
-              Donate
+              Worship In Giving
             </Button>
-          </Link> */}
+          </Link>
         </nav>
         
         {/* Mobile Menu Toggle */}
@@ -204,14 +204,14 @@ const Header = () => {
           ))}
           
           {/* Mobile Donate Button */}
-          {/* <Link to="/donate" className="px-4">
+          <Link to="/giving" className="px-4">
             <Button 
               variant="default"
               className="w-full bg-church-600 hover:bg-church-700 text-white"
             >
-              Donate
+              Worship In Giving
             </Button>
-          </Link> */}
+          </Link>
         </nav>
       </div>
     </header>
