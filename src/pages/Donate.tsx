@@ -87,7 +87,7 @@ const Donate = () => {
 
       if (response.ok) {
         const data = await response.json();
-        const checkoutId = data.data?.checkout_request_id;
+        const checkoutId = data.checkout_request_id;
         if (!checkoutId) throw new Error("No checkout_request_id returned from backend");
         setCheckoutRequestId(checkoutId);
         setPaymentStatus("processing");
