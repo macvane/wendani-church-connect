@@ -462,4 +462,27 @@ export const mpesaAPI = {
   transactionDetail: async (id: number) => {
     return apiRequest(`/api/v1/mpesa/transactions/${id}/`);
   },
+
+  pollCoopStatus: async (messageReference: string) => {
+  try {
+    const resp = await fetch(`${API_BASE_URL}/api/v1/mpesa/check-status/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ MessageReference: messageReference }),
+    });
+
+    if (!resp.ok) {
+      const text = await resp.text();
+      throw new Error(`HTTP ${resp.status}: ${text}`);
+    }
+
+    // parse JSON only once here
+    const data = await resp.json();
+    return { ok: true, data };
+  } catch (err) {
+    return { ok: false, error: err };
+  }
+},
+
+
 };

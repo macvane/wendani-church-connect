@@ -105,36 +105,59 @@ const Donate = () => {
   };
 
   useEffect(() => {
-    if (!checkoutRequestId) return;
+  if (!checkoutRequestId) return;
 
-    let cancelled = false;
+  let cancelled = false;
 
-    const poll = async () => {
-      if (cancelled) return;
-      try {
-        const data = await mpesaAPI.checkTransactionStatus(checkoutRequestId);
-        if (data.status === "SUCCESS") {
+  const poll = async () => {
+    if (cancelled) return;
+
+    try {
+      const response = await mpesaAPI.pollCoopStatus(checkoutRequestId);
+
+      if (!response.ok) {
+        console.error("Polling failed:", await response.text());
+        setTimeout(poll, 3000);
+        return;
+      }
+
+      const data = await response.json();
+
+      switch (data.status) {
+        case "SUCCESS":
           setPaymentStatus("success");
           setStatusMessage("Payment completed successfully!");
           setCheckoutRequestId(null);
-        } else if (data.status === "FAILED") {
-          setPaymentStatus("failed");
-          setStatusMessage(data.message || "Payment failed.");
-          setCheckoutRequestId(null);
-        } else {
-          setTimeout(poll, 3000);
-        }
-      } catch (err) {
-        console.error(err);
-        setTimeout(poll, 3000);
-      }
-    };
+          break;
 
-    poll();
-    return () => {
-      cancelled = true;
-    };
-  }, [checkoutRequestId]);
+        case "FAILED":
+          setPaymentStatus("failed");
+          setStatusMessage(data.coop_message_details || "Payment failed.");
+          setCheckoutRequestId(null);
+          break;
+
+        case "PROCESSING":
+          // Transaction is still pending, poll again
+          setPaymentStatus("processing");
+          setTimeout(poll, 3000);
+          break;
+
+        default:
+          // Unknown status, also keep polling
+          setPaymentStatus("processing");
+          setTimeout(poll, 3000);
+      }
+
+    } catch (error) {
+      console.error("Polling error:", error);
+      setTimeout(poll, 3000);
+    }
+  };
+
+  poll();
+
+  return () => { cancelled = true; };
+}, [checkoutRequestId]);
 
   const handleCloseModal = () => {
     setPaymentStatus("idle");
