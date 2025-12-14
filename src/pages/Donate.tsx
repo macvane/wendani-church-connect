@@ -15,6 +15,21 @@ interface PurposeInfo {
   description?: string;
 }
 
+type CoopStatus =
+  | "SUCCESS"
+  | "FAILED"
+  | "PROCESSING"
+  | "UNKNOWN";
+
+interface CoopStatusResponse {
+  status: CoopStatus;
+  coop_message_code?: string;
+  coop_message_description?: string;
+  coop_message_details?: string;
+}
+
+
+
 const PURPOSES_MAP: Record<string, PurposeInfo> = {
   Tithe: { label: "God's Tithe 10%", description: "" },
   Offering: { label: "Combined Offering 10%+", description: "50% retained at local church level for local activities. 50% remitted to conference for support of conference development and world mission activities." },
@@ -108,56 +123,86 @@ const Donate = () => {
   if (!checkoutRequestId) return;
 
   let cancelled = false;
+  let timeoutId: number | undefined;
 
   const poll = async () => {
     if (cancelled) return;
 
     try {
-      const response = await mpesaAPI.pollCoopStatus(checkoutRequestId);
+      const result = await mpesaAPI.pollCoopStatus(checkoutRequestId);
 
-      if (!response.ok) {
-        console.error("Polling failed:", await response.text());
-        setTimeout(poll, 3000);
+      if (!result.ok || !result.data) {
+        console.error("Polling failed", result.error);
+        timeoutId = window.setTimeout(poll, 3000);
         return;
       }
 
-      const data = await response.json();
+      const data = result.data as CoopStatusResponse;
 
-      switch (data.status) {
-        case "SUCCESS":
-          setPaymentStatus("success");
-          setStatusMessage("Payment completed successfully!");
-          setCheckoutRequestId(null);
-          break;
-
-        case "FAILED":
-          setPaymentStatus("failed");
-          setStatusMessage(data.coop_message_details || "Payment failed.");
-          setCheckoutRequestId(null);
-          break;
-
-        case "PROCESSING":
-          // Transaction is still pending, poll again
-          setPaymentStatus("processing");
-          setTimeout(poll, 3000);
-          break;
-
-        default:
-          // Unknown status, also keep polling
-          setPaymentStatus("processing");
-          setTimeout(poll, 3000);
+      if (!data.status) {
+        timeoutId = window.setTimeout(poll, 3000);
+        return;
       }
 
-    } catch (error) {
-      console.error("Polling error:", error);
-      setTimeout(poll, 3000);
+      switch (data.status) {
+  case "SUCCESS":
+    setPaymentStatus("success");
+    setStatusMessage("Payment completed successfully!");
+    setCheckoutRequestId(null);
+    return;
+
+  case "FAILED":
+    setPaymentStatus("failed");
+    setStatusMessage(
+      data.coop_message_details ||
+      data.coop_message_description ||
+      "Payment failed"
+    );
+    setCheckoutRequestId(null);
+    return;
+
+  case "UNKNOWN":
+    // 🔥 USER CANCELLED / TIMEOUT CASE
+    if (data.coop_message_code === "1032") {
+      setPaymentStatus("failed");
+      setStatusMessage("Payment cancelled by user.");
+      setCheckoutRequestId(null);
+      return;
+    }
+
+    if (data.coop_message_code === "1037") {
+      setPaymentStatus("failed");
+      setStatusMessage("Payment timed out. Please try again.");
+      setCheckoutRequestId(null);
+      return;
+    }
+
+    // Otherwise keep polling briefly
+    setPaymentStatus("processing");
+    timeoutId = window.setTimeout(poll, 3000);
+    return;
+
+  case "PROCESSING":
+  default:
+    setPaymentStatus("processing");
+    timeoutId = window.setTimeout(poll, 3000);
+}
+
+    } catch (err) {
+      console.error("Polling error:", err);
+      timeoutId = window.setTimeout(poll, 3000);
     }
   };
 
   poll();
 
-  return () => { cancelled = true; };
+  return () => {
+    cancelled = true;
+    if (timeoutId) clearTimeout(timeoutId);
+  };
 }, [checkoutRequestId]);
+
+
 
   const handleCloseModal = () => {
     setPaymentStatus("idle");
