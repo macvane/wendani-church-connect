@@ -38,7 +38,7 @@ const PURPOSES_MAP: Record<string, PurposeInfo> = {
   "Camp Expenses": { label: "Camp Meeting Expenses", description: "Meets the cost of camp meeting event." },
   Evangelism: { label: "Evangelism (Outreach)", description: "Support missionary work" },
   "Station Dev": { label: "Station Support", description: "Support station improvement projects." },
-  DEVGR: { label: "Local Church Development", description: "Select a group number (1–42) and enter amount" },
+  DEVGR: { label: "Local Church Development", description: "Select a group number (1–42) and enter amount, If you are a visitor or don't have one, pick Group 42." },
   Other: { label: "Other", description: "Specify your custom purpose eg DEV" },
 };
 
