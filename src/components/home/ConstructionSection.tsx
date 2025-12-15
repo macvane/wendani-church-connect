@@ -13,6 +13,13 @@ import { Card, CardContent } from "@/components/ui/card";
 
 const ConstructionSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
+
+  const ContructionVideos = [
+    "https://res.cloudinary.com/dxvzdn2ao/video/upload/v1765798967/KahawaWendaniSDAChurchDev1_pmbzci.mp4",
+    "https://res.cloudinary.com/dxvzdn2ao/video/upload/v1765798969/KahawaWendaniSDAChurchDev2_orgyot.mp4",
+    "https://res.cloudinary.com/dxvzdn2ao/video/upload/v1765798976/KahawaWendaniSDAChurchDev_mycavh.mp4",
+    "https://res.cloudinary.com/dxvzdn2ao/video/upload/v1765798980/KahawaWendaniSDAChurchDev4_s8bawb.mp4"
+  ]
   
   // Construction journey milestones with images
   const milestones = [
@@ -109,7 +116,21 @@ const ConstructionSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 ">
           <div className="animate-on-scroll animate-delay-2">
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20 w-full ">
-              <WistiaEmbed />
+              <div className='grid md:grid-cols-2 gap-3'>
+                {ContructionVideos.map((video,index) => (
+                  <div key={index} className='h-[15rem]'>
+                    <video
+                    muted
+                    loop
+                    autoPlay
+                    src={video}
+                    className='rounded-xl object-cover w-full h-full'
+                  >
+                  </video>
+                  </div>
+                ))}
+              </div>
+              {/* <WistiaEmbed /> */}
             </div>
           </div>
           
