@@ -37,7 +37,8 @@ const PURPOSES_MAP: Record<string, PurposeInfo> = {
   "Camp Offering": { label: "Camp Meeting Offering", description: "" },
   "Camp Expenses": { label: "Camp Meeting Expenses", description: "Meets the cost of camp meeting event." },
   Evangelism: { label: "Evangelism (Outreach)", description: "Support missionary work" },
-  "Station Dev": { label: "Station Support", description: "Station improvement projects. For Local Church Development Use custom field below with description DEVGR#, replace # with your group number." },
+  "Station Dev": { label: "Station Support", description: "Support station improvement projects." },
+  DEVGR: { label: "Local Church Development", description: "Select a group number (1–42) and enter amount" },
   Other: { label: "Other", description: "Specify your custom purpose eg DEV" },
 };
 
@@ -49,6 +50,7 @@ const PURPOSE_OPTIONS = [
   "Camp Expenses",
   "Evangelism",
   "Station Dev",
+  "DEVGR", 
   "Other",
 ];
 
@@ -80,6 +82,16 @@ const Donate = () => {
       return;
     }
 
+    if (amounts["DEVGR"] && !amounts["DEVGR_group"]) {
+  toast({
+    title: "Missing DEVGR group",
+    description: "Please select a development group number (1–42).",
+    variant: "destructive",
+  });
+  setIsSubmitting(false);
+  return;
+}
+
     if (totalAmount <= 0) {
       toast({ title: "Invalid Amount", description: "Please enter at least one amount.", variant: "destructive" });
       return;
@@ -87,11 +99,33 @@ const Donate = () => {
 
     setIsSubmitting(true);
     try {
-      const purposesPayload = PURPOSE_OPTIONS.filter(p => Number(amounts[p]) > 0).map(p => ({
-        purpose: p,
+      const purposesPayload = PURPOSE_OPTIONS
+  .filter((p) => Number(amounts[p]) > 0)
+  .map((p) => {
+    if (p === "DEVGR") {
+      return {
+        purpose: "DEVGR",
         amount: Number(amounts[p]),
-        ...(p === "Other" && amounts["Other_details"] ? { other_purpose_details: amounts["Other_details"] } : {}),
-      }));
+        other_purpose_details: amounts["DEVGR_group"]
+          ? `${amounts["DEVGR_group"]}`
+          : null,
+      };
+    }
+
+    if (p === "Other") {
+      return {
+        purpose: "Other",
+        amount: Number(amounts[p]),
+        other_purpose_details: amounts["Other_details"] || null,
+      };
+    }
+
+    return {
+      purpose: p,
+      amount: Number(amounts[p]),
+    };
+  });
+
 
       const response = await mpesaAPI.initiatePayment({
         name: payerInfo.name,
@@ -271,35 +305,69 @@ const Donate = () => {
           <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
   {PURPOSE_OPTIONS.map((purpose) => {
     const info = PURPOSES_MAP[purpose];
+
     return (
-      <div key={purpose} className="flex flex-col bg-gray-50 p-3 rounded-lg shadow-sm border border-gray-200">
+      <div
+        key={purpose}
+        className="flex flex-col bg-gray-50 p-3 rounded-lg shadow-sm border border-gray-200"
+      >
         <Label className="my-3 font-medium">{info.label}</Label>
+
         {info.description && (
-          <p className="text-sm text-muted-foreground mb-3">{info.description}</p>
+          <p className="text-sm text-muted-foreground mb-3">
+            {info.description}
+          </p>
         )}
+
         <div className="flex gap-2 items-center">
+          {/* DEVGR: group selector */}
+          {purpose === "DEVGR" && (
+            <select
+              value={amounts["DEVGR_group"] || ""}
+              onChange={(e) =>
+                setAmounts({ ...amounts, DEVGR_group: e.target.value })
+              }
+              className="flex-1 border rounded px-2 py-1"
+            >
+              <option value="">Select group (1–42)</option>
+              {Array.from({ length: 42 }, (_, i) => i + 1).map((n) => (
+                <option key={n} value={n}>
+                  Group {n}
+                </option>
+              ))}
+            </select>
+          )}
+
+          {/* Other: free text purpose */}
           {purpose === "Other" && (
             <Input
               type="text"
               placeholder="Specify purpose"
               value={amounts["Other_details"] || ""}
-              onChange={e => setAmounts({ ...amounts, Other_details: e.target.value })}
+              onChange={(e) =>
+                setAmounts({ ...amounts, Other_details: e.target.value })
+              }
               className="flex-1"
             />
           )}
+
+          {/* Amount input (for all purposes including DEVGR) */}
           <Input
             type="number"
             min="0"
             placeholder="0"
             value={amounts[purpose] || ""}
-            onChange={e => handleAmountChange(purpose, e.target.value)}
-            className={`flex-1 ${amounts[purpose] ? "border-green-400 bg-green-50" : ""}`}
+            onChange={(e) => handleAmountChange(purpose, e.target.value)}
+            className={`flex-1 ${
+              amounts[purpose] ? "border-green-400 bg-green-50" : ""
+            }`}
           />
         </div>
       </div>
     );
   })}
 </div>
+
 
 
           {/* Total */}
