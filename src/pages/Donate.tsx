@@ -33,7 +33,7 @@ interface CoopStatusResponse {
 const PURPOSES_MAP: Record<string, PurposeInfo> = {
   Tithe: { label: "God's Tithe 10%", description: "" },
   Offering: { label: "Combined Offering 10%+", description: "50% retained at local church level for local activities. 50% remitted to conference for support of conference development and world mission activities." },
-  "Local Church Budget (LCB)": { label: "Local Church Budget (LCB)", description: "Supports the local church congregation and its ministries, outreach programs, utilities, repairs and maintenance." },
+  "Local Church": { label: "Local Church Budget (LCB)", description: "Supports the local church congregation and its ministries, outreach programs, utilities, repairs and maintenance." },
   "Camp Offering": { label: "Camp Meeting Offering", description: "" },
   "Camp Expenses": { label: "Camp Meeting Expenses", description: "Meets the cost of camp meeting event." },
   Evangelism: { label: "Evangelism (Outreach)", description: "Support missionary work" },
@@ -44,6 +44,7 @@ const PURPOSES_MAP: Record<string, PurposeInfo> = {
 const PURPOSE_OPTIONS = [
   "Tithe",
   "Offering",
+  "Local Church",
   "Camp Offering",
   "Camp Expenses",
   "Evangelism",
