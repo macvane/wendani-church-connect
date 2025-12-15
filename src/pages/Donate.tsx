@@ -37,7 +37,7 @@ const PURPOSES_MAP: Record<string, PurposeInfo> = {
   "Camp Offering": { label: "Camp Meeting Offering", description: "" },
   "Camp Expenses": { label: "Camp Meeting Expenses", description: "Meets the cost of camp meeting event." },
   Evangelism: { label: "Evangelism (Outreach)", description: "Support missionary work" },
-  "Station Dev": { label: "Station Development", description: "Station improvement projects" },
+  "Station Dev": { label: "Station Development", description: "Station improvement projects. For Local Church Development Use custom field below with description DEVGR#, replace # with your group number." },
   Other: { label: "Other", description: "Specify your custom purpose eg DEV" },
 };
 
@@ -275,7 +275,7 @@ const Donate = () => {
       <div key={purpose} className="flex flex-col bg-gray-50 p-3 rounded-lg shadow-sm border border-gray-200">
         <Label className="my-3 font-medium">{info.label}</Label>
         {info.description && (
-          <p className="text-sm text-muted-foreground mb-1">{info.description}</p>
+          <p className="text-sm text-muted-foreground mb-3">{info.description}</p>
         )}
         <div className="flex gap-2 items-center">
           {purpose === "Other" && (
