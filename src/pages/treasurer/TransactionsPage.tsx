@@ -491,9 +491,12 @@ const TransactionsPage = () => {
         <div className="mt-2 space-y-1 border rounded-md p-2 bg-muted/30">
           {transaction.purposes.map((p, idx) => {
             const label =
-              p.purpose.toLowerCase() === "other" && p.other_purpose_details
-                ? p.other_purpose_details
-                : p.purpose;
+  p.purpose === "DEVGR" && p.other_purpose_details
+    ? `DEVGR${p.other_purpose_details}`
+    : p.purpose.toLowerCase() === "other" && p.other_purpose_details
+    ? p.other_purpose_details
+    : p.purpose;
+
 
             return (
               <div
