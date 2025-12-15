@@ -152,7 +152,7 @@ const ConstructionSection = () => {
               
               <div className="mt-6 flex flex-col sm:flex-row gap-4">
                 <Link
-                  to='/'
+                  to='/giving'
                   className="btn bg-church-600 hover:bg-church-700 text-white flex-1 text-center btn-lg"
                 >
                   Donate Now
