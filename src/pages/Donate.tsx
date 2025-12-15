@@ -44,7 +44,6 @@ const PURPOSES_MAP: Record<string, PurposeInfo> = {
 const PURPOSE_OPTIONS = [
   "Tithe",
   "Offering",
-  "Local Church Budget (LCB)",
   "Camp Offering",
   "Camp Expenses",
   "Evangelism",
