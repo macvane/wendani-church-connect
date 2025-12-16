@@ -42,27 +42,34 @@ const TreasurerDashboard = () => {
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full treasurer-theme">
+      <div className="flex min-h-screen w-full treasurer-theme bg-background">
         <TreasurerSidebar />
         <div className="flex-1 flex flex-col">
-          <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b bg-background px-6">
-            <SidebarTrigger />
+          <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b border-border/50 bg-card/80 backdrop-blur-sm px-6 shadow-sm">
             <div className="flex items-center gap-4">
-              <span className="text-sm text-muted-foreground">
+              <SidebarTrigger className="rounded-lg hover:bg-muted" />
+              <div className="hidden sm:block">
+                <h1 className="text-sm font-semibold">Treasury Dashboard</h1>
+                <p className="text-xs text-muted-foreground">Financial Management</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="hidden md:inline-flex items-center gap-2 text-sm text-muted-foreground bg-muted/50 px-3 py-1.5 rounded-full">
+                <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
                 Treasurer Portal
               </span>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={handleLogout}
-                className="gap-2"
+                className="gap-2 rounded-lg hover:bg-destructive/10 hover:text-destructive hover:border-destructive/50"
               >
                 <LogOut className="h-4 w-4" />
-                Logout
+                <span className="hidden sm:inline">Logout</span>
               </Button>
             </div>
           </header>
-          <main className="flex-1 overflow-auto p-6">
+          <main className="flex-1 overflow-auto p-4 md:p-6 lg:p-8">
             <Outlet />
           </main>
         </div>

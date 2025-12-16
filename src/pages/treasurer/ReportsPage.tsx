@@ -438,18 +438,18 @@ const exportSummaryCSV = (data: Transaction[]) => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Financial Reports</h1>
-        <p className="text-muted-foreground">Comprehensive financial analysis and reporting</p>
+        <h1 className="text-2xl font-bold tracking-tight">Financial Reports</h1>
+        <p className="text-sm text-muted-foreground">Comprehensive financial analysis and reporting</p>
       </div>
 
       <StatsOverview stats={stats} />
 
       <Tabs defaultValue="purpose" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="purpose">By Purpose</TabsTrigger>
-          <TabsTrigger value="trend">Trend Analysis</TabsTrigger>
-          <TabsTrigger value="distribution">Distribution</TabsTrigger>
-          <TabsTrigger value="status">Status Overview</TabsTrigger>
+        <TabsList className="bg-muted/50 p-1 rounded-xl">
+          <TabsTrigger value="purpose" className="rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm">By Purpose</TabsTrigger>
+          <TabsTrigger value="trend" className="rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm">Trend Analysis</TabsTrigger>
+          <TabsTrigger value="distribution" className="rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm">Distribution</TabsTrigger>
+          <TabsTrigger value="status" className="rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm">Status Overview</TabsTrigger>
         </TabsList>
 
         <TabsContent value="purpose" className="space-y-4">
@@ -461,9 +461,9 @@ const exportSummaryCSV = (data: Transaction[]) => {
         </TabsContent>
 
         <TabsContent value="distribution" className="space-y-4">
-          <Card>
+          <Card className="border-0 shadow-sm">
             <CardHeader>
-              <CardTitle>Purpose Distribution</CardTitle>
+              <CardTitle className="text-lg">Purpose Distribution</CardTitle>
               <CardDescription>Percentage breakdown by category</CardDescription>
             </CardHeader>
             <CardContent>
@@ -491,9 +491,9 @@ const exportSummaryCSV = (data: Transaction[]) => {
         </TabsContent>
 
         <TabsContent value="status" className="space-y-4">
-          <Card>
+          <Card className="border-0 shadow-sm">
             <CardHeader>
-              <CardTitle>Transaction Status</CardTitle>
+              <CardTitle className="text-lg">Transaction Status</CardTitle>
               <CardDescription>Pending vs Completed transactions</CardDescription>
             </CardHeader>
             <CardContent>
@@ -524,23 +524,23 @@ const exportSummaryCSV = (data: Transaction[]) => {
         </TabsContent>
       </Tabs>
 
-      <Card>
+      <Card className="border-0 shadow-sm">
         <CardHeader>
-          <CardTitle>Export Options</CardTitle>
+          <CardTitle className="text-lg">Export Options</CardTitle>
           <CardDescription>Generate and download financial reports</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Period Reports */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Period Reports</h3>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <h3 className="font-semibold text-muted-foreground">Period Reports</h3>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <div className="space-y-2">
-                <Label>Report Type</Label>
+                <Label className="text-xs font-medium text-muted-foreground">Report Type</Label>
                 <Select value={reportType} onValueChange={(value: 'monthly' | 'yearly') => setReportType(value)}>
-                  <SelectTrigger>
+                  <SelectTrigger className="rounded-lg bg-muted/50 border-0">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-card">
                     <SelectItem value="monthly">Monthly</SelectItem>
                     <SelectItem value="yearly">Yearly</SelectItem>
                   </SelectContent>
@@ -549,12 +549,12 @@ const exportSummaryCSV = (data: Transaction[]) => {
 
               {reportType === 'monthly' && (
                 <div className="space-y-2">
-                  <Label>Month</Label>
+                  <Label className="text-xs font-medium text-muted-foreground">Month</Label>
                   <Select value={reportMonth} onValueChange={setReportMonth}>
-                    <SelectTrigger>
+                    <SelectTrigger className="rounded-lg bg-muted/50 border-0">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-card">
                       {Array.from({ length: 12 }, (_, i) => i + 1).map(month => (
                         <SelectItem key={month} value={month.toString()}>
                           {new Date(2000, month - 1).toLocaleString('default', { month: 'long' })}
@@ -566,12 +566,12 @@ const exportSummaryCSV = (data: Transaction[]) => {
               )}
 
               <div className="space-y-2">
-                <Label>Year</Label>
+                <Label className="text-xs font-medium text-muted-foreground">Year</Label>
                 <Select value={reportYear} onValueChange={setReportYear}>
-                  <SelectTrigger>
+                  <SelectTrigger className="rounded-lg bg-muted/50 border-0">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-card">
                     {Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - i).map(year => (
                       <SelectItem key={year} value={year.toString()}>
                         {year}
@@ -582,8 +582,8 @@ const exportSummaryCSV = (data: Transaction[]) => {
               </div>
 
               <div className="space-y-2">
-                <Label>&nbsp;</Label>
-                <Button onClick={handlePeriodReport} className="w-full">
+                <Label className="text-xs font-medium text-muted-foreground">&nbsp;</Label>
+                <Button onClick={handlePeriodReport} className="w-full rounded-xl shadow-sm">
                   <FileText className="mr-2 h-4 w-4" />
                   Generate Report
                 </Button>
@@ -593,34 +593,36 @@ const exportSummaryCSV = (data: Transaction[]) => {
 
           {/* Custom Date Range */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Custom Date Range Export</h3>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <h3 className="font-semibold text-muted-foreground">Custom Date Range Export</h3>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <div className="space-y-2">
-                <Label>Start Date</Label>
+                <Label className="text-xs font-medium text-muted-foreground">Start Date</Label>
                 <Input
                   type="date"
                   value={exportStartDate}
                   onChange={(e) => setExportStartDate(e.target.value)}
+                  className="rounded-lg bg-muted/50 border-0"
                 />
               </div>
               <div className="space-y-2">
-                <Label>End Date</Label>
+                <Label className="text-xs font-medium text-muted-foreground">End Date</Label>
                 <Input
                   type="date"
                   value={exportEndDate}
                   onChange={(e) => setExportEndDate(e.target.value)}
+                  className="rounded-lg bg-muted/50 border-0"
                 />
               </div>
               <div className="space-y-2">
-                <Label>&nbsp;</Label>
-                <Button onClick={() => handleCustomRangeExport('csv')} variant="outline" className="w-full">
+                <Label className="text-xs font-medium text-muted-foreground">&nbsp;</Label>
+                <Button onClick={() => handleCustomRangeExport('csv')} variant="outline" className="w-full rounded-xl">
                   <Download className="mr-2 h-4 w-4" />
                   Export CSV
                 </Button>
               </div>
               <div className="space-y-2">
-                <Label>&nbsp;</Label>
-                <Button onClick={() => handleCustomRangeExport('pdf')} className="w-full">
+                <Label className="text-xs font-medium text-muted-foreground">&nbsp;</Label>
+                <Button onClick={() => handleCustomRangeExport('pdf')} className="w-full rounded-xl shadow-sm">
                   <FileText className="mr-2 h-4 w-4" />
                   Export PDF
                 </Button>
@@ -630,56 +632,51 @@ const exportSummaryCSV = (data: Transaction[]) => {
 
           {/* Export by Purpose */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Export by Purpose</h3>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <h3 className="font-semibold text-muted-foreground">Export by Purpose</h3>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {PURPOSES.map(purpose => (
-                <Card key={purpose}>
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-sm">{purpose}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-2">
-                    <p className="text-2xl font-bold">
-                      {formatKsh(stats.purposeBreakdown[purpose] || 0)}
-                    </p>
-                    <div className="flex gap-2">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => handlePurposeExport(purpose, 'csv')}
-                        className="flex-1"
-                      >
-                        CSV
-                      </Button>
-                      <Button
-                        size="sm"
-                        onClick={() => handlePurposeExport(purpose, 'pdf')}
-                        className="flex-1"
-                      >
-                        PDF
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
+                <div key={purpose} className="p-4 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors">
+                  <p className="text-xs font-medium text-muted-foreground mb-1">{purpose}</p>
+                  <p className="text-xl font-bold mb-3">
+                    {formatKsh(stats.purposeBreakdown[purpose] || 0)}
+                  </p>
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => handlePurposeExport(purpose, 'csv')}
+                      className="flex-1 rounded-lg text-xs"
+                    >
+                      CSV
+                    </Button>
+                    <Button
+                      size="sm"
+                      onClick={() => handlePurposeExport(purpose, 'pdf')}
+                      className="flex-1 rounded-lg text-xs"
+                    >
+                      PDF
+                    </Button>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
 
           {/* Summary Report */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Summary Report</h3>
-            <div className="flex items-center justify-between p-4 border rounded-lg">
+            <h3 className="font-semibold text-muted-foreground">Summary Report</h3>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-5 rounded-xl bg-gradient-to-r from-primary/5 to-primary/10">
               <div>
-                <p className="font-medium">Complete Financial Summary</p>
+                <p className="font-semibold">Complete Financial Summary</p>
                 <p className="text-sm text-muted-foreground">
                   Includes totals, averages, purpose breakdown, and all completed transactions
                 </p>
               </div>
               <div className="flex gap-2">
-                <Button variant="outline" onClick={() => handleSummaryExport('csv')}>
+                <Button variant="outline" onClick={() => handleSummaryExport('csv')} className="rounded-xl">
                   <Download className="mr-2 h-4 w-4" /> CSV
                 </Button>
-
-                <Button onClick={() => handleSummaryExport('pdf')}>
+                <Button onClick={() => handleSummaryExport('pdf')} className="rounded-xl shadow-sm">
                   <FileText className="mr-2 h-4 w-4" /> PDF
                 </Button>
               </div>
