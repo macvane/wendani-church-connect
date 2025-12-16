@@ -27,7 +27,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
-import { Loader2, DollarSign, TrendingUp, Filter, Download } from 'lucide-react';
+import { Loader2, DollarSign, TrendingUp, Filter, Download, RefreshCw } from 'lucide-react';
 import { mpesaAPI } from '@/utils/api';
 import { useToast } from '@/hooks/use-toast';
 
@@ -356,7 +356,8 @@ const TransactionsPage = () => {
               <Filter className="h-5 w-5 text-muted-foreground" />
               Filters
             </CardTitle>
-            <Button onClick={handleResetFilters} variant="ghost" size="sm" className="rounded-lg">
+            <Button onClick={handleResetFilters} variant="ghost" size="sm" className="rounded-lg py-4 border flex items-center ">
+              <span><RefreshCw /></span>
               Reset Filters
             </Button>
           </div>
@@ -398,11 +399,12 @@ const TransactionsPage = () => {
                   <SelectItem value="all">All Purposes</SelectItem>
                   <SelectItem value="Tithe">Tithe</SelectItem>
                   <SelectItem value="Offering">Offering</SelectItem>
-                  <SelectItem value="Local Church Budget (LCB)">LCB</SelectItem>
+                  <SelectItem value="Local Church">LCB</SelectItem>
                   <SelectItem value="Camp Offering">Camp Offering</SelectItem>
                   <SelectItem value="Camp Expenses">Camp Expenses</SelectItem>
                   <SelectItem value="Evangelism">Evangelism</SelectItem>
                   <SelectItem value="Station Dev">Station Dev</SelectItem>
+                  <SelectItem value="DEVGR">Local Development</SelectItem>
                   <SelectItem value="Other">Other</SelectItem>
                 </SelectContent>
               </Select>
