@@ -1,9 +1,3 @@
-// ReportsPage.tsx (fixed)
-// - Normalizes status checks (case-insensitive)
-// - Uses safeDate parser to avoid timezone month shifts
-// - Safely reads lastAutoTable when building multi-table PDFs
-// - Completed export handlers (CSV, PDF, date-range, purpose, period, summary)
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -23,6 +17,7 @@ import { calculateStats, getPurposeChartData, getMonthlyTrendData } from '@/comp
 import StatsOverview from '@/components/treasurer/StatsOverview';
 import PurposeChart from '@/components/treasurer/PurposeChart';
 import TrendChart from '@/components/treasurer/TrendChart';
+import StatusChart from '@/components/treasurer/StatusChart';
 
 interface Transaction {
   id: number;
@@ -44,6 +39,7 @@ interface Stats {
   avgTransaction: number;
   completedTransactions: number;
   pendingTransactions: number;
+  failedTransactions: number;
   thisMonthAmount: number;
   thisYearAmount: number;
   purposeBreakdown: { [key: string]: number };
@@ -54,11 +50,12 @@ const COLORS = ['#8b5cf6', '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#ec4899'
 const PURPOSES = [
   'Tithe',
   'Offering',
-  'Local Church Budget (LCB)',
+  'Local Church',
   'Camp Offering',
   'Camp Expenses',
   'Evangelism',
   'Station Dev',
+  'DEVGR',
   'Other'
 ];
 
@@ -107,11 +104,27 @@ const ReportsPage: React.FC = () => {
     avgTransaction: 0,
     completedTransactions: 0,
     pendingTransactions: 0,
+    failedTransactions: 0,
     thisMonthAmount: 0,
     thisYearAmount: 0,
     purposeBreakdown: {},
   });
   const [loading, setLoading] = useState(true);
+
+  
+  const completedCount = transactions.filter(isCompleted).length;
+  const isFailed = (t: Transaction) => {
+  return ['failed', 'error', 'cancelled', 'canceled', 'rejected']
+    .includes((t.status || '').toLowerCase());
+};
+const failedCount = transactions.filter(isFailed).length;
+const totalStatusCount = completedCount + failedCount;
+
+const statusChartData = [
+  { name: 'Completed', value: completedCount },
+  { name: 'Failed', value: failedCount },
+];
+
 
   // Export filters
   const [exportStartDate, setExportStartDate] = useState('');
@@ -135,7 +148,7 @@ const ReportsPage: React.FC = () => {
       const allTransactions = data.results || [];
       setTransactions(allTransactions);
 
-      setStats(calculateStats(allTransactions));
+      setStats(calculateStats(allTransactions)as Stats);
     } catch (error) {
       console.error(error);
       toast({ title: 'Error', description: 'Failed to fetch transactions', variant: 'destructive' });
@@ -491,37 +504,12 @@ const exportSummaryCSV = (data: Transaction[]) => {
         </TabsContent>
 
         <TabsContent value="status" className="space-y-4">
-          <Card className="border-0 shadow-sm">
-            <CardHeader>
-              <CardTitle className="text-lg">Transaction Status</CardTitle>
-              <CardDescription>Pending vs Completed transactions</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={350}>
-                <RechartsPie>
-                  <Pie
-                    data={[
-                      { name: 'Completed', value: stats.completedTransactions },
-                      { name: 'Pending', value: stats.pendingTransactions }
-                    ]}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={({ name, value }: any) => `${name}: ${value}`}
-                    outerRadius={120}
-                    fill="#8884d8"
-                    dataKey="value"
-                  >
-                    <Cell fill="#10b981" />
-                    <Cell fill="#f59e0b" />
-                  </Pie>
-                  <Tooltip />
-                  <Legend />
-                </RechartsPie>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
+          <StatusChart
+            completed={completedCount}
+            failed={failedCount}
+          />
         </TabsContent>
+
       </Tabs>
 
       <Card className="border-0 shadow-sm">

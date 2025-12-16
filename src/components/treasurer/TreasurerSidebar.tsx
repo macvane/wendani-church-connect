@@ -45,15 +45,15 @@ export function TreasurerSidebar() {
 
   return (
     <Sidebar 
-      className={`${state === 'collapsed' ? 'w-16' : 'w-72'} border-r border-sidebar-border bg-sidebar-background`} 
+      className={`${state === 'collapsed' ? 'w-16' : 'w-64'} border-r border-sidebar-border bg-sidebar-background`} 
       collapsible="icon"
     >
       <SidebarContent className="py-6">
         {/* Logo Section */}
         <div className="px-4 mb-8">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-lg shadow-primary/25">
-              <LayoutDashboard className="h-5 w-5 text-primary-foreground" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl  ">
+              <img src="/logo.png" alt="" />
             </div>
             {state !== 'collapsed' && (
               <div>
@@ -75,9 +75,9 @@ export function TreasurerSidebar() {
                   <SidebarMenuButton asChild>
                     <NavLink
                       to={item.url}
-                      className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200 ${
+                      className={`flex items-center gap-3 rounded-xl px-4 py-6 text-sm font-medium transition-all duration-200 ${
                         isActive(item.url)
-                          ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/25'
+                          ? 'border border-primary '
                           : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
                       }`}
                     >
