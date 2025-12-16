@@ -31,14 +31,20 @@ import { Loader2, DollarSign, TrendingUp, Filter, Download } from 'lucide-react'
 import { mpesaAPI } from '@/utils/api';
 import { useToast } from '@/hooks/use-toast';
 
+interface PurposeItem {
+  purpose: string;
+  amount: number;
+  other_purpose_details?: string;
+}
+
 interface Transaction {
   id: number;
   name: string;
   phone_number: string;
   email?: string;
-  total_amount?: number; // For backward compatibility
-  purposes?: Array<{ purpose: string; amount: number }>; // New structure
-  purpose?: string; // For backward compatibility
+  total_amount?: number;
+  purposes?: PurposeItem[];
+  purpose?: string;
   other_purpose_details?: string;
   status: string;
   mpesa_receipt_number?: string;
@@ -253,69 +259,88 @@ const TransactionsPage = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">M-Pesa Transactions</h1>
-        <Button onClick={handleExport} variant="outline" className="gap-2">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Transactions</h1>
+          <p className="text-sm text-muted-foreground">Track and manage all M-Pesa contributions</p>
+        </div>
+        <Button onClick={handleExport} className="gap-2 rounded-xl shadow-sm">
           <Download className="h-4 w-4" />
           Export CSV
         </Button>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Transactions</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.totalTransactions}</div>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <Card className="border-0 shadow-sm hover:shadow-md transition-shadow">
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between">
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-muted-foreground">Total Transactions</p>
+                <p className="text-2xl font-bold">{stats.totalTransactions}</p>
+              </div>
+              <div className="p-3 rounded-xl bg-primary/10 text-primary">
+                <DollarSign className="h-5 w-5" />
+              </div>
+            </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Completed</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.completedCount}</div>
+        <Card className="border-0 shadow-sm hover:shadow-md transition-shadow">
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between">
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-muted-foreground">Completed</p>
+                <p className="text-2xl font-bold">{stats.completedCount}</p>
+              </div>
+              <div className="p-3 rounded-xl bg-emerald-500/10 text-emerald-600">
+                <TrendingUp className="h-5 w-5" />
+              </div>
+            </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Amount</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{formatAmount(stats.totalAmount)}</div>
+        <Card className="border-0 shadow-sm hover:shadow-md transition-shadow">
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between">
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-muted-foreground">Total Amount</p>
+                <p className="text-2xl font-bold">{formatAmount(stats.totalAmount)}</p>
+              </div>
+              <div className="p-3 rounded-xl bg-blue-500/10 text-blue-600">
+                <DollarSign className="h-5 w-5" />
+              </div>
+            </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Avg Transaction</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {formatAmount(stats.completedCount > 0 ? stats.totalAmount / stats.completedCount : 0)}
+        <Card className="border-0 shadow-sm hover:shadow-md transition-shadow">
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between">
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-muted-foreground">Avg Transaction</p>
+                <p className="text-2xl font-bold">
+                  {formatAmount(stats.completedCount > 0 ? stats.totalAmount / stats.completedCount : 0)}
+                </p>
+              </div>
+              <div className="p-3 rounded-xl bg-amber-500/10 text-amber-600">
+                <DollarSign className="h-5 w-5" />
+              </div>
             </div>
           </CardContent>
         </Card>
       </div>
 
       {/* Purpose Breakdown */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Purpose Breakdown</CardTitle>
+      <Card className="border-0 shadow-sm">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-lg">Purpose Breakdown</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {Object.entries(stats.purposeBreakdown).map(([purpose, amount]) => (
-              <div key={purpose} className="space-y-1">
-                <p className="text-sm text-muted-foreground">{purpose}</p>
+              <div key={purpose} className="p-4 rounded-xl bg-muted/50 hover:bg-muted transition-colors">
+                <p className="text-xs font-medium text-muted-foreground mb-1">{purpose}</p>
                 <p className="text-lg font-bold">{formatAmount(amount)}</p>
               </div>
             ))}
@@ -324,36 +349,37 @@ const TransactionsPage = () => {
       </Card>
 
       {/* Filters */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle className="flex items-center gap-2">
-              <Filter className="h-5 w-5" />
+      <Card className="border-0 shadow-sm">
+        <CardHeader className="pb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Filter className="h-5 w-5 text-muted-foreground" />
               Filters
             </CardTitle>
-            <Button onClick={handleResetFilters} variant="outline" size="sm">
+            <Button onClick={handleResetFilters} variant="ghost" size="sm" className="rounded-lg">
               Reset Filters
             </Button>
           </div>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             <div className="space-y-2">
-              <Label>Search</Label>
+              <Label className="text-xs font-medium text-muted-foreground">Search</Label>
               <Input
                 placeholder="Name, phone, email..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                className="rounded-lg bg-muted/50 border-0 focus-visible:ring-primary"
               />
             </div>
             
             <div className="space-y-2">
-              <Label>Status</Label>
+              <Label className="text-xs font-medium text-muted-foreground">Status</Label>
               <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger>
+                <SelectTrigger className="rounded-lg bg-muted/50 border-0">
                   <SelectValue placeholder="All statuses" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-card">
                   <SelectItem value="all">All Statuses</SelectItem>
                   <SelectItem value="success">Success</SelectItem>
                   <SelectItem value="pending">Pending</SelectItem>
@@ -363,12 +389,12 @@ const TransactionsPage = () => {
             </div>
 
             <div className="space-y-2">
-              <Label>Purpose</Label>
+              <Label className="text-xs font-medium text-muted-foreground">Purpose</Label>
               <Select value={purposeFilter} onValueChange={setPurposeFilter}>
-                <SelectTrigger>
+                <SelectTrigger className="rounded-lg bg-muted/50 border-0">
                   <SelectValue placeholder="All purposes" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-card">
                   <SelectItem value="all">All Purposes</SelectItem>
                   <SelectItem value="Tithe">Tithe</SelectItem>
                   <SelectItem value="Offering">Offering</SelectItem>
@@ -383,20 +409,22 @@ const TransactionsPage = () => {
             </div>
 
             <div className="space-y-2">
-              <Label>Start Date</Label>
+              <Label className="text-xs font-medium text-muted-foreground">Start Date</Label>
               <Input
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
+                className="rounded-lg bg-muted/50 border-0"
               />
             </div>
 
             <div className="space-y-2">
-              <Label>End Date</Label>
+              <Label className="text-xs font-medium text-muted-foreground">End Date</Label>
               <Input
                 type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
+                className="rounded-lg bg-muted/50 border-0"
               />
             </div>
           </div>
@@ -404,14 +432,16 @@ const TransactionsPage = () => {
       </Card>
 
       {/* Transactions Table */}
-      <Card>
-        <CardHeader>
-          <CardTitle>
-            All Transactions 
-            <span className="text-sm font-normal text-muted-foreground ml-2">
-              (Page {currentPage} of {totalPages})
+      <Card className="border-0 shadow-sm">
+        <CardHeader className="pb-4">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-lg">
+              All Transactions 
+            </CardTitle>
+            <span className="text-sm text-muted-foreground bg-muted/50 px-3 py-1 rounded-full">
+              Page {currentPage} of {totalPages}
             </span>
-          </CardTitle>
+          </div>
         </CardHeader>
         <CardContent>
           <div className="rounded-md border">

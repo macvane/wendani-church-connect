@@ -1,57 +1,101 @@
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { DollarSign, TrendingUp, CreditCard } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { DollarSign, TrendingUp, CreditCard, Activity } from 'lucide-react';
 
 interface StatsOverviewProps {
-  stats: any;
+  stats: {
+    totalAmount: number;
+    totalTransactions: number;
+    avgTransaction: number;
+    completedTransactions: number;
+    pendingTransactions: number;
+    thisMonthAmount: number;
+    thisYearAmount: number;
+    purposeBreakdown: { [key: string]: number };
+  };
 }
 
-const StatsOverview: React.FC<StatsOverviewProps> = ({ stats }) => (
-  <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">Total Amount (All Time)</CardTitle>
-        <DollarSign className="h-4 w-4 text-muted-foreground" />
-      </CardHeader>
-      <CardContent>
-        <div className="text-2xl font-bold">KSH {stats.totalAmount.toLocaleString()}</div>
-        <p className="text-xs text-muted-foreground">{stats.completedTransactions} completed transactions</p>
-      </CardContent>
-    </Card>
+const StatCard = ({ 
+  title, 
+  value, 
+  subtitle, 
+  icon: Icon, 
+  trend,
+  accentColor = 'primary' 
+}: { 
+  title: string; 
+  value: string; 
+  subtitle: string; 
+  icon: React.ElementType;
+  trend?: string;
+  accentColor?: 'primary' | 'blue' | 'amber' | 'emerald';
+}) => {
+  const colorClasses = {
+    primary: 'bg-primary/10 text-primary',
+    blue: 'bg-blue-500/10 text-blue-600',
+    amber: 'bg-amber-500/10 text-amber-600',
+    emerald: 'bg-emerald-500/10 text-emerald-600',
+  };
 
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">This Month</CardTitle>
-        <TrendingUp className="h-4 w-4 text-muted-foreground" />
-      </CardHeader>
-      <CardContent>
-        <div className="text-2xl font-bold">KSH {stats.thisMonthAmount.toLocaleString()}</div>
-        <p className="text-xs text-muted-foreground">Current month contributions</p>
+  return (
+    <Card className="overflow-hidden border-0 shadow-sm hover:shadow-md transition-shadow duration-200">
+      <CardContent className="p-6">
+        <div className="flex items-start justify-between">
+          <div className="space-y-3">
+            <p className="text-sm font-medium text-muted-foreground">{title}</p>
+            <div>
+              <p className="text-2xl font-bold tracking-tight">{value}</p>
+              <p className="text-xs text-muted-foreground mt-1">{subtitle}</p>
+            </div>
+            {trend && (
+              <span className="inline-flex items-center gap-1 text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
+                <TrendingUp className="h-3 w-3" />
+                {trend}
+              </span>
+            )}
+          </div>
+          <div className={`p-3 rounded-xl ${colorClasses[accentColor]}`}>
+            <Icon className="h-5 w-5" />
+          </div>
+        </div>
       </CardContent>
     </Card>
+  );
+};
 
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">This Year</CardTitle>
-        <TrendingUp className="h-4 w-4 text-muted-foreground" />
-      </CardHeader>
-      <CardContent>
-        <div className="text-2xl font-bold">KSH {stats.thisYearAmount.toLocaleString()}</div>
-        <p className="text-xs text-muted-foreground">Year to date contributions</p>
-      </CardContent>
-    </Card>
-
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">Average Transaction</CardTitle>
-        <CreditCard className="h-4 w-4 text-muted-foreground" />
-      </CardHeader>
-      <CardContent>
-        <div className="text-2xl font-bold">KSH {stats.avgTransaction.toLocaleString()}</div>
-        <p className="text-xs text-muted-foreground">{stats.pendingTransactions} pending transactions</p>
-      </CardContent>
-    </Card>
-  </div>
-);
+const StatsOverview: React.FC<StatsOverviewProps> = ({ stats }) => {
+  return (
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <StatCard
+        title="Total Amount (All Time)"
+        value={`KSH ${stats.totalAmount.toLocaleString()}`}
+        subtitle={`${stats.completedTransactions} completed transactions`}
+        icon={DollarSign}
+        accentColor="primary"
+      />
+      <StatCard
+        title="This Month"
+        value={`KSH ${stats.thisMonthAmount.toLocaleString()}`}
+        subtitle="Current month contributions"
+        icon={TrendingUp}
+        accentColor="blue"
+      />
+      <StatCard
+        title="This Year"
+        value={`KSH ${stats.thisYearAmount.toLocaleString()}`}
+        subtitle="Year to date contributions"
+        icon={Activity}
+        accentColor="amber"
+      />
+      <StatCard
+        title="Average Transaction"
+        value={`KSH ${stats.avgTransaction.toLocaleString()}`}
+        subtitle={`${stats.pendingTransactions} pending transactions`}
+        icon={CreditCard}
+        accentColor="emerald"
+      />
+    </div>
+  );
+};
 
 export default StatsOverview;
