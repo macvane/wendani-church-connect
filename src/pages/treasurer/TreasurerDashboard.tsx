@@ -7,6 +7,18 @@ import { LogOut } from 'lucide-react';
 import { clearTokens } from '@/utils/api';
 import { useToast } from '@/hooks/use-toast';
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+
 const TreasurerDashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -53,22 +65,45 @@ const TreasurerDashboard = () => {
                 <p className="text-xs text-muted-foreground">Financial Management</p>
               </div>
             </div>
+
             <div className="flex items-center gap-3">
               <span className="hidden md:inline-flex items-center gap-2 text-sm text-muted-foreground bg-muted/50 px-3 py-1.5 rounded-full">
                 <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
                 Treasurer Portal
               </span>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleLogout}
-                className="gap-2 rounded-lg hover:bg-destructive/10 hover:text-destructive hover:border-destructive/50"
-              >
-                <LogOut className="h-4 w-4" />
-                <span className="hidden sm:inline">Logout</span>
-              </Button>
+
+              {/* Logout Confirmation */}
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="gap-2 rounded-lg hover:bg-destructive/10 hover:text-destructive hover:border-destructive/50"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    <span className="hidden sm:inline">Logout</span>
+                  </Button>
+                </AlertDialogTrigger>
+
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Confirm Logout</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Are you sure you want to log out of the Treasurer dashboard?
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleLogout}>
+                      Logout
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
           </header>
+
           <main className="flex-1 overflow-auto p-4 md:p-6 lg:p-8">
             <Outlet />
           </main>
