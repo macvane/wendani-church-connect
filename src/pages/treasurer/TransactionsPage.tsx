@@ -30,6 +30,7 @@ import {
 import { Loader2, DollarSign, TrendingUp, Filter, Download, RefreshCw } from 'lucide-react';
 import { mpesaAPI } from '@/utils/api';
 import { useToast } from '@/hooks/use-toast';
+import { Helmet } from 'react-helmet-async';
 
 interface PurposeItem {
   purpose: string;
@@ -257,6 +258,12 @@ const TransactionsPage = () => {
   }
 
   return (
+    <>
+    <Helmet>
+      <title>Transactions - Kahawa Wendani SDA Church</title>
+      <meta name="description" content="The name “Wendani,” a rich Kikuyu word meaning “love,” perfectly embodies the spirit and essence of our church." />
+      <link rel="canonical" href="https://kahawawendanisda.org/treasurer/dashboard" />
+    </Helmet>
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -622,6 +629,7 @@ const TransactionsPage = () => {
         </CardContent>
       </Card>
     </div>
+    </>
   );
 };
 

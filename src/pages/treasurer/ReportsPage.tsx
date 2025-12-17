@@ -19,6 +19,7 @@ import PurposeChart from '@/components/treasurer/PurposeChart';
 import TrendChart from '@/components/treasurer/TrendChart';
 import StatusChart from '@/components/treasurer/StatusChart';
 import DailyTransactionsChart from '@/components/treasurer/DailyTransactionsChart';
+import { Helmet } from 'react-helmet-async';
 
 
 interface Transaction {
@@ -451,6 +452,13 @@ const exportSummaryCSV = (data: Transaction[]) => {
 
   // UI
   return (
+    <>
+    <Helmet>
+      <title>Reports - Kahawa Wendani SDA Church</title>
+      <meta name="description" content="The name “Wendani,” a rich Kikuyu word meaning “love,” perfectly embodies the spirit and essence of our church." />
+      <link rel="canonical" href="https://kahawawendanisda.org/dashboard/reports" />
+    </Helmet>
+    
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Financial Reports</h1>
@@ -680,6 +688,7 @@ const exportSummaryCSV = (data: Transaction[]) => {
         </CardContent>
       </Card>
     </div>
+    </>
   );
 };
 
