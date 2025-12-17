@@ -18,6 +18,8 @@ import StatsOverview from '@/components/treasurer/StatsOverview';
 import PurposeChart from '@/components/treasurer/PurposeChart';
 import TrendChart from '@/components/treasurer/TrendChart';
 import StatusChart from '@/components/treasurer/StatusChart';
+import DailyTransactionsChart from '@/components/treasurer/DailyTransactionsChart';
+
 
 interface Transaction {
   id: number;
@@ -458,11 +460,12 @@ const exportSummaryCSV = (data: Transaction[]) => {
       <StatsOverview stats={stats} />
 
       <Tabs defaultValue="purpose" className="space-y-4">
-        <TabsList className="bg-muted/50 p-1 rounded-xl">
-          <TabsTrigger value="purpose" className="rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm">By Purpose</TabsTrigger>
-          <TabsTrigger value="trend" className="rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm">Trend Analysis</TabsTrigger>
-          <TabsTrigger value="distribution" className="rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm">Distribution</TabsTrigger>
-          <TabsTrigger value="status" className="rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm">Status Overview</TabsTrigger>
+        <TabsList className="bg-white p-1 rounded-xl">
+          <TabsTrigger value="purpose" className="rounded-lg data-[state=active]:bg-primary data-[state=active]:text-white">By Purpose</TabsTrigger>
+          <TabsTrigger value="trend" className="rounded-lg data-[state=active]:bg-primary data-[state=active]:text-white">Trend Analysis</TabsTrigger>
+          <TabsTrigger value="distribution" className="rounded-lg data-[state=active]:bg-primary data-[state=active]:text-white">Distribution</TabsTrigger>
+          <TabsTrigger value="status" className="rounded-lg data-[state=active]:bg-primary data-[state=active]:text-white">Status Overview</TabsTrigger>
+          <TabsTrigger value="daily" className="rounded-lg data-[state=active]:bg-primary data-[state=active]:text-white">Daily Transactions</TabsTrigger>
         </TabsList>
 
         <TabsContent value="purpose" className="space-y-4">
@@ -508,6 +511,10 @@ const exportSummaryCSV = (data: Transaction[]) => {
             completed={completedCount}
             failed={failedCount}
           />
+        </TabsContent>
+
+        <TabsContent value="daily" className="space-y-4">
+          <DailyTransactionsChart transactions={transactions} />
         </TabsContent>
 
       </Tabs>
