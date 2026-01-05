@@ -71,12 +71,12 @@ const sabbathSchoolMaterials = [
     id: 3,
     title: "Sabbath School Teacher's Guide",
     description: "Comprehensive teaching materials and discussion guides for Sabbath School teachers.",
-    quarter: "Q3 2025",
+    quarter: "Q1 2026",
     type: "PDF",
     fileSize: "1.68 MB",
     icon: GraduationCap,
     color: "text-purple-500",
-    url: "https://kahawawendanisda.org/q3exodus.pdf",
+    url: "https://www.fustero.es/en_2026t1.pdf",
     viewUrl: "https://www.absg.adventist.org/",
   }
 ];
