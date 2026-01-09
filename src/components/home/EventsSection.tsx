@@ -11,6 +11,8 @@ interface Event {
   description: string;
   venue: string;
   date: string;
+  to_date: string;
+  from_date: string;
   time: string;
   image: string;
   created_at: string;
@@ -26,27 +28,55 @@ const EventsSection = () => {
   }, []);
 
   const fetchEvents = async () => {
-    try {
-      const response = await eventAPI.list();
-      if (response.ok) {
-        const data = await response.json();
-        const now = new Date();
-        now.setHours(0, 0, 0, 0);
-        
-        // Filter upcoming events and get first 2
-        const upcoming = data
-          .filter((event: Event) => new Date(event.date) >= now)
-          .sort((a: Event, b: Event) => new Date(a.date).getTime() - new Date(b.date).getTime())
-          .slice(0, 2);
-        
-        setUpcomingEvents(upcoming);
-      }
-    } catch (error) {
-      console.error('Error fetching events:', error);
-    } finally {
-      setLoading(false);
+  try {
+    const response = await eventAPI.list();
+    if (response.ok) {
+      const data = await response.json();
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const parseDate = (dateStr: string) => {
+        const [y, m, d] = dateStr.split("-").map(Number);
+        return new Date(y, m - 1, d); // local midnight
+      };
+
+      const upcoming = data
+        .filter((event: Event) => {
+          // Case 1: Event has from_date & to_date (range event)
+          if (event.from_date && event.to_date) {
+            const toDate = parseDate(event.to_date);
+            return toDate >= today;
+          }
+
+          // Case 2: Single-day event
+          if (event.date) {
+            const eventDate = parseDate(event.date);
+            return eventDate >= today;
+          }
+
+          return false;
+        })
+        .sort((a: Event, b: Event) => {
+          const getSortDate = (event: Event) =>
+            event.from_date
+              ? parseDate(event.from_date).getTime()
+              : parseDate(event.date).getTime();
+
+          return getSortDate(a) - getSortDate(b);
+        })
+        .slice(0, 2);
+
+      setUpcomingEvents(upcoming);
     }
-  };
+  } catch (error) {
+    console.error("Error fetching events:", error);
+  } finally {
+    setLoading(false);
+  }
+};
+
+
   
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -90,12 +120,12 @@ const EventsSection = () => {
                 className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col"
                 style={{animationDelay: `${index * 0.1 + 0.2}s`}}
               >
-                <div className="w-full h-[12rem] md:h-[17rem] relative">
+                <div className="w-full aspect-video relative">
                   <img 
                     src={`https://churchmedia.kahawawendanisda.org${event.image}`}
                     alt={event.title} 
                     loading="lazy"
-                    className="w-full h-full object-cover object-top"
+                    className="aspect-video object-cover object-top"
                     onError={(e) => {
                       e.currentTarget.src = 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=500&auto=format&fit=crop&q=60';
                     }}
