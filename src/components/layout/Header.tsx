@@ -50,7 +50,6 @@ const Header = () => {
         { name: 'Membership Transfer', path: '/membership-transfer' },
         { name: 'Benevolence', path: '/benevolence' },
         { name: 'Library', path: '/library' },
-        { name: 'Portal', path: '/admin/login' },
       ]
     },
     { name: 'Contact', path: '/contact' },
