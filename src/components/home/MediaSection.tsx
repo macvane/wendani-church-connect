@@ -28,9 +28,9 @@ const MediaSection = () => {
 
   // These would be replaced with actual video IDs from the church's YouTube channel
   const sermonVideos = [
+    { id: "l8YAOcm9tlM?si=cSkfmbw1s_CnLzJ6", title: "The Greatest Pandemic!" }, 
     { id: "jrI-cglj3Ko?si=Oc1aeS7tNr01nCqV", title: "What Can One Person Do?" }, 
     { id: "iYN3uHIR6qs", title: "I Will Go With My Family" }, 
-    { id: "ZkxoLb-rJOg", title: "No Uniform, No Singing" },
   ];
   
   const musicVideos = [
