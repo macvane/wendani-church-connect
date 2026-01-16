@@ -41,8 +41,8 @@ const MediaSection = () => {
 
   const campMeetingVideos = [
     { id: "AtARIfHwNAw?si=X_E6N2jc7p8cZTB0", title: "Camp Meeting 2024 - Closing Day" }, 
-    { id: "hwbcAwd9xg4?si=9yDWcXTZvSY956c-", title: "Camp Meeting 2024 - Sanctuary Message" },
-    { id: "yyGJgIiAED4?si=DMG5t5nLaABgDiKU", title: "Camp Meeting 2024 - The Hidden God" }
+    { id: "nwJM8OvHW9Y?si=U9BWoXPe9B6qvgmK", title: "Camp Meeting 2025" },  
+    { id: "-CXMqdlPavg?si=4vl13X1vp4b7ml4g", title: "Camp Meeting 2025" } 
   ];
   
   return (
