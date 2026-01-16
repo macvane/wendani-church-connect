@@ -189,7 +189,11 @@ const AdminLogin = () => {
               </Button>
 
               <p className="text-sm text-center text-gray-600 hover:text-primary transition">
-                <Link to="/">Back Home</Link>
+                <Link to="/">
+                    <button className="border w-full rounded-md py-2  hover:bg-black hover:text-white transition duration-500">
+                      Back Home
+                    </button>
+                </Link>
               </p>
             </form>
           </CardContent>
