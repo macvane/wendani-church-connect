@@ -11,7 +11,7 @@ interface Dependent {
 }
 
 const Benevolence = () => {
-  const apiKey = import.meta.env.VITE_WEB3FORMS_BENEVOLENCE_API_KEY;
+  const apiKey = 'fc879bd6-4920-4ac3-9cda-cfb692ab542f';
   const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format for min attribute
   
   // A ref to the form element to allow us to reset it after submission
