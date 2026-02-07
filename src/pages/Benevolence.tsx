@@ -147,7 +147,7 @@ const Benevolence = () => {
                 {/* *** MODIFIED: Attached ref and onSubmit handler, removed action/method *** */}
                 <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
                   {/* The access key is still required by Web3Forms */}
-                  <input type="hidden" name="access_key" value={apiKey} />
+                  <input type="hidden" name="access_key" value='fc879bd6-4920-4ac3-9cda-cfb692ab542f' />
                   {/* *** REMOVED: Hidden inputs for redirect and subject are now handled in JS *** */}
 
 
