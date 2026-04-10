@@ -95,11 +95,9 @@ const Downloads = () => {
 
   const fetchAnnouncements = async () => {
     try {
-      const response = await announcementAPI.list();
-      if (response.ok) {
-        const data = await response.json();
-        setAnnouncements(data);
-      }
+      const data = await announcementAPI.list();
+      const items = Array.isArray(data) ? data : (data.results ?? []);
+      setAnnouncements(items);
     } catch (error) {
       console.error('Error fetching announcements:', error);
     } finally {
