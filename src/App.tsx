@@ -1,11 +1,15 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import React, { useState } from "react";
+
 import ScrollToTop from "./components/layout/ScrollToTop";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
+import PublicOnlyRoute from "./components/auth/PublicOnlyRoute";
+import { AuthProvider } from "./context/AuthContext";
+
 import Index from "./pages/Index";
 import About from "./pages/About";
 import Media from "./pages/Media";
@@ -24,6 +28,8 @@ import NotFound from "./pages/NotFound";
 import Donate from "./pages/Donate";
 import MembershipTransfer from "./pages/MembershipTransfer";
 import ThankYou from "./pages/ThankYou";
+import MedicalConsentForm from "./pages/MedicalConsentForm";
+
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import DashboardOverview from "./pages/admin/DashboardOverview";
@@ -37,69 +43,80 @@ import DedicationsPage from "./pages/admin/DedicationsPage";
 import MembershipTransfersPage from "./pages/admin/MembershipTransfersPage";
 import BenevolencePage from "./pages/admin/BenevolencePage";
 import UsersPage from "./pages/admin/UsersPage";
+
 import TreasurerDashboard from "./pages/treasurer/TreasurerDashboard";
 import TransactionsPage from "./pages/treasurer/TransactionsPage";
 import ReportsPage from "./pages/treasurer/ReportsPage";
 
-import MedicalConsentForm from "./pages/MedicalConsentForm";
-
-
-
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
-  
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <ScrollToTop />
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/media" element={<Media />} />
-            <Route path="/events" element={<Events />} />
-            <Route path="/events/:slug" element={<EventDetail />} />
-            <Route path="/prayer" element={<Prayer />} />
-            <Route path="/medical-consent-form" element={<MedicalConsentForm />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/downloads" element={<Downloads />} />
-            <Route path="/blogs" element={<Blogs />} />
-            <Route path="/blogs/:id" element={<BlogPost />} />
-            <Route path="/child-dedication" element={<ChildDedication />} />
-            <Route path="/benevolence" element={<Benevolence />} />
-            <Route path="/library" element={<Library />} />
-            <Route path="/baptism" element={<Baptism />} />
-            <Route path="/giving" element={<Donate />} />
-            <Route path="/membership-transfer" element={<MembershipTransfer />} />
-            <Route path="/thank-you" element={<ThankYou />} />
-            <Route path="/admin/login" element={<AdminLogin />} />
-            <Route path="/admin/dashboard" element={<AdminDashboard />}>
-              <Route index element={<DashboardOverview />} />
-              <Route path="prayers" element={<PrayersPage />} />
-              <Route path="baptisms" element={<BaptismRequestsPage />} />
-              <Route path="dedications" element={<DedicationsPage />} />
-              <Route path="memberships" element={<MembershipTransfersPage />} />
-              <Route path="benevolence" element={<BenevolencePage />} />
-              <Route path="blogs" element={<BlogManagementPage />} />
-              <Route path="announcements" element={<AnnouncementsPage />} />
-              <Route path="events" element={<EventsPage />} />
-              <Route path="contacts" element={<ContactsPage />} />
-              <Route path="users" element={<UsersPage />} />
-            </Route>
-          <Route path="/treasurer/dashboard" element={<TreasurerDashboard />}>
-            <Route index element={<TransactionsPage />} />
-            <Route path="reports" element={<ReportsPage />} />
-          </Route>
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
+        <AuthProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <ScrollToTop />
+            <Routes>
+              {/* Public website */}
+              <Route path="/" element={<Index />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/media" element={<Media />} />
+              <Route path="/events" element={<Events />} />
+              <Route path="/events/:slug" element={<EventDetail />} />
+              <Route path="/prayer" element={<Prayer />} />
+              <Route path="/medical-consent-form" element={<MedicalConsentForm />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/downloads" element={<Downloads />} />
+              <Route path="/blogs" element={<Blogs />} />
+              <Route path="/blogs/:id" element={<BlogPost />} />
+              <Route path="/child-dedication" element={<ChildDedication />} />
+              <Route path="/benevolence" element={<Benevolence />} />
+              <Route path="/library" element={<Library />} />
+              <Route path="/baptism" element={<Baptism />} />
+              <Route path="/giving" element={<Donate />} />
+              <Route path="/membership-transfer" element={<MembershipTransfer />} />
+              <Route path="/thank-you" element={<ThankYou />} />
+
+              {/* Public-only auth pages */}
+              <Route element={<PublicOnlyRoute />}>
+                <Route path="/admin/login" element={<AdminLogin />} />
+              </Route>
+
+              {/* Admin-only routes */}
+              <Route element={<ProtectedRoute allowedRoles={['admin', 'superadmin']} />}>
+                <Route path="/admin/dashboard" element={<AdminDashboard />}>
+                  <Route index element={<DashboardOverview />} />
+                  <Route path="prayers" element={<PrayersPage />} />
+                  <Route path="baptisms" element={<BaptismRequestsPage />} />
+                  <Route path="dedications" element={<DedicationsPage />} />
+                  <Route path="memberships" element={<MembershipTransfersPage />} />
+                  <Route path="benevolence" element={<BenevolencePage />} />
+                  <Route path="blogs" element={<BlogManagementPage />} />
+                  <Route path="announcements" element={<AnnouncementsPage />} />
+                  <Route path="events" element={<EventsPage />} />
+                  <Route path="contacts" element={<ContactsPage />} />
+                  <Route path="users" element={<UsersPage />} />
+                </Route>
+              </Route>
+
+              {/* Treasurer-only routes */}
+              <Route element={<ProtectedRoute allowedRoles={['treasurer']} />}>
+                <Route path="/treasurer/dashboard" element={<TreasurerDashboard />}>
+                  <Route index element={<TransactionsPage />} />
+                  <Route path="reports" element={<ReportsPage />} />
+                </Route>
+              </Route>
+
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </AuthProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );
 };
-
-
 
 export default App;

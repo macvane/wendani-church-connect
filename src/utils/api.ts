@@ -1,105 +1,437 @@
-const API_BASE_URL = 'https://churchmedia.kahawawendanisda.org';
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || 'https://churchmedia.kahawawendanisda.org';
 
-// Token management
-export const getAccessToken = () => localStorage.getItem('access_token');
-export const getRefreshToken = () => localStorage.getItem('refresh_token');
-export const setTokens = (access: string, refresh: string) => {
-  localStorage.setItem('access_token', access);
-  localStorage.setItem('refresh_token', refresh);
-};
-export const clearTokens = () => {
-  localStorage.removeItem('access_token');
-  localStorage.removeItem('refresh_token');
-  localStorage.removeItem('isAdminLoggedIn');
+/* =========================================================
+   TYPES
+========================================================= */
+
+type Primitive = string | number | boolean | null | undefined;
+
+export interface ApiErrorPayload {
+  detail?: string;
+  message?: string;
+  [key: string]: any;
+}
+
+export class ApiError extends Error {
+  status: number;
+  payload: ApiErrorPayload | string | null;
+
+  constructor(status: number, message: string, payload: ApiErrorPayload | string | null = null) {
+    super(message);
+    this.name = 'ApiError';
+    this.status = status;
+    this.payload = payload;
+  }
+}
+
+export interface AuthTokens {
+  access: string;
+  refresh: string;
+}
+
+export interface UserProfile {
+  id?: number;
+  email?: string;
+  full_name?: string;
+  first_name?: string;
+  last_name?: string;
+  role?: string;
+  [key: string]: any;
+}
+
+export interface LoginResponse extends Partial<AuthTokens> {
+  detail?: string;
+  message?: string;
+  otp_required?: boolean;
+  otp_reference?: string;
+  reference?: string;
+  [key: string]: any;
+}
+
+export interface OtpVerifyPayload {
+  email: string;
+  otp_code: string;
+}
+
+export interface OtpVerifyResponse extends AuthTokens {
+  user?: UserProfile;
+  [key: string]: any;
+}
+
+export interface PaginatedResponse<T> {
+  count?: number;
+  next?: string | null;
+  previous?: string | null;
+  results?: T[];
+  [key: string]: any;
+}
+
+/* =========================================================
+   TOKEN STORAGE
+========================================================= */
+
+const STORAGE_KEYS = {
+  access: 'access_token',
+  refresh: 'refresh_token',
+  adminLoggedIn: 'isAdminLoggedIn',
+  role: 'user_role',
+  userName: 'user_name',
 };
 
-// API request helper with authentication
-export const apiRequest = async (
+export const tokenStorage = {
+  getAccessToken: () => localStorage.getItem(STORAGE_KEYS.access),
+  getRefreshToken: () => localStorage.getItem(STORAGE_KEYS.refresh),
+
+  setTokens: (access: string, refresh: string) => {
+    localStorage.setItem(STORAGE_KEYS.access, access);
+    localStorage.setItem(STORAGE_KEYS.refresh, refresh);
+    localStorage.setItem(STORAGE_KEYS.adminLoggedIn, 'true');
+  },
+
+  clearTokens: () => {
+    localStorage.removeItem(STORAGE_KEYS.access);
+    localStorage.removeItem(STORAGE_KEYS.refresh);
+    localStorage.removeItem(STORAGE_KEYS.adminLoggedIn);
+  },
+
+  setUserRole: (role: string) => {
+    localStorage.setItem(STORAGE_KEYS.role, role);
+  },
+
+  getUserRole: () => localStorage.getItem(STORAGE_KEYS.role),
+
+  setUserName: (name: string) => {
+    localStorage.setItem(STORAGE_KEYS.userName, name);
+  },
+
+  getUserName: () => localStorage.getItem(STORAGE_KEYS.userName),
+
+  clearSession: () => {
+    localStorage.removeItem(STORAGE_KEYS.access);
+    localStorage.removeItem(STORAGE_KEYS.refresh);
+    localStorage.removeItem(STORAGE_KEYS.adminLoggedIn);
+    localStorage.removeItem(STORAGE_KEYS.role);
+    localStorage.removeItem(STORAGE_KEYS.userName);
+  },
+
+  isAuthenticated: () => !!localStorage.getItem(STORAGE_KEYS.access),
+};
+
+/* =========================================================
+   BACKWARD COMPAT HELPERS
+========================================================= */
+
+export const getAccessToken = () => tokenStorage.getAccessToken();
+export const getRefreshToken = () => tokenStorage.getRefreshToken();
+export const setTokens = (access: string, refresh: string) => tokenStorage.setTokens(access, refresh);
+export const clearTokens = () => tokenStorage.clearTokens();
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+const isFormData = (value: unknown): value is FormData => value instanceof FormData;
+
+const buildUrl = (endpoint: string, query?: Record<string, Primitive>) => {
+  const normalizedEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+  const url = new URL(`${API_BASE_URL}${normalizedEndpoint}`);
+
+  if (query) {
+    Object.entries(query).forEach(([key, value]) => {
+      if (value === undefined || value === null || value === '') return;
+      url.searchParams.append(key, String(value));
+    });
+  }
+
+  return url.toString();
+};
+
+const parseResponse = async <T>(response: Response): Promise<T> => {
+  const contentType = response.headers.get('content-type') || '';
+
+  if (!response.ok) {
+    let payload: ApiErrorPayload | string | null = null;
+
+    try {
+      payload = contentType.includes('application/json')
+        ? await response.json()
+        : await response.text();
+    } catch {
+      payload = null;
+    }
+
+    const message =
+      typeof payload === 'string'
+        ? payload
+        : payload?.detail || payload?.message || `Request failed with status ${response.status}`;
+
+    throw new ApiError(response.status, message, payload);
+  }
+
+  if (response.status === 204) {
+    return null as T;
+  }
+
+  if (contentType.includes('application/json')) {
+    return response.json() as Promise<T>;
+  }
+
+  return (await response.text()) as T;
+};
+
+/* =========================================================
+   TOKEN REFRESH
+========================================================= */
+
+let refreshPromise: Promise<string | null> | null = null;
+
+const refreshAccessToken = async (): Promise<string | null> => {
+  const refresh = tokenStorage.getRefreshToken();
+  if (!refresh) {
+    tokenStorage.clearSession();
+    return null;
+  }
+
+  if (!refreshPromise) {
+    refreshPromise = (async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/token/refresh/`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ refresh }),
+        });
+
+        if (!response.ok) {
+          tokenStorage.clearSession();
+          return null;
+        }
+
+        const data = await response.json();
+        if (!data?.access) {
+          tokenStorage.clearSession();
+          return null;
+        }
+
+        localStorage.setItem(STORAGE_KEYS.access, data.access);
+        return data.access as string;
+      } catch {
+        tokenStorage.clearSession();
+        return null;
+      } finally {
+        refreshPromise = null;
+      }
+    })();
+  }
+
+  return refreshPromise;
+};
+
+/* =========================================================
+   CORE REQUESTS
+========================================================= */
+
+interface ApiRequestOptions extends Omit<RequestInit, 'body'> {
+  body?: any;
+  query?: Record<string, Primitive>;
+  auth?: boolean;
+  rawResponse?: boolean;
+  retryOn401?: boolean;
+}
+
+export const apiRequest = async <T = any>(
   endpoint: string,
-  options: RequestInit = {}
-) => {
-  const token = getAccessToken();
-  const headers: HeadersInit = {
-    ...options.headers,
+  options: ApiRequestOptions = {}
+): Promise<T> => {
+  const {
+    method = 'GET',
+    body,
+    query,
+    auth = true,
+    rawResponse = false,
+    retryOn401 = true,
+    headers,
+    ...rest
+  } = options;
+
+  const url = buildUrl(endpoint, query);
+
+  const makeRequest = async (tokenOverride?: string | null) => {
+    const mergedHeaders: HeadersInit = {
+      ...headers,
+    };
+
+    if (!isFormData(body)) {
+      mergedHeaders['Content-Type'] = 'application/json';
+    }
+
+    const token = tokenOverride ?? tokenStorage.getAccessToken();
+    if (auth && token) {
+      mergedHeaders['Authorization'] = `Bearer ${token}`;
+    }
+
+    return fetch(url, {
+      method,
+      headers: mergedHeaders,
+      body:
+        body === undefined || body === null
+          ? undefined
+          : isFormData(body)
+          ? body
+          : JSON.stringify(body),
+      ...rest,
+    });
   };
 
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
-  }
+  let response = await makeRequest();
 
-  if (!(options.body instanceof FormData)) {
-    headers['Content-Type'] = 'application/json';
-  }
+  if (auth && response.status === 401 && retryOn401) {
+    const newAccessToken = await refreshAccessToken();
 
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-    ...options,
-    headers,
-  });
-
-  if (response.status === 401) {
-    // Token expired, try to refresh
-    const refreshToken = getRefreshToken();
-    if (refreshToken) {
-      const refreshResponse = await fetch(`${API_BASE_URL}/api/token/refresh/`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ refresh: refreshToken }),
-      });
-
-      if (refreshResponse.ok) {
-        const { access } = await refreshResponse.json();
-        localStorage.setItem('access_token', access);
-        headers['Authorization'] = `Bearer ${access}`;
-        
-        // Retry original request with new token
-        return fetch(`${API_BASE_URL}${endpoint}`, {
-          ...options,
-          headers,
-        });
-      } else {
-        clearTokens();
-        window.location.href = '/admin/login';
-      }
+    if (!newAccessToken) {
+      throw new ApiError(401, 'Session expired. Please log in again.');
     }
+
+    response = await makeRequest(newAccessToken);
   }
 
-  return response;
+  if (rawResponse) {
+    return response as T;
+  }
+
+  return parseResponse<T>(response);
 };
 
-// Auth APIs
+export const publicRequest = <T = any>(endpoint: string, options: ApiRequestOptions = {}) =>
+  apiRequest<T>(endpoint, { ...options, auth: false });
+
+export const privateRequest = <T = any>(endpoint: string, options: ApiRequestOptions = {}) =>
+  apiRequest<T>(endpoint, { ...options, auth: true });
+
+export const extractResults = <T,>(data: PaginatedResponse<T> | T[]): T[] => {
+  if (Array.isArray(data)) return data;
+  return data.results || [];
+};
+
+/* =========================================================
+   AUTH API
+========================================================= */
+
 export const authAPI = {
   login: async (email: string, password: string) => {
-    const response = await fetch(`${API_BASE_URL}/api/token/`, {
+    return publicRequest<LoginResponse>('/api/login/', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
+      body: { email, password },
     });
-    return response;
+  },
+
+  verifyOtp: async (payload: OtpVerifyPayload) => {
+    const data = await publicRequest<OtpVerifyResponse>('/api/verify-otp/', {
+      method: 'POST',
+      body: payload,
+    });
+
+    if (data?.access && data?.refresh) {
+      tokenStorage.setTokens(data.access, data.refresh);
+    }
+
+    return data;
+  },
+
+  directJwtLogin: async (email: string, password: string) => {
+    const data = await publicRequest<AuthTokens>('/api/token/', {
+      method: 'POST',
+      body: { email, password },
+    });
+
+    tokenStorage.setTokens(data.access, data.refresh);
+    return data;
   },
 
   logout: async () => {
-    const response = await apiRequest('/api/logout/', { method: 'POST' });
-    clearTokens();
-    return response;
+    try {
+      return await privateRequest('/api/logout/', {
+        method: 'POST',
+      });
+    } finally {
+      tokenStorage.clearSession();
+    }
   },
 
   getProfile: async () => {
-    return apiRequest('/api/me/');
+    return privateRequest<UserProfile>('/api/me/');
   },
 
   getUserRole: async () => {
-    return apiRequest('/api/user/role/');
+    return privateRequest<{ role?: string; [key: string]: any }>('/api/user/role/');
   },
 
   changePassword: async (oldPassword: string, newPassword: string) => {
-    return apiRequest('/api/change-password/', {
+    return privateRequest('/api/change-password/', {
       method: 'POST',
-      body: JSON.stringify({ old_password: oldPassword, new_password: newPassword }),
+      body: {
+        old_password: oldPassword,
+        new_password: newPassword,
+      },
     });
+  },
+
+  refreshToken: async () => {
+    const access = await refreshAccessToken();
+    if (!access) {
+      throw new ApiError(401, 'Unable to refresh token');
+    }
+    return { access };
+  },
+
+  checkAuth: async () => {
+    try {
+      await privateRequest('/api/me/');
+      return true;
+    } catch {
+      return false;
+    }
   },
 };
 
-// Prayer APIs
+/* =========================================================
+   SESSION API
+========================================================= */
+
+export const sessionAPI = {
+  bootstrapUserSession: async () => {
+    const profile = await authAPI.getProfile();
+    const role = profile?.role || 'admin';
+    const fullName =
+      profile?.full_name ||
+      [profile?.first_name, profile?.last_name].filter(Boolean).join(' ') ||
+      profile?.email ||
+      'Admin User';
+
+    tokenStorage.setUserRole(role);
+    tokenStorage.setUserName(fullName);
+
+    return {
+      profile,
+      role,
+      fullName,
+    };
+  },
+
+  logoutAndRedirect: async (redirectTo = '/admin/login') => {
+    window.location.href = redirectTo;
+    try {
+      await authAPI.logout();
+    } finally {
+      
+    }
+  },
+};
+
+/* =========================================================
+   PRAYER API
+========================================================= */
+
 export const prayerAPI = {
   create: async (data: {
     full_name?: string;
@@ -112,93 +444,100 @@ export const prayerAPI = {
     general_area?: string;
     visitation_method?: string;
   }) => {
-    const response = await fetch(`${API_BASE_URL}/form/prayers/`, {
+    return publicRequest('/form/prayers/', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
+      body: data,
     });
-    return response;
   },
 
   list: async () => {
-    return apiRequest('/form/prayers/');
+    return privateRequest('/form/prayers/');
   },
 
   detail: async (id: number) => {
-    return apiRequest(`/form/prayers/${id}/`);
+    return privateRequest(`/form/prayers/${id}/`);
   },
 
   update: async (id: number, data: { status?: string }) => {
-    return apiRequest(`/form/prayers/${id}/`, {
+    return privateRequest(`/form/prayers/${id}/`, {
       method: 'PATCH',
-      body: JSON.stringify(data),
+      body: data,
     });
   },
 
   delete: async (id: number) => {
-    return apiRequest(`/form/prayers/${id}/`, { method: 'DELETE' });
+    return privateRequest(`/form/prayers/${id}/`, { method: 'DELETE' });
   },
 };
 
-// Announcements APIs
+/* =========================================================
+   ANNOUNCEMENTS API
+========================================================= */
+
 export const announcementAPI = {
   list: async () => {
-    return apiRequest('/form/announcements/');
+    return privateRequest('/form/announcements/');
   },
 
   detail: async (id: number) => {
-    return apiRequest(`/form/announcements/${id}/`);
+    return privateRequest(`/form/announcements/${id}/`);
   },
 
   create: async (formData: FormData) => {
-    return apiRequest('/form/announcements/', {
+    return privateRequest('/form/announcements/', {
       method: 'POST',
       body: formData,
     });
   },
 
   update: async (id: number, formData: FormData) => {
-    return apiRequest(`/form/announcements/${id}/`, {
+    return privateRequest(`/form/announcements/${id}/`, {
       method: 'PUT',
       body: formData,
     });
   },
 
   delete: async (id: number) => {
-    return apiRequest(`/form/announcements/${id}/`, { method: 'DELETE' });
+    return privateRequest(`/form/announcements/${id}/`, { method: 'DELETE' });
   },
 };
 
-// Events APIs
+/* =========================================================
+   EVENTS API
+========================================================= */
+
 export const eventAPI = {
   list: async () => {
-    return apiRequest('/form/events/list/');
+    return privateRequest('/form/events/list/');
   },
 
   detail: async (slug: string) => {
-    return apiRequest(`/form/events/detail/${slug}/`);
+    return privateRequest(`/form/events/detail/${slug}/`);
   },
 
   create: async (formData: FormData) => {
-    return apiRequest('/form/events/', {
+    return privateRequest('/form/events/', {
       method: 'POST',
       body: formData,
     });
   },
 
   update: async (slug: string, formData: FormData) => {
-    return apiRequest(`/form/events/update/${slug}/`, {
+    return privateRequest(`/form/events/update/${slug}/`, {
       method: 'PUT',
       body: formData,
     });
   },
 
   delete: async (slug: string) => {
-    return apiRequest(`/form/events/update/${slug}/`, { method: 'DELETE' });
+    return privateRequest(`/form/events/update/${slug}/`, { method: 'DELETE' });
   },
 };
 
-// Baptism (Dedications) APIs
+/* =========================================================
+   BAPTISM API
+========================================================= */
+
 export const baptismAPI = {
   create: async (data: {
     full_name: string;
@@ -209,35 +548,36 @@ export const baptismAPI = {
     is_study: boolean;
     additional_information?: string;
   }) => {
-    const response = await fetch(`${API_BASE_URL}/form/baptism/`, {
+    return publicRequest('/form/baptism/', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
+      body: data,
     });
-    return response;
   },
 
   list: async () => {
-    return apiRequest('/form/baptism/');
+    return privateRequest('/form/baptism/');
   },
 
   detail: async (id: number) => {
-    return apiRequest(`/form/baptism/${id}/`);
+    return privateRequest(`/form/baptism/${id}/`);
   },
 
   updateStatus: async (id: number, status: string) => {
-    return apiRequest(`/form/baptism/${id}/status_update/`, {
+    return privateRequest(`/form/baptism/${id}/status_update/`, {
       method: 'PATCH',
-      body: JSON.stringify({ status }),
+      body: { status },
     });
   },
 
   delete: async (id: number) => {
-    return apiRequest(`/form/baptism/${id}/`, { method: 'DELETE' });
+    return privateRequest(`/form/baptism/${id}/`, { method: 'DELETE' });
   },
 };
 
-// Child Dedication APIs
+/* =========================================================
+   DEDICATION API
+========================================================= */
+
 export const dedicationAPI = {
   create: async (data: {
     child_full_name: string;
@@ -251,35 +591,36 @@ export const dedicationAPI = {
     mother_phone_number: string;
     additional_information?: string;
   }) => {
-    const response = await fetch(`${API_BASE_URL}/form/dedication/`, {
+    return publicRequest('/form/dedication/', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
+      body: data,
     });
-    return response;
   },
 
   list: async () => {
-    return apiRequest('/form/dedication/');
+    return privateRequest('/form/dedication/');
   },
 
   detail: async (id: number) => {
-    return apiRequest(`/form/dedication/${id}/`);
+    return privateRequest(`/form/dedication/${id}/`);
   },
 
   updateStatus: async (id: number, status: string) => {
-    return apiRequest(`/form/dedication/${id}/status_update/`, {
+    return privateRequest(`/form/dedication/${id}/status_update/`, {
       method: 'PATCH',
-      body: JSON.stringify({ status }),
+      body: { status },
     });
   },
 
   delete: async (id: number) => {
-    return apiRequest(`/form/dedication/${id}/`, { method: 'DELETE' });
+    return privateRequest(`/form/dedication/${id}/`, { method: 'DELETE' });
   },
 };
 
-// Membership Transfer APIs
+/* =========================================================
+   MEMBERSHIP API
+========================================================= */
+
 export const membershipAPI = {
   create: async (data: {
     full_name: string;
@@ -301,35 +642,36 @@ export const membershipAPI = {
     second_reading_date?: string;
     business_number?: string;
   }) => {
-    const response = await fetch(`${API_BASE_URL}/form/membership/`, {
+    return publicRequest('/form/membership/', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
+      body: data,
     });
-    return response;
   },
 
   list: async () => {
-    return apiRequest('/form/membership/list/');
+    return privateRequest('/form/membership/list/');
   },
 
   detail: async (id: number) => {
-    return apiRequest(`/form/membership/${id}/`);
+    return privateRequest(`/form/membership/${id}/`);
   },
 
   updateStatus: async (id: number, status: string) => {
-    return apiRequest(`/form/membership/${id}/status_update/`, {
+    return privateRequest(`/form/membership/${id}/status_update/`, {
       method: 'PATCH',
-      body: JSON.stringify({ status }),
+      body: { status },
     });
   },
 
   delete: async (id: number) => {
-    return apiRequest(`/form/membership/${id}/`, { method: 'DELETE' });
+    return privateRequest(`/form/membership/${id}/`, { method: 'DELETE' });
   },
 };
 
-// Benevolence APIs
+/* =========================================================
+   BENEVOLENCE API
+========================================================= */
+
 export const benevolenceAPI = {
   create: async (data: {
     head_full_name: string;
@@ -345,35 +687,36 @@ export const benevolenceAPI = {
       relationship: string;
     }>;
   }) => {
-    const response = await fetch(`${API_BASE_URL}/form/benevolence/submit/`, {
+    return publicRequest('/form/benevolence/submit/', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
+      body: data,
     });
-    return response;
   },
 
   list: async () => {
-    return apiRequest('/form/benevolence/');
+    return privateRequest('/form/benevolence/');
   },
 
   detail: async (id: number) => {
-    return apiRequest(`/form/benevolence/${id}/`);
+    return privateRequest(`/form/benevolence/${id}/`);
   },
 
   updateStatus: async (id: number, status: string) => {
-    return apiRequest(`/form/benevolence/${id}/status_update/`, {
+    return privateRequest(`/form/benevolence/${id}/status_update/`, {
       method: 'PATCH',
-      body: JSON.stringify({ status }),
+      body: { status },
     });
   },
 
   delete: async (id: number) => {
-    return apiRequest(`/form/benevolence/${id}/`, { method: 'DELETE' });
+    return privateRequest(`/form/benevolence/${id}/`, { method: 'DELETE' });
   },
 };
 
-// Contact Form APIs
+/* =========================================================
+   CONTACT API
+========================================================= */
+
 export const contactAPI = {
   create: async (data: {
     full_name: string;
@@ -382,49 +725,42 @@ export const contactAPI = {
     subject: string;
     message: string;
   }) => {
-    const response = await fetch(`${API_BASE_URL}/form/contact/`, {
+    return publicRequest('/form/contact/', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
+      body: data,
     });
-    return response;
   },
 
   list: async () => {
-    return apiRequest('/form/contact/list/');
+    return privateRequest('/form/contact/list/');
   },
 
   detail: async (id: number) => {
-    return apiRequest(`/form/contact/${id}/`);
+    return privateRequest(`/form/contact/${id}/`);
   },
 
   delete: async (id: number) => {
-    return apiRequest(`/form/contact/${id}/`, { method: 'DELETE' });
+    return privateRequest(`/form/contact/${id}/`, { method: 'DELETE' });
   },
 };
 
-// M-Pesa Payment APIs
+/* =========================================================
+   MPESA API
+========================================================= */
+
 export const mpesaAPI = {
-  /**
-   * Initiate an M-Pesa payment
-   * Multi-purpose transactions: send an array of purposes with amount and optional details.
-   */
   initiatePayment: async (data: {
     name: string;
     phone_number: string;
     email?: string;
     purposes: { purpose: string; amount: number; other_purpose_details?: string }[];
   }) => {
-    return fetch(`${API_BASE_URL}/api/v1/mpesa/initiate-payment/`, {
+    return publicRequest('/api/v1/mpesa/initiate-payment/', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
+      body: data,
     });
   },
 
-  /**
-   * List all transactions
-   */
   listTransactions: async (params?: {
     page?: number;
     page_size?: number;
@@ -434,55 +770,25 @@ export const mpesaAPI = {
     end_date?: string;
     search?: string;
   }) => {
-    const queryParams = new URLSearchParams();
-    if (params?.page) queryParams.append('page', String(params.page));
-    if (params?.page_size) queryParams.append('page_size', String(params.page_size));
-    if (params?.status) queryParams.append('status', params.status);
-    if (params?.purpose) queryParams.append('purpose', params.purpose);
-    if (params?.start_date) queryParams.append('start_date', params.start_date);
-    if (params?.end_date) queryParams.append('end_date', params.end_date);
-    if (params?.search) queryParams.append('search', params.search);
-
-    const url = `/api/v1/mpesa/transactions/${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
-    return apiRequest(url);
+    return privateRequest('/api/v1/mpesa/transactions/', {
+      query: params,
+    });
   },
 
-  /**
-   * Check the status of a single transaction by CheckoutRequestID
-   */
   checkTransactionStatus: async (checkoutRequestId: string) => {
-    return fetch(
-      `${API_BASE_URL}/api/v1/mpesa/status-check/?checkout_request_id=${checkoutRequestId}`
-    ).then(res => res.json());
+    return publicRequest('/api/v1/mpesa/status-check/', {
+      query: { checkout_request_id: checkoutRequestId },
+    });
   },
 
-  /**
-   * Get detailed info for a single transaction by ID
-   */
   transactionDetail: async (id: number) => {
-    return apiRequest(`/api/v1/mpesa/transactions/${id}/`);
+    return privateRequest(`/api/v1/mpesa/transactions/${id}/`);
   },
 
   pollCoopStatus: async (messageReference: string) => {
-  try {
-    const resp = await fetch(`${API_BASE_URL}/api/v1/mpesa/check-status/`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ MessageReference: messageReference }),
+    return publicRequest('/api/v1/mpesa/check-status/', {
+      method: 'POST',
+      body: { MessageReference: messageReference },
     });
-
-    if (!resp.ok) {
-      const text = await resp.text();
-      throw new Error(`HTTP ${resp.status}: ${text}`);
-    }
-
-    // parse JSON only once here
-    const data = await resp.json();
-    return { ok: true, data };
-  } catch (err) {
-    return { ok: false, error: err };
-  }
-},
-
-
+  },
 };

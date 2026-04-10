@@ -5,7 +5,6 @@ import { SidebarTrigger } from '@/components/ui/sidebar';
 import { LogOut, User, Bell, Search } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,18 +16,20 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { useAuth } from '@/context/AuthContext';
 
 export function AdminHeader() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { logout, user, role } = useAuth();
 
-  const handleLogout = () => {
-    localStorage.removeItem('isAdminLoggedIn');
+  const handleLogout = async () => {
+    navigate('/admin/login');  // navigate first to avoid white flash
+    await logout();            // then clear state
     toast({
       title: 'Logged out',
       description: 'You have been successfully logged out.',
     });
-    navigate('/admin/login');
   };
 
   return (
@@ -54,8 +55,12 @@ export function AdminHeader() {
 
         <div className="flex items-center gap-3 pl-2 ml-2 border-l border-border">
           <div className="flex flex-col items-end hidden sm:flex">
-            <span className="text-sm font-semibold leading-none text-foreground">Admin User</span>
-            <span className="text-[11px] text-muted-foreground">Super Administrator</span>
+            <span className="text-sm font-semibold leading-none text-foreground">
+              {user?.full_name || 'Admin User'}
+            </span>
+            <span className="text-[11px] text-muted-foreground capitalize">
+              {role || 'Administrator'}
+            </span>
           </div>
           
           <AlertDialog>
@@ -73,7 +78,10 @@ export function AdminHeader() {
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Stay</AlertDialogCancel>
-                <AlertDialogAction onClick={handleLogout} className="bg-church-600 hover:bg-church-700 text-white">
+                <AlertDialogAction
+                  onClick={handleLogout}
+                  className="bg-church-600 hover:bg-church-700 text-white"
+                >
                   Log out
                 </AlertDialogAction>
               </AlertDialogFooter>

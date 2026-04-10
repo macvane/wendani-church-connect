@@ -6,11 +6,14 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { Eye, EyeOff } from 'lucide-react';
+import { authAPI } from '@/utils/api';
+import { useAuth } from '@/context/AuthContext';
 
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || 'https://churchmedia.kahawawendanisda.org';
 
 const AdminLogin = () => {
+  const { refreshCurrentUser } = useAuth();
   const [step, setStep] = useState<'login' | 'otp'>('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -27,48 +30,15 @@ const AdminLogin = () => {
     localStorage.setItem('refresh_token', refresh);
     localStorage.setItem('isAdminLoggedIn', 'true');
 
-    try {
-      const roleResponse = await fetch(`${API_BASE_URL}/api/me/`, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${access}`,
-        },
-      });
+    // Let AuthContext bootstrap itself with the new tokens
+    await refreshCurrentUser();
 
-      if (roleResponse.ok) {
-        const roleData = await roleResponse.json();
-        const userRole = roleData.role || 'admin';
-
-        localStorage.setItem('user_role', userRole);
-
-        if (userRole === 'treasurer') {
-          toast({
-            title: 'Login Successful',
-            description: 'OTP verified. Welcome to the treasurer dashboard.',
-          });
-          navigate('/treasurer/dashboard');
-          return;
-        }
-
-        toast({
-          title: 'Login Successful',
-          description: 'OTP verified. Welcome to the admin dashboard.',
-        });
-        navigate('/admin/dashboard');
-        return;
-      }
-
-      toast({
-        title: 'Login Successful',
-        description: 'OTP verified. Welcome to the admin dashboard.',
-      });
-      navigate('/admin/dashboard');
-    } catch (error) {
-      toast({
-        title: 'Login Successful',
-        description: 'OTP verified. Welcome to the admin dashboard.',
-      });
-      navigate('/admin/dashboard');
+    // Navigate AFTER context has updated
+    const userRole = localStorage.getItem('user_role');
+    if (userRole === 'treasurer') {
+      navigate('/treasurer/dashboard', { replace: true });
+    } else {
+      navigate('/admin/dashboard', { replace: true });
     }
   };
 
@@ -127,26 +97,10 @@ const AdminLogin = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/verify-otp/`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email,
-          otp_code: otp,
-          otp_reference: otpReference,
-        }),
-      });
-
-      const data = await response.json().catch(() => ({}));
-
-      if (!response.ok) {
-        toast({
-          title: 'OTP Verification Failed',
-          description: data?.detail || data?.message || 'Invalid or expired OTP.',
-          variant: 'destructive',
-        });
-        return;
-      }
+      const data = await authAPI.verifyOtp({
+        email,
+        otp_code: otp,  
+      } as any);
 
       if (!data?.access || !data?.refresh) {
         toast({
@@ -158,10 +112,10 @@ const AdminLogin = () => {
       }
 
       await storeSessionAndRedirect(data.access, data.refresh);
-    } catch (error) {
+    } catch (err: any) {
       toast({
         title: 'OTP Verification Failed',
-        description: 'Unable to connect to server. Please try again later.',
+        description: err?.message || 'Invalid or expired OTP.',
         variant: 'destructive',
       });
     } finally {
