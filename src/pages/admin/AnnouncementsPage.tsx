@@ -44,11 +44,10 @@ const AnnouncementsPage = () => {
 
   const fetchAnnouncements = async () => {
     try {
-      const response = await announcementAPI.list();
-      if (response.ok) {
-        const data = await response.json();
-        setAnnouncements(data);
-      }
+      const data = await announcementAPI.list();
+      // API may return paginated {results: [...]} or a plain array
+      const items = Array.isArray(data) ? data : (data.results ?? []);
+      setAnnouncements(items);
     } catch (error) {
       toast({
         title: "Error",
@@ -66,126 +65,76 @@ const AnnouncementsPage = () => {
   });
 
   const handleCreateAnnouncement = async () => {
-  if (!formData.title || !formData.description || !formData.file) {
-    toast({
-      title: "Error",
-      description: "Please fill in all fields",
-      variant: "destructive",
-    });
-    return;
-  }
-
-  setIsCreating(true); // Start loading
-
-  const data = new FormData();
-  data.append('title', formData.title);
-  data.append('description', formData.description);
-  data.append('file', formData.file);
-
-  try {
-    const response = await announcementAPI.create(data);
-    const resData = await response.json();
-
-    if (!response.ok) {
-      // Display server validation errors
-      const errorMsg = resData.file?.[0] || resData.title?.[0] || resData.description?.[0] || resData.detail || "Failed to create announcement";
-      throw new Error(errorMsg);
+    if (!formData.title || !formData.description || !formData.file) {
+      toast({ title: "Error", description: "Please fill in all fields", variant: "destructive" });
+      return;
     }
-
-    toast({
-      title: "Success",
-      description: "Announcement created successfully",
-    });
-    fetchAnnouncements();
-    setIsCreateOpen(false);
-    setFormData({ title: '', description: '', file: null });
-  } catch (error: any) {
-    toast({
-      title: "Error",
-      description: error.message || "Failed to create announcement",
-      variant: "destructive",
-    });
-  } finally {
-    setIsCreating(false);
-  }
-};
-
+    setIsCreating(true);
+    const data = new FormData();
+    data.append('title', formData.title);
+    data.append('description', formData.description);
+    data.append('file', formData.file);
+    try {
+      await announcementAPI.create(data); // throws ApiError on failure
+      toast({ title: "Success", description: "Announcement created successfully" });
+      fetchAnnouncements();
+      setIsCreateOpen(false);
+      setFormData({ title: '', description: '', file: null });
+    } catch (error: any) {
+      const payload = error?.payload;
+      const msg = payload?.file?.[0] || payload?.title?.[0] || payload?.description?.[0] || error?.message || "Failed to create announcement";
+      toast({ title: "Error", description: msg, variant: "destructive" });
+    } finally {
+      setIsCreating(false);
+    }
+  };
 
   const handleEditAnnouncement = async () => {
-  if (!selectedAnnouncement || !formData.title || !formData.description) {
-    toast({
-      title: "Error",
-      description: "Please fill in all required fields",
-      variant: "destructive",
-    });
-    return;
-  }
-
-  setIsUpdating(true); // Start loading
-
-  const data = new FormData();
-  data.append('title', formData.title);
-  data.append('description', formData.description);
-  if (formData.file) data.append('file', formData.file);
-
-  try {
-    const response = await announcementAPI.update(selectedAnnouncement.id, data);
-    const resData = await response.json();
-
-    if (!response.ok) {
-      const errorMsg = resData.file?.[0] || resData.title?.[0] || resData.description?.[0] || resData.detail || "Failed to update announcement";
-      throw new Error(errorMsg);
+    if (!selectedAnnouncement || !formData.title || !formData.description) {
+      toast({ title: "Error", description: "Please fill in all required fields", variant: "destructive" });
+      return;
     }
-
-    toast({
-      title: "Success",
-      description: "Announcement updated successfully",
-    });
-    fetchAnnouncements();
-    setIsEditOpen(false);
-    setFormData({ title: '', description: '', file: null });
-  } catch (error: any) {
-    toast({
-      title: "Error",
-      description: error.message || "Failed to update announcement",
-      variant: "destructive",
-    });
-  } finally {
-    setIsUpdating(false);
-  }
-};
+    setIsUpdating(true);
+    const data = new FormData();
+    data.append('title', formData.title);
+    data.append('description', formData.description);
+    if (formData.file) data.append('file', formData.file);
+    try {
+      await announcementAPI.update(selectedAnnouncement.id, data);
+      toast({ title: "Success", description: "Announcement updated successfully" });
+      fetchAnnouncements();
+      setIsEditOpen(false);
+      setFormData({ title: '', description: '', file: null });
+    } catch (error: any) {
+      const payload = error?.payload;
+      const msg = payload?.file?.[0] || payload?.title?.[0] || payload?.description?.[0] || error?.message || "Failed to update announcement";
+      toast({ title: "Error", description: msg, variant: "destructive" });
+    } finally {
+      setIsUpdating(false);
+    }
+  };
 
 
   const handleDelete = async (id: number) => {
     if (!confirm('Are you sure you want to delete this announcement?')) return;
-
     try {
-      const response = await announcementAPI.delete(id);
-      if (response.ok) {
-        toast({
-          title: "Success",
-          description: "Announcement deleted successfully",
-        });
-        fetchAnnouncements();
-      }
+      await announcementAPI.delete(id); // 204 No Content — throws on error
+      toast({ title: "Success", description: "Announcement deleted successfully" });
+      fetchAnnouncements();
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to delete announcement",
-        variant: "destructive",
-      });
+      toast({ title: "Error", description: "Failed to delete announcement", variant: "destructive" });
     }
   };
 
-  const openEditDialog = (announcement: Announcement) => {
-    setSelectedAnnouncement(announcement);
-    setFormData({
-      title: announcement.title,
-      description: announcement.description,
-      file: null,
-    });
-    setIsEditOpen(true);
-  };
+    const openEditDialog = (announcement: Announcement) => {
+      setSelectedAnnouncement(announcement);
+      setFormData({
+        title: announcement.title,
+        description: announcement.description,
+        file: null,
+      });
+      setIsEditOpen(true);
+    };
 
   return (
     <div className="space-y-6">
