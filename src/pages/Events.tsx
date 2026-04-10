@@ -55,18 +55,16 @@ const Events = () => {
 
   const fetchEvents = async () => {
     try {
-      const response = await eventAPI.list();
-      if (response.ok) {
-        const data = await response.json();
+      const data = await eventAPI.list();
+      const items = Array.isArray(data) ? data : (data.results ?? []);
 
-        // Default sort (nearest → furthest)
-        const sortedEvents = data.sort((a: Event, b: Event) => {
-          const aDate = new Date(a.from_date || a.date);
-          const bDate = new Date(b.from_date || b.date);
-          return aDate.getTime() - bDate.getTime();
-        });
-        setEvents(sortedEvents);
-      }
+      const sortedEvents = items.sort((a: Event, b: Event) => {
+        const aDate = new Date(a.from_date || a.date);
+        const bDate = new Date(b.from_date || b.date);
+        return aDate.getTime() - bDate.getTime();
+      });
+
+      setEvents(sortedEvents);
     } catch (error) {
       console.error('Error fetching events:', error);
     } finally {
