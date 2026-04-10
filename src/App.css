@@ -25,6 +25,52 @@
   transition-shadow shadow-sm placeholder-gray-400;
 }
 
+@layer utilities {
+  /* Custom Scrollbar Utility */
+  .scrollbar-church {
+    --sb-track-color: transparent;
+    --sb-thumb-color: hsl(var(--muted-foreground) / 0.2);
+    --sb-size: 6px;
+  }
+
+  .scrollbar-church::-webkit-scrollbar {
+    width: var(--sb-size);
+    height: var(--sb-size);
+  }
+
+  .scrollbar-church::-webkit-scrollbar-track {
+    background: var(--sb-track-color);
+    border-radius: 10px;
+  }
+
+  .scrollbar-church::-webkit-scrollbar-thumb {
+    background: var(--sb-thumb-color);
+    border-radius: 10px;
+    border: 1px solid transparent;
+    transition: background 0.2s ease;
+  }
+
+  .scrollbar-church::-webkit-scrollbar-thumb:hover {
+    --sb-thumb-color: #008787; /* church-500 */
+  }
+
+  /* Firefox support */
+  @supports (scrollbar-width: thin) {
+    .scrollbar-church {
+      scrollbar-width: thin;
+      scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+    }
+  }
+
+  /* Hide scrollbar but allow scrolling */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
 
 @keyframes logo-spin {
   from {
