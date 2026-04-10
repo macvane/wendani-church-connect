@@ -29,6 +29,7 @@ import Donate from "./pages/Donate";
 import MembershipTransfer from "./pages/MembershipTransfer";
 import ThankYou from "./pages/ThankYou";
 import MedicalConsentForm from "./pages/MedicalConsentForm";
+import SetPassword from "./pages/SetPassword";
 
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -47,6 +48,8 @@ import UsersPage from "./pages/admin/UsersPage";
 import TreasurerDashboard from "./pages/treasurer/TreasurerDashboard";
 import TransactionsPage from "./pages/treasurer/TransactionsPage";
 import ReportsPage from "./pages/treasurer/ReportsPage";
+
+import InviteUser from "./pages/admin/InviteUser";
 
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
@@ -78,6 +81,7 @@ const App = () => {
               <Route path="/baptism" element={<Baptism />} />
               <Route path="/giving" element={<Donate />} />
               <Route path="/membership-transfer" element={<MembershipTransfer />} />
+              <Route path="/set-password/:uidb64/:token" element={<SetPassword />} />
               <Route path="/thank-you" element={<ThankYou />} />
 
               {/* Public-only auth pages */}
@@ -86,7 +90,7 @@ const App = () => {
               </Route>
 
               {/* Admin-only routes */}
-              <Route element={<ProtectedRoute allowedRoles={['admin', 'superadmin']} />}>
+              <Route element={<ProtectedRoute allowedRoles={['admin', 'superadmin', 'elder']} />}>
                 <Route path="/admin/dashboard" element={<AdminDashboard />}>
                   <Route index element={<DashboardOverview />} />
                   <Route path="prayers" element={<PrayersPage />} />
@@ -107,6 +111,12 @@ const App = () => {
                 <Route path="/treasurer/dashboard" element={<TreasurerDashboard />}>
                   <Route index element={<TransactionsPage />} />
                   <Route path="reports" element={<ReportsPage />} />
+                </Route>
+              </Route>
+
+              <Route element={<ProtectedRoute allowedRoles={['superadmin']} />}>
+                <Route path="/admin/dashboard" element={<AdminDashboard />}>
+                  <Route path="invite" element={<InviteUser />} />
                 </Route>
               </Route>
 

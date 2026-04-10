@@ -23,44 +23,101 @@ import {
   MessageSquare,
   Megaphone,
   Calendar,
+  UserCog,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/context/AuthContext';
 
 const menuGroups = [
   {
-    label: "Core",
+    label: 'Core',
     items: [
       { title: 'Overview', url: '/admin/dashboard', icon: LayoutDashboard },
       { title: 'Announcements', url: '/admin/dashboard/announcements', icon: Megaphone },
       { title: 'Events', url: '/admin/dashboard/events', icon: Calendar },
-    ]
+    ],
   },
   {
-    label: "Ministry Requests",
+    label: 'Ministry Requests',
     items: [
       { title: 'Prayer Requests', url: '/admin/dashboard/prayers', icon: Heart },
       { title: 'Baptism Requests', url: '/admin/dashboard/baptisms', icon: Droplets },
       { title: 'Child Dedications', url: '/admin/dashboard/dedications', icon: Baby },
-    ]
+    ],
   },
   {
-    label: "Administration",
+    label: 'Administration',
     items: [
       { title: 'Membership', url: '/admin/dashboard/memberships', icon: UserPlus },
       { title: 'Benevolence', url: '/admin/dashboard/benevolence', icon: HandHeart },
       { title: 'Contacts', url: '/admin/dashboard/contacts', icon: MessageSquare },
-    ]
-  }
+    ],
+  },
 ];
+
+const superAdminGroup = {
+  label: 'Super Admin',
+  items: [
+    { title: 'Invite User', url: '/admin/dashboard/invite', icon: UserCog },
+  ],
+};
 
 export function AdminSidebar() {
   const { state } = useSidebar();
   const location = useLocation();
+  const { role } = useAuth();
 
   const isActive = (path: string) => {
     if (path === '/admin/dashboard') return location.pathname === path;
     return location.pathname.startsWith(path);
   };
+
+  const allGroups = role === 'superadmin'
+    ? [...menuGroups, superAdminGroup]
+    : menuGroups;
+
+  const renderGroup = (group: typeof menuGroups[0], idx: number) => (
+    <SidebarGroup key={idx} className="px-2">
+      {state !== 'collapsed' && (
+        <SidebarGroupLabel className="px-2 text-[11px] font-bold uppercase tracking-widest text-muted-foreground/70">
+          {group.label}
+        </SidebarGroupLabel>
+      )}
+      <SidebarGroupContent>
+        <SidebarMenu>
+          {group.items.map((item) => {
+            const active = isActive(item.url);
+            return (
+              <SidebarMenuItem key={item.title}>
+                <SidebarMenuButton
+                  asChild
+                  tooltip={state === 'collapsed' ? item.title : undefined}
+                  className={cn(
+                    'relative group h-10 transition-all duration-200 mb-1',
+                    active
+                      ? 'bg-church-50 text-church-600 font-semibold'
+                      : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                  )}
+                >
+                  <NavLink to={item.url} className="flex items-center w-full gap-3 px-3">
+                    <item.icon
+                      className={cn(
+                        'h-[18px] w-[18px] shrink-0',
+                        active ? 'text-church-600' : 'group-hover:text-foreground'
+                      )}
+                    />
+                    {state !== 'collapsed' && (
+                      <span className="flex-1 truncate">{item.title}</span>
+                    )}
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            );
+          })}
+        </SidebarMenu>
+      </SidebarGroupContent>
+    </SidebarGroup>
+  );
 
   return (
     <Sidebar collapsible="icon" className="border-r border-border/50">
@@ -82,46 +139,8 @@ export function AdminSidebar() {
         </div>
       </SidebarHeader>
 
-      {/* Applied the custom scrollbar here */}
       <SidebarContent className="py-4 scrollbar-church overflow-y-auto overflow-x-hidden">
-        {menuGroups.map((group, idx) => (
-          <SidebarGroup key={idx} className="px-2">
-            {state !== 'collapsed' && (
-              <SidebarGroupLabel className="px-2 text-[11px] font-bold uppercase tracking-widest text-muted-foreground/70">
-                {group.label}
-              </SidebarGroupLabel>
-            )}
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {group.items.map((item) => {
-                  const active = isActive(item.url);
-                  return (
-                    <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton
-                        asChild
-                        tooltip={state === 'collapsed' ? item.title : undefined}
-                        className={cn(
-                          "relative group h-10 transition-all duration-200 mb-1",
-                          active 
-                            ? "bg-church-50 text-church-600 font-semibold" 
-                            : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-                        )}
-                      >
-                        <NavLink to={item.url} className="flex items-center w-full gap-3 px-3">
-                          <item.icon className={cn(
-                            "h-[18px] w-[18px] shrink-0",
-                            active ? "text-church-600" : "group-hover:text-foreground"
-                          )} />
-                          {state !== 'collapsed' && <span className="flex-1 truncate">{item.title}</span>}
-                        </NavLink>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  );
-                })}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        ))}
+        {allGroups.map((group, idx) => renderGroup(group, idx))}
       </SidebarContent>
       <SidebarRail />
     </Sidebar>
