@@ -60,7 +60,6 @@ const superAdminGroup = {
   label: 'Super Admin',
   items: [
     { title: 'User Management', url: '/admin/dashboard/users', icon: Users },
-    { title: 'Invite User', url: '/admin/dashboard/invite', icon: UserCog },
   ],
 };
 
