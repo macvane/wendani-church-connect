@@ -910,7 +910,7 @@ export const passwordResetAPI = {
 
   resetPassword: async (uidb64: string, token: string, password: string, confirmPassword: string) => {
     return publicRequest<{ message: string }>(`/api/reset-password/${uidb64}/${token}/`, {
-      method: 'POST',
+      method: 'PUT',
       body: { password, confirm_password: confirmPassword },
     });
   },

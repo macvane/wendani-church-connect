@@ -43,7 +43,6 @@ import BaptismRequestsPage from "./pages/admin/BaptismRequestsPage";
 import DedicationsPage from "./pages/admin/DedicationsPage";
 import MembershipTransfersPage from "./pages/admin/MembershipTransfersPage";
 import BenevolencePage from "./pages/admin/BenevolencePage";
-import UsersPage from "./pages/admin/UsersPage";
 
 import TreasurerDashboard from "./pages/treasurer/TreasurerDashboard";
 import TransactionsPage from "./pages/treasurer/TransactionsPage";
@@ -108,7 +107,6 @@ const App = () => {
                   <Route path="announcements" element={<AnnouncementsPage />} />
                   <Route path="events" element={<EventsPage />} />
                   <Route path="contacts" element={<ContactsPage />} />
-                  <Route path="users" element={<UsersPage />} />
                 </Route>
               </Route>
 
