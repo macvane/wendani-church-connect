@@ -674,16 +674,18 @@ export const membershipAPI = {
 
 export const benevolenceAPI = {
   create: async (data: {
-    head_full_name: string;
-    head_phone_number: string;
-    email: string;
-    membership_status: string;
-    spouse_name?: string;
-    church_name?: string;
+    requestType: string;               // "new-registration" | "update-details"
+    contributorName: string;
+    contributorContact: string;
+    contributorSpouse?: string;
+    contributorSpouseContact?: string;
+    email?: string;
+    membershipStatus: string;
+    signatureName: string;
+    signatureDate: string;             // "YYYY-MM-DD"
     additional?: string;
     dependents: Array<{
       name: string;
-      phone_number: string;
       relationship: string;
     }>;
   }) => {
@@ -692,25 +694,19 @@ export const benevolenceAPI = {
       body: data,
     });
   },
-
-  list: async () => {
-    return privateRequest('/form/benevolence/');
-  },
-
-  detail: async (id: number) => {
-    return privateRequest(`/form/benevolence/${id}/`);
-  },
-
-  updateStatus: async (id: number, status: string) => {
-    return privateRequest(`/form/benevolence/${id}/status_update/`, {
+ 
+  list: async () => privateRequest('/form/benevolence/'),
+ 
+  detail: async (id: number) => privateRequest(`/form/benevolence/${id}/`),
+ 
+  updateStatus: async (id: number, status: string) =>
+    privateRequest(`/form/benevolence/${id}/`, {
       method: 'PATCH',
       body: { status },
-    });
-  },
-
-  delete: async (id: number) => {
-    return privateRequest(`/form/benevolence/${id}/`, { method: 'DELETE' });
-  },
+    }),
+ 
+  delete: async (id: number) =>
+    privateRequest(`/form/benevolence/${id}/`, { method: 'DELETE' }),
 };
 
 /* =========================================================
