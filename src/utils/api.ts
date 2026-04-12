@@ -792,3 +792,126 @@ export const mpesaAPI = {
     });
   },
 };
+
+
+/* =========================================================
+   USER MANAGEMENT API
+========================================================= */
+
+export interface SystemUser {
+  id: number;
+  email: string;
+  full_name: string;
+  phone_number: string;
+  role: string;
+  must_change_password: boolean;
+  is_email_verified: boolean;
+  is_active: boolean;
+  created_at: string;
+}
+
+export interface UpdateUserPayload {
+  full_name?: string;
+  phone_number?: string;
+  role?: string;
+  is_active?: boolean;
+  is_email_verified?: boolean;
+}
+
+export interface InviteUserPayload {
+  email: string;
+  full_name: string;
+  phone_number: string;
+  role: string;
+}
+
+export const userManagementAPI = {
+  // List all users — supports ?role=elder&is_active=true
+  list: async (filters?: { role?: string; is_active?: boolean }) => {
+    return privateRequest<SystemUser[]>('/api/users/', {
+      query: {
+        ...(filters?.role !== undefined && { role: filters.role }),
+        ...(filters?.is_active !== undefined && { is_active: String(filters.is_active) }),
+      },
+    });
+  },
+
+  retrieve: async (pk: number) => {
+    return privateRequest<SystemUser>(`/api/users/${pk}/`);
+  },
+
+  // Full update — all fields required
+  update: async (pk: number, data: UpdateUserPayload) => {
+    return privateRequest<{ message: string; user: SystemUser }>(`/api/users/${pk}/update/`, {
+      method: 'PUT',
+      body: data,
+    });
+  },
+
+  // Partial update — e.g. just { is_active: false } to deactivate
+  patch: async (pk: number, data: UpdateUserPayload) => {
+    return privateRequest<{ message: string; user: SystemUser }>(`/api/users/${pk}/update/`, {
+      method: 'PATCH',
+      body: data,
+    });
+  },
+
+  // Convenience wrappers for common actions
+  deactivate: async (pk: number) => {
+    return userManagementAPI.patch(pk, { is_active: false });
+  },
+
+  activate: async (pk: number) => {
+    return userManagementAPI.patch(pk, { is_active: true });
+  },
+
+  changeRole: async (pk: number, role: string) => {
+    return userManagementAPI.patch(pk, { role });
+  },
+
+  delete: async (pk: number) => {
+    return privateRequest<{ message: string }>(`/api/users/${pk}/delete/`, {
+      method: 'DELETE',
+    });
+  },
+
+  invite: async (data: InviteUserPayload) => {
+    return privateRequest<{ message: string; user: SystemUser }>('/api/invite/', {
+      method: 'POST',
+      body: data,
+    });
+  },
+
+  resendInvitation: async (pk: number) => {
+    return privateRequest<{ message: string }>(`/api/users/${pk}/resend-invitation/`, {
+      method: 'POST',
+    });
+  },
+
+  setPasswordFromInvite: async (uidb64: string, token: string, password: string, confirmPassword: string) => {
+    return publicRequest<{ message: string }>(`/api/set-password/${uidb64}/${token}/`, {
+      method: 'POST',
+      body: { password, confirm_password: confirmPassword },
+    });
+  },
+};
+
+/* =========================================================
+   PASSWORD RESET API
+========================================================= */
+
+export const passwordResetAPI = {
+  forgotPassword: async (email: string) => {
+    return publicRequest<{ message: string }>('/api/forgot-password/', {
+      method: 'POST',
+      body: { email },
+    });
+  },
+
+  resetPassword: async (uidb64: string, token: string, password: string, confirmPassword: string) => {
+    return publicRequest<{ message: string }>(`/api/reset-password/${uidb64}/${token}/`, {
+      method: 'POST',
+      body: { password, confirm_password: confirmPassword },
+    });
+  },
+};

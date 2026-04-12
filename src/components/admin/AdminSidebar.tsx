@@ -24,6 +24,7 @@ import {
   Megaphone,
   Calendar,
   UserCog,
+  Users,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/AuthContext';
@@ -58,6 +59,7 @@ const menuGroups = [
 const superAdminGroup = {
   label: 'Super Admin',
   items: [
+    { title: 'User Management', url: '/admin/dashboard/users', icon: Users },
     { title: 'Invite User', url: '/admin/dashboard/invite', icon: UserCog },
   ],
 };
@@ -73,7 +75,7 @@ export function AdminSidebar() {
   };
 
   const allGroups = role === 'superadmin'
-    ? [...menuGroups, superAdminGroup]
+    ? [superAdminGroup, ...menuGroups]
     : menuGroups;
 
   const renderGroup = (group: typeof menuGroups[0], idx: number) => (

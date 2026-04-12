@@ -49,7 +49,11 @@ import TreasurerDashboard from "./pages/treasurer/TreasurerDashboard";
 import TransactionsPage from "./pages/treasurer/TransactionsPage";
 import ReportsPage from "./pages/treasurer/ReportsPage";
 
+// Super Admin-only pages
 import InviteUser from "./pages/admin/InviteUser";
+import Users from "./pages/admin/Users";
+import ResetPassword from "./pages/ResetPassword";
+import ForgotPassword from "./pages/ForgotPassword";
 
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
@@ -82,6 +86,8 @@ const App = () => {
               <Route path="/giving" element={<Donate />} />
               <Route path="/membership-transfer" element={<MembershipTransfer />} />
               <Route path="/set-password/:uidb64/:token" element={<SetPassword />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password/:uidb64/:token" element={<ResetPassword />} />
               <Route path="/thank-you" element={<ThankYou />} />
 
               {/* Public-only auth pages */}
@@ -117,6 +123,7 @@ const App = () => {
               <Route element={<ProtectedRoute allowedRoles={['superadmin']} />}>
                 <Route path="/admin/dashboard" element={<AdminDashboard />}>
                   <Route path="invite" element={<InviteUser />} />
+                  <Route path="users" element={<Users />} />
                 </Route>
               </Route>
 

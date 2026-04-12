@@ -255,6 +255,11 @@ const AdminLogin = () => {
                         )}
                       </Button>
                     </div>
+                    <div className="flex justify-end">
+                      <Link to="/forgot-password" className="text-xs text-church-600 hover:underline">
+                        Forgot password?
+                      </Link>
+                    </div>
                   </div>
 
                   <Button
