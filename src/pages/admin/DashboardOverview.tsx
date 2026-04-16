@@ -39,6 +39,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Line, Bar, Doughnut } from 'react-chartjs-2';
+import type { ChartOptions } from 'chart.js';
 
 ChartJS.register(
   CategoryScale,
@@ -55,17 +56,17 @@ ChartJS.register(
 /* ─────────────────────────────────────────────
    UTILITY HELPERS
 ───────────────────────────────────────────── */
-const toArray = (res) => (Array.isArray(res) ? res : res?.results ?? []);
+const toArray = (res: any) => (Array.isArray(res) ? res : res?.results ?? []);
 
-const getMonth = (dateStr) => new Date(dateStr).getMonth();
+const getMonth = (dateStr: string) => new Date(dateStr).getMonth();
 
-const subWeeks = (n) => {
+const subWeeks = (n: number) => {
   const d = new Date();
   d.setDate(d.getDate() - n * 7);
   return d;
 };
 
-const withinDays = (dateStr, days) =>
+const withinDays = (dateStr: string, days: number) =>
   new Date(dateStr) >= new Date(Date.now() - days * 86400000);
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
@@ -91,7 +92,14 @@ const normaliseStatus = (s = '') => {
 /* ─────────────────────────────────────────────
    STAT CARD
 ───────────────────────────────────────────── */
-const StatCard = ({ title, current, previous, icon: Icon, color, bg }) => {
+const StatCard = ({ title, current, previous, icon: Icon, color, bg }: {
+  title: string;
+  current: number;
+  previous: number;
+  icon: React.ElementType;
+  color: string;
+  bg: string;
+}) => {
   const delta = current - previous;
   const pct = previous > 0 ? Math.round((delta / previous) * 100) : 0;
   const up = delta >= 0;
@@ -128,8 +136,11 @@ const statusStyles = {
   rejected: { bg: 'bg-red-50',     text: 'text-red-600',    icon: AlertCircle,   label: 'Rejected'  },
   review:   { bg: 'bg-blue-50',    text: 'text-blue-700',   icon: RefreshCw,     label: 'In Review' },
 };
-const StatusBadge = ({ status }) => {
-  const s = statusStyles[status] ?? statusStyles.review;
+
+type StatusKey = keyof typeof statusStyles;
+
+const StatusBadge = ({ status }: { status: string }) => {
+  const s = statusStyles[status as StatusKey] ?? statusStyles.review;
   const Ic = s.icon;
   return (
     <span className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full ${s.bg} ${s.text}`}>
@@ -140,6 +151,9 @@ const StatusBadge = ({ status }) => {
 
 /* ─────────────────────────────────────────────
    CHART DEFAULTS
+   FIX 1: Use `satisfies ChartOptions<...>` (or explicit type annotation)
+   so that string-literal fields like tooltip.mode are narrowed correctly
+   and TypeScript stops complaining about them being too wide.
 ───────────────────────────────────────────── */
 const chartFont = { family: 'inherit', size: 11 };
 const gridColor = 'rgba(0,0,0,0.06)';
@@ -148,20 +162,29 @@ const tickColor = '#9ca3af';
 const baseLineOpts = {
   responsive: true,
   maintainAspectRatio: false,
-  plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } },
+  plugins: {
+    legend: { display: false },
+    tooltip: {
+      mode: 'index' as const,   // ← `as const` narrows 'index' to its literal type
+      intersect: false,
+    },
+  },
   scales: {
     x: { grid: { display: false }, ticks: { color: tickColor, font: chartFont } },
     y: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: tickColor, font: chartFont } },
   },
-};
+} satisfies ChartOptions<'line'>;
 
 const baseBarOpts = {
   ...baseLineOpts,
   scales: {
     ...baseLineOpts.scales,
-    x: { ...baseLineOpts.scales.x, ticks: { color: tickColor, font: { ...chartFont, size: 10 }, maxRotation: 0 } },
+    x: {
+      ...baseLineOpts.scales.x,
+      ticks: { color: tickColor, font: { ...chartFont, size: 10 }, maxRotation: 0 },
+    },
   },
-};
+} satisfies ChartOptions<'bar'>;
 
 /* ─────────────────────────────────────────────
    MAIN COMPONENT
@@ -171,7 +194,7 @@ const DashboardOverview = () => {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [range, setRange] = useState(30);
-  const [raw, setRaw] = useState(null);
+  const [raw, setRaw] = useState<any>(null);
 
   /* ── fetch ── */
   const fetchAll = async (silent = false) => {
@@ -210,16 +233,16 @@ const DashboardOverview = () => {
   const analytics = React.useMemo(() => {
     if (!raw) return null;
 
-    const dateField = (item) =>
-      item.created_at || item.date_submitted || item.submission_date || item.created || null;
+    const dateField = (item: any): string =>
+      item.created_at || item.date_submitted || item.submission_date || item.created || '';
 
-    const inRange = (arr, days) =>
+    const inRange = (arr: any[], days: number) =>
       arr.filter((i) => {
         const d = dateField(i);
         return d ? withinDays(d, days) : true;
       });
 
-    const prevRange = (arr, days) =>
+    const prevRange = (arr: any[], days: number) =>
       arr.filter((i) => {
         const d = dateField(i);
         if (!d) return false;
@@ -253,7 +276,7 @@ const DashboardOverview = () => {
 
     // weekly trend (last 8 weeks across all types)
     const weekBuckets = Array(8).fill(0);
-    all.forEach((item) => {
+    all.forEach((item: any) => {
       const d = dateField(item);
       if (!d) return;
       const weeksAgo = Math.floor((Date.now() - new Date(d).getTime()) / (7 * 86400000));
@@ -262,7 +285,7 @@ const DashboardOverview = () => {
 
     // membership by month
     const memberByMonth = Array(12).fill(0);
-    raw.memberships.forEach((m) => {
+    raw.memberships.forEach((m: any) => {
       const d = dateField(m);
       if (d) memberByMonth[getMonth(d)]++;
     });
@@ -273,15 +296,15 @@ const DashboardOverview = () => {
       ...raw.memberships, ...raw.benevolence,
     ];
     const statusCount = { pending: 0, approved: 0, review: 0, rejected: 0 };
-    actionable.forEach((i) => {
-      const s = normaliseStatus(i.status);
+    actionable.forEach((i: any) => {
+      const s = normaliseStatus(i.status) as keyof typeof statusCount;
       statusCount[s]++;
     });
 
     // benevolence pipeline
     const benTotal = raw.benevolence.length;
-    const benReview = raw.benevolence.filter((b) => ['review', 'pending'].includes(normaliseStatus(b.status))).length;
-    const benApproved = raw.benevolence.filter((b) => normaliseStatus(b.status) === 'approved').length;
+    const benReview = raw.benevolence.filter((b: any) => ['review', 'pending'].includes(normaliseStatus(b.status))).length;
+    const benApproved = raw.benevolence.filter((b: any) => normaliseStatus(b.status) === 'approved').length;
 
     // category totals
     const categories = [
@@ -340,7 +363,7 @@ const DashboardOverview = () => {
       data: memberByMonth,
       backgroundColor: '#10b981',
       borderRadius: 4,
-      borderSkipped: false,
+      borderSkipped: false as const,
     }],
   };
 
@@ -354,13 +377,18 @@ const DashboardOverview = () => {
     }],
   };
 
-  const donutOpts = {
+  const donutOpts: ChartOptions<'doughnut'> = {
     responsive: true,
     maintainAspectRatio: false,
     cutout: '65%',
     plugins: {
       legend: { display: false },
-      tooltip: { callbacks: { label: (ctx) => ` ${ctx.label}: ${ctx.parsed} (${Math.round(ctx.parsed / totalStatusCount * 100)}%)` } },
+      tooltip: {
+        callbacks: {
+          label: (ctx) =>
+            ` ${ctx.label}: ${ctx.parsed} (${Math.round((ctx.parsed / totalStatusCount) * 100)}%)`,
+        },
+      },
     },
   };
 
@@ -409,12 +437,12 @@ const DashboardOverview = () => {
       {/* KPI cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
         {[
-          { title: 'Prayer Requests', icon: Heart,         color: 'text-red-500',    bg: 'bg-red-50',     key: 'prayers'     },
-          { title: 'Baptism Inquiries', icon: Droplets,    color: 'text-blue-500',   bg: 'bg-blue-50',    key: 'baptisms'    },
-          { title: 'Dedications',     icon: Baby,          color: 'text-pink-500',   bg: 'bg-pink-50',    key: 'dedications' },
-          { title: 'Memberships',     icon: UserPlus,      color: 'text-emerald-600',bg: 'bg-emerald-50', key: 'memberships' },
-          { title: 'Benevolence',     icon: HandHeart,     color: 'text-purple-600', bg: 'bg-purple-50',  key: 'benevolence' },
-          { title: 'Contact Messages',icon: MessageSquare, color: 'text-orange-500', bg: 'bg-orange-50',  key: 'contacts'    },
+          { title: 'Prayer Requests',   icon: Heart,         color: 'text-red-500',     bg: 'bg-red-50',     key: 'prayers'     },
+          { title: 'Baptism Inquiries', icon: Droplets,      color: 'text-blue-500',    bg: 'bg-blue-50',    key: 'baptisms'    },
+          { title: 'Dedications',       icon: Baby,          color: 'text-pink-500',    bg: 'bg-pink-50',    key: 'dedications' },
+          { title: 'Memberships',       icon: UserPlus,      color: 'text-emerald-600', bg: 'bg-emerald-50', key: 'memberships' },
+          { title: 'Benevolence',       icon: HandHeart,     color: 'text-purple-600',  bg: 'bg-purple-50',  key: 'benevolence' },
+          { title: 'Contact Messages',  icon: MessageSquare, color: 'text-orange-500',  bg: 'bg-orange-50',  key: 'contacts'    },
         ].map((card) => (
           <StatCard
             key={card.key}
@@ -422,8 +450,8 @@ const DashboardOverview = () => {
             icon={card.icon}
             color={card.color}
             bg={card.bg}
-            current={curr[card.key].length}
-            previous={prev[card.key].length}
+            current={(curr as any)[card.key].length}
+            previous={(prev as any)[card.key].length}
           />
         ))}
       </div>
@@ -439,7 +467,7 @@ const DashboardOverview = () => {
               <div className="text-xs text-gray-400 mt-0.5">All request types · last 8 weeks</div>
             </div>
             <div className="text-2xl font-bold text-indigo-600">
-              {weekBuckets.reduce((a, b) => a + b, 0)}
+              {weekBuckets.reduce((a: number, b: number) => a + b, 0)}
             </div>
           </div>
           <div style={{ position: 'relative', height: 180 }}>
@@ -528,14 +556,16 @@ const DashboardOverview = () => {
           <div className="text-xs text-gray-400 mb-5">Submitted → disbursed funnel</div>
           <div className="space-y-4">
             {[
-              { label: 'Submitted',   val: benTotal,    color: 'bg-purple-500', pct: 100              },
-              { label: 'Under Review',val: benReview,   color: 'bg-blue-500',   pct: benTotal > 0 ? Math.round(benReview / benTotal * 100) : 0 },
-              { label: 'Approved',    val: benApproved, color: 'bg-emerald-500',pct: benTotal > 0 ? Math.round(benApproved / benTotal * 100) : 0 },
+              { label: 'Submitted',    val: benTotal,    color: 'bg-purple-500', pct: 100 },
+              { label: 'Under Review', val: benReview,   color: 'bg-blue-500',   pct: benTotal > 0 ? Math.round((benReview / benTotal) * 100) : 0 },
+              { label: 'Approved',     val: benApproved, color: 'bg-emerald-500', pct: benTotal > 0 ? Math.round((benApproved / benTotal) * 100) : 0 },
             ].map((stage) => (
               <div key={stage.label}>
                 <div className="flex justify-between text-xs mb-1.5">
                   <span className="text-gray-600">{stage.label}</span>
-                  <span className="font-semibold text-gray-900">{stage.val} <span className="font-normal text-gray-400">({stage.pct}%)</span></span>
+                  <span className="font-semibold text-gray-900">
+                    {stage.val} <span className="font-normal text-gray-400">({stage.pct}%)</span>
+                  </span>
                 </div>
                 <div className="h-5 bg-gray-100 rounded-lg overflow-hidden">
                   <div
@@ -579,15 +609,26 @@ const DashboardOverview = () => {
             <tbody>
               {(() => {
                 const tagged = [
-                  ...raw.prayers.map((i) => ({ ...i, _type: 'Prayer' })),
-                  ...raw.baptisms.map((i) => ({ ...i, _type: 'Baptism' })),
-                  ...raw.dedications.map((i) => ({ ...i, _type: 'Dedication' })),
-                  ...raw.memberships.map((i) => ({ ...i, _type: 'Membership' })),
-                  ...raw.benevolence.map((i) => ({ ...i, _type: 'Benevolence' })),
-                  ...raw.contacts.map((i) => ({ ...i, _type: 'Contact' })),
+                  ...raw.prayers.map((i: any) => ({ ...i, _type: 'Prayer' })),
+                  ...raw.baptisms.map((i: any) => ({ ...i, _type: 'Baptism' })),
+                  ...raw.dedications.map((i: any) => ({ ...i, _type: 'Dedication' })),
+                  ...raw.memberships.map((i: any) => ({ ...i, _type: 'Membership' })),
+                  ...raw.benevolence.map((i: any) => ({ ...i, _type: 'Benevolence' })),
+                  ...raw.contacts.map((i: any) => ({ ...i, _type: 'Contact' })),
                 ];
-                const dateField = (i) => i.created_at || i.date_submitted || i.submission_date || i.created || '';
-                const sorted = tagged.sort((a, b) => new Date(dateField(b)) - new Date(dateField(a))).slice(0, 8);
+
+                const dateField = (i: any): string =>
+                  i.created_at || i.date_submitted || i.submission_date || i.created || '';
+
+                // FIX 2: call .getTime() on both Date objects so subtraction
+                // operates on numbers, not Date instances (TypeScript disallows
+                // the `-` operator between two Date values directly).
+                const sorted = tagged
+                  .sort(
+                    (a, b) =>
+                      new Date(dateField(b)).getTime() - new Date(dateField(a)).getTime()
+                  )
+                  .slice(0, 8);
 
                 if (sorted.length === 0) {
                   return (
@@ -599,16 +640,16 @@ const DashboardOverview = () => {
                   );
                 }
 
-                const typeColors = {
-                  Prayer:     'bg-red-50 text-red-600',
-                  Baptism:    'bg-blue-50 text-blue-600',
-                  Dedication: 'bg-pink-50 text-pink-600',
-                  Membership: 'bg-emerald-50 text-emerald-600',
-                  Benevolence:'bg-purple-50 text-purple-600',
-                  Contact:    'bg-orange-50 text-orange-600',
+                const typeColors: Record<string, string> = {
+                  Prayer:      'bg-red-50 text-red-600',
+                  Baptism:     'bg-blue-50 text-blue-600',
+                  Dedication:  'bg-pink-50 text-pink-600',
+                  Membership:  'bg-emerald-50 text-emerald-600',
+                  Benevolence: 'bg-purple-50 text-purple-600',
+                  Contact:     'bg-orange-50 text-orange-600',
                 };
 
-                return sorted.map((item, idx) => {
+                return sorted.map((item: any, idx: number) => {
                   const name =
                     item.full_name || item.child_full_name ||
                     item.contributorName || item.name || '—';
@@ -623,7 +664,13 @@ const DashboardOverview = () => {
                         </span>
                       </td>
                       <td className="py-3 pr-4 text-gray-400 text-xs">
-                        {date ? new Date(date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'}
+                        {date
+                          ? new Date(date).toLocaleDateString('en-GB', {
+                              day: 'numeric',
+                              month: 'short',
+                              year: 'numeric',
+                            })
+                          : '—'}
                       </td>
                       <td className="py-3">
                         <StatusBadge status={status} />
