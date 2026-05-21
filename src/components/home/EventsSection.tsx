@@ -99,72 +99,75 @@ const EventsSection = () => {
   }, []);
   
   return (
-    <section id="events" className="section bg-gray-50" ref={sectionRef}>
-      <div className="container">
+    <section id="events" className="section bg-white relative overflow-hidden" ref={sectionRef}>
+      <div className="absolute top-1/2 -left-32 w-72 h-72 rounded-full bg-church-50 blur-3xl pointer-events-none" />
+      <div className="container relative">
         <div className="max-w-3xl mx-auto text-center mb-12">
-          <h2 className="section-title animate-on-scroll">Upcoming Events</h2>
-          <p className="section-subtitle animate-on-scroll animate-delay-1">
+          <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-church-50 text-church-700 text-xs font-semibold uppercase tracking-widest">
+            <Calendar size={14} /> What's coming up
+          </span>
+          <h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-bold text-[#0A192F] font-serif animate-on-scroll">
+            Upcoming Events
+          </h2>
+          <p className="mt-3 text-slate-600 text-lg animate-on-scroll animate-delay-1 max-w-xl mx-auto">
             Join us for these upcoming events and activities at our church.
           </p>
         </div>
-        
-        <div className="md:w-[85%] mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+
+        <div className="md:w-[90%] mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
           {loading ? (
-            <div className="col-span-2 text-center py-12">
-              <p className="text-lg text-gray-600">Loading events...</p>
-            </div>
+            <div className="col-span-2 text-center py-12 text-slate-500">Loading events...</div>
           ) : upcomingEvents.length > 0 ? (
             upcomingEvents.map((event, index) => (
-              <div 
+              <div
                 key={event.id}
-                className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col"
-                style={{animationDelay: `${index * 0.1 + 0.2}s`}}
+                className="group bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col"
+                style={{ animationDelay: `${index * 0.1 + 0.2}s` }}
               >
-                <div className="w-full aspect-video relative">
-                  <img 
+                <div className="w-full aspect-video relative overflow-hidden">
+                  <img
                     src={`https://churchmedia.kahawawendanisda.org${event.image}`}
-                    alt={event.title} 
+                    alt={event.title}
                     loading="lazy"
-                    className="aspect-video object-cover object-top"
+                    className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
                     onError={(e) => {
-                      e.currentTarget.src = 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=500&auto=format&fit=crop&q=60';
+                      e.currentTarget.src = 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800&auto=format&fit=crop&q=60';
                     }}
                   />
+                  <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-white/90 backdrop-blur text-xs font-semibold text-church-700">
+                    {format(new Date(event.date), 'MMM d, yyyy')}
+                  </div>
                 </div>
-                <div className="p-6 w-full flex flex-col">
-                  <div className="flex items-start justify-between mb-2">
-                    <h3 className="font-bold text-xl">{event.title}</h3>
+                <div className="p-6 flex-1 flex flex-col">
+                  <h3 className="text-xl font-bold text-[#0A192F] mb-2 group-hover:text-church-700 transition-colors">
+                    {event.title}
+                  </h3>
+                  <div className="flex items-center text-slate-500 text-sm mb-3">
+                    <Calendar size={14} className="mr-2" />
+                    <span>{event.time} • {event.venue}</span>
                   </div>
-                  <div className="flex items-center text-gray-600 mb-2">
-                    <Calendar size={16} className="mr-2" />
-                    <span>{format(new Date(event.date), 'MMM d, yyyy')} • {event.time}</span>
-                  </div>
-                  <p className="text-gray-600 mb-4">
-                    Location: {event.venue}
-                  </p>
-                  <p className="text-gray-600 mb-4 line-clamp-2">
-                    {event.description}
-                  </p>
-                  <div className="mt-auto">
-                    <Link 
-                      to={`/events/${event.slug}`}
-                      className="text-church-600 font-medium hover:text-church-700"
-                    >
-                      View Details →
-                    </Link>
-                  </div>
+                  <p className="text-slate-600 text-sm mb-5 line-clamp-2 leading-relaxed">{event.description}</p>
+                  <Link
+                    to={`/events/${event.slug}`}
+                    className="mt-auto inline-flex items-center gap-1 text-church-700 font-semibold text-sm hover:text-church-800"
+                  >
+                    View Details →
+                  </Link>
                 </div>
               </div>
             ))
           ) : (
-            <div className="col-span-2 text-center py-12">
-              <p className="text-lg text-gray-600">No upcoming events at this time. Check back soon!</p>
+            <div className="col-span-2 text-center py-12 text-slate-500">
+              No upcoming events at this time. Check back soon!
             </div>
           )}
         </div>
-        
-        <div className="mt-8 text-center animate-on-scroll">
-          <Link to="/events" className="btn btn-primary btn-lg">
+
+        <div className="mt-10 text-center animate-on-scroll">
+          <Link
+            to="/events"
+            className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-church-600 hover:bg-church-700 text-white font-semibold transition-colors shadow-lg shadow-church-900/10"
+          >
             View All Events
           </Link>
         </div>
@@ -174,3 +177,4 @@ const EventsSection = () => {
 };
 
 export default EventsSection;
+

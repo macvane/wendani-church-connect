@@ -1,15 +1,6 @@
-
 import React, { useRef } from 'react';
-import WistiaEmbed from './ContructionPromo';
 import { Link } from 'react-router-dom';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselPrevious,
-  CarouselNext
-} from "@/components/ui/carousel";
-import { Card, CardContent } from "@/components/ui/card";
+import { Check, Clock, ArrowRight } from 'lucide-react';
 
 const ConstructionSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -18,167 +9,142 @@ const ConstructionSection = () => {
     "https://res.cloudinary.com/dxvzdn2ao/video/upload/v1765798967/KahawaWendaniSDAChurchDev1_pmbzci.mp4",
     "https://res.cloudinary.com/dxvzdn2ao/video/upload/v1765798969/KahawaWendaniSDAChurchDev2_orgyot.mp4",
     "https://res.cloudinary.com/dxvzdn2ao/video/upload/v1765798976/KahawaWendaniSDAChurchDev_mycavh.mp4",
-    "https://res.cloudinary.com/dxvzdn2ao/video/upload/v1765798980/KahawaWendaniSDAChurchDev4_s8bawb.mp4"
-  ]
-  
-  // Construction journey milestones with images
+    "https://res.cloudinary.com/dxvzdn2ao/video/upload/v1765798980/KahawaWendaniSDAChurchDev4_s8bawb.mp4",
+  ];
+
   const milestones = [
     {
-      title: "Land Acquisition",
-      date: "August 2023",
-      description: "We successfully acquired 1/2 acre of land in a prime location for our new church building.",
-      image: "https://images.unsplash.com/photo-1501854140801-50d01698950b?q=80&w=1200",
-      completed: true
+      step: '01',
+      status: 'Completed',
+      title: 'Site Acquisition',
+      description: 'Procured and cleared the project development plot, matching all institutional zoning requirements.',
+      done: true,
     },
     {
-      title: "Project Planning",
-      date: "November 2023",
-      description: "Architectural designs were completed and approved by the church board and local authorities.",
-      image: "/assets/image (45).jpg",
-      completed: true
+      step: '02',
+      status: 'Completed',
+      title: 'Engineering Designs',
+      description: 'Structural blueprint parameters finalized and signed off by regional authorities.',
+      done: true,
     },
     {
-      title: "Ground Breaking",
-      date: "May 2025",
-      description: "The official ground breaking ceremony was held with church members and community leaders.",
-      image: "/assets/image (30).jpg",
-      completed: true
+      step: '03',
+      status: 'In Progress',
+      title: 'Substructure Foundation',
+      description: 'Excavation works, concrete foundation pouring, and ground reinforcements currently active on-site.',
+      done: false,
     },
     {
-      title: "Foundation Work",
-      date: "August 2025",
-      description: "Site clearing and foundation work has begun, setting the structural base for our new church.",
-      image: "/assets/dev.jpeg",
-      completed: false
-    }
+      step: '04',
+      status: 'Upcoming',
+      title: 'Superstructure',
+      description: 'Walls, columns, and roofing — the rise of our future sanctuary.',
+      done: false,
+    },
   ];
-  
+
   return (
-    <section className="relative py-20 text-white overflow-hidden">
-      {/* Background Image with Overlay */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-church-800 bg-opacity-85 z-10"></div>
-        <img 
-          src="/assets/image (45).jpg"
-          alt="Church Construction"
-          loading="lazy"
-          className="w-full h-full object-cover"
-        />
-      </div>
-      
-      <div className="container relative z-20">
-        <div className="max-w-3xl mx-auto text-center mb-12">
-          <h2 className="section-title text-white animate-on-scroll">Building Our Future Church</h2>
-          <p className="section-subtitle text-white/90 animate-on-scroll animate-delay-1">
-            Join us in our mission to build a new sanctuary for worship, fellowship, and community service.
+    <section ref={sectionRef} className="relative py-20 md:py-28 bg-[#0A192F] text-white overflow-hidden">
+      {/* Decorative grid */}
+      <div className="absolute inset-0 opacity-[0.05] pointer-events-none"
+        style={{
+          backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)',
+          backgroundSize: '32px 32px',
+        }}
+      />
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-church-600/20 blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-church-500/10 blur-3xl" />
+
+      <div className="container relative">
+        <div className="max-w-3xl mx-auto text-center mb-14">
+          <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-church-600/20 border border-church-400/30 text-church-100 text-xs font-semibold uppercase tracking-widest">
+            Building Project
+          </span>
+          <h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-bold font-serif animate-on-scroll">
+            Our Sanctuary Building Journey
+          </h2>
+          <p className="mt-4 text-white/70 text-lg animate-on-scroll animate-delay-1 max-w-xl mx-auto">
+            Transparent roadmap documenting our ongoing construction journey.
           </p>
         </div>
-        
-        {/* Journey Carousel */}
-        <div className="mb-16 animate-on-scroll">
-          <h3 className="text-2xl font-bold mb-6 text-center">Our Construction Journey</h3>
-          <Carousel className="w-full">
-            <CarouselContent>
-              {milestones.map((milestone, index) => (
-                <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
-                  <div className="p-1">
-                    <Card className="bg-white/10 backdrop-blur-sm border-white/20">
-                      <CardContent className="flex flex-col p-0 aspect-[4/3]">
-                        <div className="relative h-40">
-                          <img 
-                            src={milestone.image} 
-                            alt={milestone.title} 
-                            loading='lazy'
-                            className="w-full h-full object-cover"
-                          />
-                          {milestone.completed && (
-                            <div className="absolute top-2 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
-                              Completed
-                            </div>
-                          )}
-                        </div>
-                        <div className="p-4 flex-1 flex flex-col">
-                          <div className="text-sm text-white/70 mb-1">{milestone.date}</div>
-                          <h4 className="text-lg font-bold mb-2">{milestone.title}</h4>
-                          <p className="text-sm text-white/90 flex-1">{milestone.description}</p>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious className="left-0 lg:-left-12 bg-white/20 border-white/30 text-white hover:bg-white/30" />
-            <CarouselNext className="right-0 lg:-right-12 bg-white/20 border-white/30 text-white hover:bg-white/30" />
-          </Carousel>
+
+        {/* Timeline */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-16">
+          {milestones.map((m, i) => (
+            <div
+              key={i}
+              className="group relative bg-white/[0.04] backdrop-blur border border-white/10 rounded-3xl p-6 hover:bg-white/[0.08] hover:border-church-400/40 transition-all duration-300 animate-on-scroll"
+              style={{ animationDelay: `${i * 0.08}s` }}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-3xl font-bold text-white/20 group-hover:text-church-400/60 transition-colors">
+                  {m.step}
+                </span>
+                <span
+                  className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold ${
+                    m.done
+                      ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/30'
+                      : m.status === 'In Progress'
+                      ? 'bg-amber-500/20 text-amber-200 border border-amber-400/30'
+                      : 'bg-white/10 text-white/70 border border-white/20'
+                  }`}
+                >
+                  {m.done ? <Check size={12} /> : <Clock size={12} />} {m.status}
+                </span>
+              </div>
+              <h3 className="text-lg font-bold mb-2">{m.title}</h3>
+              <p className="text-sm text-white/70 leading-relaxed">{m.description}</p>
+            </div>
+          ))}
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 ">
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+          {/* Videos */}
+          <div className="animate-on-scroll">
+            <div className="grid grid-cols-2 gap-3">
+              {ContructionVideos.map((video, index) => (
+                <div key={index} className="aspect-video rounded-2xl overflow-hidden border border-white/10">
+                  <video muted loop autoPlay playsInline src={video} className="w-full h-full object-cover" />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* CTA Card */}
           <div className="animate-on-scroll animate-delay-2">
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20 w-full ">
-              <div className='grid md:grid-cols-2 gap-3'>
-                {ContructionVideos.map((video,index) => (
-                  <div key={index} className='h-[15rem]'>
-                    <video
-                    muted
-                    loop
-                    autoPlay
-                    src={video}
-                    className='rounded-xl object-cover w-full h-full'
-                  >
-                  </video>
+            <div className="rounded-3xl bg-gradient-to-br from-church-600 to-church-800 p-8 md:p-10 border border-church-400/30 shadow-2xl">
+              <h3 className="text-2xl md:text-3xl font-bold mb-4 font-serif">Support Our Construction</h3>
+              <p className="text-white/85 mb-6 leading-relaxed">
+                Your contribution, big or small, brings us closer to completing a place of worship that will serve generations to come.
+              </p>
+
+              <div className="space-y-3 mb-8">
+                {[
+                  'Pray for the success of our construction project',
+                  'Contribute financially through our church account',
+                  'Volunteer your skills and time to the project',
+                  'Spread the word and invite others to support',
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-3">
+                    <span className="h-8 w-8 shrink-0 rounded-full bg-white/15 backdrop-blur flex items-center justify-center text-sm font-bold">
+                      {i + 1}
+                    </span>
+                    <span className="text-sm text-white/90">{item}</span>
                   </div>
                 ))}
               </div>
-              {/* <WistiaEmbed /> */}
-            </div>
-          </div>
-          
-          <div className="animate-on-scroll animate-delay-2">
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
-              <h3 className="text-2xl font-bold mb-4">Support Our Construction</h3>
-              <p className="mb-6">
-                Your contribution, whether big or small, brings us one step closer to completing our new church building. Together, we can create a place of worship that will serve generations to come.
-              </p>
-              
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full bg-church-600 flex items-center justify-center">
-                    <span className="font-bold">1</span>
-                  </div>
-                  <span>Pray for the success of our construction project</span>
-                </div>
-                
-                <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full bg-church-600 flex items-center justify-center">
-                    <span className="font-bold">2</span>
-                  </div>
-                  <span>Contribute financially through our church account</span>
-                </div>
-                
-                <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full bg-church-600 flex items-center justify-center">
-                    <span className="font-bold">3</span>
-                  </div>
-                  <span>Volunteer your skills and time to the project</span>
-                </div>
-                
-                <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full bg-church-600 flex items-center justify-center">
-                    <span className="font-bold">4</span>
-                  </div>
-                  <span>Spread the word and invite others to support</span>
-                </div>
-              </div>
-              
-              <div className="mt-6 flex flex-col sm:flex-row gap-4">
+
+              <div className="flex flex-col sm:flex-row gap-3">
                 <Link
-                  to='/giving'
-                  className="btn bg-church-600 hover:bg-church-700 text-white flex-1 text-center btn-lg"
+                  to="/giving"
+                  className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-white text-church-700 hover:bg-white/90 font-semibold transition-colors"
                 >
-                  Donate Now
+                  Donate Now <ArrowRight size={16} />
                 </Link>
-                <a href="https://forms.gle/schMhtN6arvjUHmd8" className="btn bg-white text-church-700 hover:bg-gray-100 flex-1 text-center">
+                <a
+                  href="https://forms.gle/schMhtN6arvjUHmd8"
+                  className="flex-1 inline-flex items-center justify-center px-6 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 backdrop-blur border border-white/30 text-white font-semibold transition-colors"
+                >
                   Join a Group
                 </a>
               </div>

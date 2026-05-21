@@ -1,33 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Link } from 'react-router-dom';
 
 const slides = [
-  
-  
-    // YOUR NEW POSTER SLIDE
-    // image: "/posters/camp1.jpg", // <--- REPLACE WITH YOUR POSTER IMAGE PATH
-    // No title or subtitle, since the poster has the info
-    // hasOverlay: true // <--- THIS WILL PREVENT THE OVERLAY
-  
   {
     image: "/assets/hero.JPG",
-    title: "Welcome to Kahawa Wendani SDA Church",
-    subtitle: "Where faith meets community",
-    hasOverlay: true
+    eyebrow: "Nairobi East Conference",
+    title: "Where Faith Meets Community",
+    subtitle: "Welcome to your church home. Join us as we grow together in Christ, share everlasting truth, and serve our neighborhood.",
   },
   {
-    image: "https://images.unsplash.com/photo-1523803326055-9729b9e02e5a?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    title: "Join Us in Worship",
-    subtitle: "Every Sabbath at 8:00 AM",
-    hasOverlay: true
+    image: "https://images.unsplash.com/photo-1523803326055-9729b9e02e5a?q=80&w=1471&auto=format&fit=crop",
+    eyebrow: "Sabbath Worship",
+    title: "Come Worship With Us",
+    subtitle: "Every Sabbath morning we gather for Bible study, fellowship, and divine service in spirit and truth.",
   },
   {
-    image: "https://images.unsplash.com/photo-1426604966848-d7adac402bff?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: "https://images.unsplash.com/photo-1426604966848-d7adac402bff?q=80&w=1470&auto=format&fit=crop",
+    eyebrow: "Together in Christ",
     title: "Growing in Faith Together",
-    subtitle: "Building a community of believers",
-    hasOverlay: true
+    subtitle: "A vibrant family of believers committed to discipleship, mission, and the soon return of Jesus.",
   },
 ];
 
@@ -39,138 +32,115 @@ const Hero = () => {
     if (!isAutoPlaying) return;
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 6000);
+    }, 7000);
     return () => clearInterval(interval);
   }, [isAutoPlaying]);
 
-  const goToSlide = (index) => {
-    setCurrentSlide(index);
-    setIsAutoPlaying(false);
-    setTimeout(() => setIsAutoPlaying(true), 10000);
-  };
-
-  const goToNextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
-    setIsAutoPlaying(false);
-    setTimeout(() => setIsAutoPlaying(true), 10000);
-  };
-
-  const goToPrevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  const pause = () => {
     setIsAutoPlaying(false);
     setTimeout(() => setIsAutoPlaying(true), 10000);
   };
 
   return (
-    <div className="relative h-screen w-full overflow-hidden">
+    <div className="relative h-screen min-h-[640px] w-full overflow-hidden bg-[#0A192F]">
       {slides.map((slide, index) => (
         <div
           key={index}
           className={cn(
-            "absolute inset-0 transition-opacity duration-1000 ease-in-out",
+            "absolute inset-0 transition-opacity duration-[1200ms] ease-in-out",
             currentSlide === index ? "opacity-100 z-10" : "opacity-0 z-0"
           )}
         >
-          {/* --- OVERLAY FIX STARTS HERE --- */}
-          {slide.hasOverlay && (
-            <div className="absolute inset-0 bg-black bg-opacity-50 z-10"></div>
-          )}
-          {/* --- OVERLAY FIX ENDS HERE --- */}
-
           <div
-            className="absolute inset-0 bg-cover bg-center"
+            className="absolute inset-0 bg-cover bg-center scale-105"
             style={{ backgroundImage: `url(${slide.image})` }}
-          ></div>
-          
-          {/* Only show text content if the slide is supposed to have it */}
-          {(slide.title || slide.subtitle) && (
-            <div className="absolute inset-0 flex items-center z-20">
-              <div className="container mx-auto px-4">
-                <div className="max-w-3xl mx-auto text-center text-white">
-                  
-                  {index === 0 ? (
-                    // Static, non-animated content for the first slide
-                    <>
-                      <h1 className="font-bold mb-4">
-                        {slide.title}
-                      </h1>
-                      <p className="text-xl md:text-2xl mb-8">
-                        {slide.subtitle}
-                      </p>
-                      <div className="flex gap-4 justify-center">
-                        <Link to="/about" className="btn btn-primary btn-lg">
-                          Learn More
-                        </Link>
-                        <Link to="/contact" className="btn btn-outline btn-lg border-white text-white hover:bg-white hover:text-gray-900">
-                          Join Us
-                        </Link>
-                      </div>
-                    </>
-                  ) : (
-                    // Your original animated content for all other slides
-                    <>
-                      <h1
-                        className={cn(
-                          "font-bold mb-4 transition-all duration-1000 transform",
-                          currentSlide === index ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0"
-                        )}
-                      >{slide.title}</h1>
-                      <p
-                        className={cn(
-                          "text-xl md:text-2xl mb-8 transition-all duration-1000 delay-300 transform",
-                          currentSlide === index ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0"
-                        )}
-                      >{slide.subtitle}</p>
-                      <div
-                        className={cn(
-                          "flex gap-4 justify-center transition-all duration-1000 delay-500 transform",
-                          currentSlide === index ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0"
-                        )}
-                      >
-                        <Link to="/about" className="btn btn-primary btn-lg">
-                          Learn More
-                        </Link>
-                        <Link to="/contact" className="btn btn-outline btn-lg border-white text-white hover:bg-white hover:text-gray-900">
-                          Join Us
-                        </Link>
-                      </div>
-                    </>
-                  )}
+          />
+          {/* Modern layered gradient */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0A192F]/95 via-[#0A192F]/70 to-[#0A192F]/30 z-10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0A192F]/80 via-transparent to-transparent z-10" />
 
+          <div className="relative z-20 h-full flex items-center">
+            <div className="container">
+              <div className="max-w-2xl">
+                <span
+                  className={cn(
+                    "inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-church-600/20 border border-church-400/40 text-church-100 text-xs font-semibold uppercase tracking-widest transition-all duration-700",
+                    currentSlide === index ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
+                  )}
+                >
+                  <span className="h-1.5 w-1.5 rounded-full bg-church-400 animate-pulse" />
+                  {slide.eyebrow}
+                </span>
+                <h1
+                  className={cn(
+                    "mt-6 text-white font-bold tracking-tight transition-all duration-1000 delay-150",
+                    "text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05]",
+                    currentSlide === index ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+                  )}
+                >
+                  {slide.title}
+                </h1>
+                <p
+                  className={cn(
+                    "mt-6 text-lg md:text-xl text-white/80 max-w-xl leading-relaxed transition-all duration-1000 delay-300",
+                    currentSlide === index ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+                  )}
+                >
+                  {slide.subtitle}
+                </p>
+                <div
+                  className={cn(
+                    "mt-10 flex flex-wrap gap-4 transition-all duration-1000 delay-500",
+                    currentSlide === index ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+                  )}
+                >
+                  <Link
+                    to="/giving"
+                    className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-church-600 hover:bg-church-500 text-white font-semibold shadow-lg shadow-church-900/40 transition-all"
+                  >
+                    Give Tithes & Offerings
+                    <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+                  </Link>
+                  <Link
+                    to="/about"
+                    className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur border border-white/30 text-white font-semibold transition-all"
+                  >
+                    Learn More
+                  </Link>
                 </div>
               </div>
             </div>
-          )}
+          </div>
         </div>
       ))}
 
-      {/* Navigation Arrows */}
-      <button 
-        onClick={goToPrevSlide}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-30 bg-black bg-opacity-30 text-white p-2 rounded-full hover:bg-opacity-50 transition-colors"
-        aria-label="Previous slide"
+      {/* Navigation */}
+      <button
+        onClick={() => { setCurrentSlide((p) => (p - 1 + slides.length) % slides.length); pause(); }}
+        className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-30 h-11 w-11 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur border border-white/20 text-white flex items-center justify-center transition-all"
+        aria-label="Previous"
       >
-        <ChevronLeft size={24} />
+        <ChevronLeft size={20} />
       </button>
-      <button 
-        onClick={goToNextSlide}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-30 bg-black bg-opacity-30 text-white p-2 rounded-full hover:bg-opacity-50 transition-colors"
-        aria-label="Next slide"
+      <button
+        onClick={() => { setCurrentSlide((p) => (p + 1) % slides.length); pause(); }}
+        className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-30 h-11 w-11 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur border border-white/20 text-white flex items-center justify-center transition-all"
+        aria-label="Next"
       >
-        <ChevronRight size={24} />
+        <ChevronRight size={20} />
       </button>
-      
-      {/* Slide Indicators */}
-      <div className="absolute bottom-8 left-0 right-0 z-30 flex justify-center gap-2">
+
+      {/* Indicators */}
+      <div className="absolute bottom-10 left-0 right-0 z-30 flex justify-center gap-2">
         {slides.map((_, index) => (
           <button
             key={index}
-            onClick={() => goToSlide(index)}
+            onClick={() => { setCurrentSlide(index); pause(); }}
             className={cn(
-              "w-3 h-3 rounded-full transition-all duration-300",
-              currentSlide === index ? "bg-white w-6" : "bg-white bg-opacity-50 hover:bg-opacity-75"
+              "h-1.5 rounded-full transition-all duration-300",
+              currentSlide === index ? "bg-church-400 w-10" : "bg-white/40 hover:bg-white/60 w-6"
             )}
-            aria-label={`Go to slide ${index + 1}`}
+            aria-label={`Slide ${index + 1}`}
           />
         ))}
       </div>
